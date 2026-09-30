@@ -74,15 +74,61 @@ Say **"Hey Rapi"**, hear **"Yes?"**, then speak a command (e.g.
 "dim the lights to 40 percent", "message Anna", "volume 50",
 "set an alarm for 7 30 am").
 
-## 6. Audio devices
+## 6. Audio devices (USB mic + Bluetooth speaker)
+
+List what is plugged in:
 
 ```bash
-# list devices and note the input index
-python -c "import sounddevice as sd; print(sd.query_devices())"
+python -c "import sounddevice as sd; print(sd.query_devices())"  # inputs
+aplay -l                                                        # outputs (ALSA)
+wpctl status                       # Pi OS Bookworm (PipeWire): sinks/sources + ids
 ```
 
-Make the USB mic the default input (`raspi-config` -> Advanced -> Audio),
-and test with `arecord -d 3 test.wav && aplay test.wav`.
+**Bluetooth speaker** (everything the app plays - music, "Yes?", beeps -
+follows the system default output):
+
+```bash
+bluetoothctl
+[bluetooth]# power on
+[bluetooth]# scan on            # find the speaker's MAC, then:
+[bluetooth]# pair AA:BB:CC:DD:EE:FF
+[bluetooth]# connect AA:BB:CC:DD:EE:FF
+[bluetooth]# trust AA:BB:CC:DD:EE:FF
+[bluetooth]# quit
+
+# make it the default output - Bookworm (PipeWire):
+wpctl status                    # Sinks under Audio -> note the id
+wpctl set-default <id>
+# older releases (PulseAudio):
+pactl set-default-sink bluez_sink.AA_BB_CC_DD_EE_FF.a2dp_sink
+```
+
+**USB mic** (input):
+
+```bash
+# Bookworm (PipeWire): Sources under Audio -> note the id
+wpctl set-default <id>
+# PulseAudio: pactl list sources short; pactl set-default-source <NAME>
+# legacy:     raspi-config -> Advanced Options -> Audio -> pick the USB mic
+```
+
+If the BT headset also exposes a *microphone*, keep the **USB mic** as the
+default source - do not let Bluetooth grab the input.
+
+Verify:
+
+```bash
+arecord -d 3 -f S16_LE -r 16000 t.wav && aplay t.wav   # mic -> speaker loop
+aplay audio/confirm_yes.wav                            # "Yes?" through the BT speaker
+```
+
+**In the app**: output always follows the default sink; input uses the
+default source. To force a specific input anyway:
+
+```bash
+python -m sounddevice                      # note the input index (or name)
+python app.py --mode mic --gui --device 2  # or a name: --device "USB"
+```
 
 ## 7. Tuning knobs for the Pi
 
@@ -143,3 +189,5 @@ python benchmark.py --n 50
 | High latency / stutter | use `--stt-model tiny.en`, close the desktop browser, check `vcgencmd measure_temp` for throttling |
 | False wakes | raise `--wake-trigger` / `wake_threshold` in the model card |
 | No sound on "play music" | pygame needed for mp3: verify `python -c "import pygame; pygame.mixer.init(frequency=16000)"` |
+| BT speaker connected, no sound from the app | it follows the **default sink**: `wpctl status` + `wpctl set-default <id>` (or `pactl set-default-sink ...`), restart the app |
+| Wrong mic used | `python -m sounddevice` to list inputs, then `--device <index>` (or `--device "USB"`); or set the default source (`wpctl set-default <id>`) |

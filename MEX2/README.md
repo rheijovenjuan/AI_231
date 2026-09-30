@@ -87,6 +87,8 @@ Useful flags:
                        # beep / off
 --small-screen         # compact GUI layout for a 3.5in 480x320 display
                        # (Raspberry Pi touchscreen; use with --gui)
+--device ID            # mic input: sounddevice index or name substring
+                       # (default = system input; see python -m sounddevice)
 ```
 
 Every decision is printed as `>>> INTENT` with `keywords=`/`confidence=`,

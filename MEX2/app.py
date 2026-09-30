@@ -106,7 +106,7 @@ def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
             wake_trigger: float = 0.0, vad_rms: float | None = None,
             transcribe: bool = True, stt_model: str = "base.en",
             confirm: str = "voice", slot_policy: str = "text",
-            small_screen: bool = False):
+            small_screen: bool = False, mic_device=None):
     import tkinter as tk
     from voice_assistant.ui import RapiUI
 
@@ -142,7 +142,8 @@ def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
         # Start in the wake-first state and begin listening for "Hey Rapi".
         on_event(state="idle", status='Waiting for wake word: "Hey Rapi"...')
         ui.log_line('Say "Hey Rapi" to wake me up.')
-        threading.Thread(target=_mic_loop, args=(assistant,), daemon=True).start()
+        threading.Thread(target=_mic_loop, args=(assistant, mic_device),
+                         daemon=True).start()
     else:
         ui.log_line("Rapi ready (no mic) - display only.")
 
@@ -220,9 +221,9 @@ def _text_to_intent(text: str) -> str:
     return "WEATHER"
 
 
-def _mic_loop(assistant: Assistant):
+def _mic_loop(assistant: Assistant, device=None):
     try:
-        src = make_source("mic")
+        src = make_source("mic", device=device)
     except Exception as e:
         print("[mic] unavailable:", e)
         return
@@ -242,6 +243,10 @@ def main():
     ap.add_argument("--small-screen", action="store_true",
                     help="compact GUI layout for a 3.5in 480x320 display "
                          "(Raspberry Pi touchscreen; use with --gui)")
+    ap.add_argument("--device", default=None,
+                    help="mic input: sounddevice index or name substring "
+                         "(see `python -m sounddevice`); default = system "
+                         "input, e.g. --device 2 or --device 'USB'")
     ap.add_argument("--music-dir", default=MUSIC_DIR)
     ap.add_argument("--onnx", default=ONNX_DIR,
                     help="directory with wake.onnx / keyword.onnx / "
@@ -287,7 +292,7 @@ def main():
                     wake_trigger=args.wake_trigger, vad_rms=args.vad_rms,
                     transcribe=args.transcribe, stt_model=args.stt_model,
                     confirm=args.confirm, slot_policy=args.slot_policy,
-                    small_screen=args.small_screen)
+                    small_screen=args.small_screen, mic_device=args.device)
         else:
             assistant = build_assistant(on_event=_print_event,
                                         onnx_dir=args.onnx,
@@ -305,14 +310,14 @@ def main():
                 print("[stt] faster-whisper not installed - run "
                       "`pip install faster-whisper` for transcriptions "
                       "(continuing without)")
-            _mic_loop(assistant)
+            _mic_loop(assistant, args.device)
     else:  # gui
         run_gui(with_mic=False, onnx_dir=args.onnx,
                 min_confidence=args.min_confidence,
                 wake_trigger=args.wake_trigger, vad_rms=args.vad_rms,
                 transcribe=args.transcribe, stt_model=args.stt_model,
                 confirm=args.confirm, slot_policy=args.slot_policy,
-                small_screen=args.small_screen)
+                small_screen=args.small_screen, mic_device=args.device)
 
 
 if __name__ == "__main__":

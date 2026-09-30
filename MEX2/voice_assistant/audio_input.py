@@ -27,7 +27,8 @@ CHUNK = int(F.SAMPLE_RATE * CHUNK_MS / 1000)
 class Microphone:
     """Live 16 kHz mono capture using sounddevice (PortAudio)."""
 
-    def __init__(self, device: Optional[int] = None, chunk_ms: int = CHUNK_MS):
+    def __init__(self, device: Optional[int | str] = None,
+                 chunk_ms: int = CHUNK_MS):
         import sounddevice as sd
         self.sd = sd
         self.chunk = int(F.SAMPLE_RATE * chunk_ms / 1000)
@@ -45,7 +46,25 @@ class Microphone:
             x = F.resample_linear(x, self._device_sr, F.SAMPLE_RATE)
         self.q.put(x)
 
+    def _resolve_device(self):
+        """Turn a name substring into a device index (first match wins)."""
+        if not isinstance(self.device, str):
+            return
+        matches = [i for i, dev in enumerate(self.sd.query_devices())
+                   if dev["max_input_channels"] > 0
+                   and self.device.lower() in dev["name"].lower()]
+        if not matches:
+            raise ValueError(f"no input device matching {self.device!r} "
+                             f"(run `python -m sounddevice`)")
+        if len(matches) > 1:
+            print(f"[mic] {self.device!r} matches {len(matches)} inputs; "
+                  f"using #{matches[0]} "
+                  f"({self.sd.query_devices(matches[0])['name']}) - pass an "
+                  f"index to pick another")
+        self.device = matches[0]
+
     def __enter__(self):
+        self._resolve_device()
         try:
             self.stream = self.sd.InputStream(
                 samplerate=F.SAMPLE_RATE, channels=1, dtype="float32",
@@ -125,7 +144,7 @@ class FileSource:
 
 
 def make_source(kind: str, path: Optional[str] = None,
-                device: Optional[int] = None):
+                device: Optional[int | str] = None):
     if kind == "file":
         return FileSource(path)
     return Microphone(device=device)
