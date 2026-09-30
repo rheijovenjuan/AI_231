@@ -1,0 +1,116 @@
+{
+  "v40_0_0_0__ALARM_4_00AM_s98_v2_clean.wav": {
+    "intent": "ALARM",
+    "slot": "4 AM",
+    "wake_clip": "v40_0_0_0.wav",
+    "command_clip": "ALARM_4_00AM_s98_v2_clean.wav"
+  },
+  "v40_1_1_1__BRIGHTNESS_60_s99_v2_clean.wav": {
+    "intent": "BRIGHTNESS",
+    "slot": "60 percent",
+    "wake_clip": "v40_1_1_1.wav",
+    "command_clip": "BRIGHTNESS_60_s99_v2_clean.wav"
+  },
+  "v41_0_0_0__CALL_s96_v2_clean.wav": {
+    "intent": "CALL",
+    "slot": null,
+    "wake_clip": "v41_0_0_0.wav",
+    "command_clip": "CALL_s96_v2_clean.wav"
+  },
+  "v41_1_1_1__COLOR_RED_s100_v1_clean.wav": {
+    "intent": "COLOR",
+    "slot": "red",
+    "wake_clip": "v41_1_1_1.wav",
+    "command_clip": "COLOR_RED_s100_v1_clean.wav"
+  },
+  "v42_0_0_0__CREATE_REMINDER_STUDY_s100_v2_clean.wav": {
+    "intent": "CREATE_REMINDER",
+    "slot": "study",
+    "wake_clip": "v42_0_0_0.wav",
+    "command_clip": "CREATE_REMINDER_STUDY_s100_v2_clean.wav"
+  },
+  "v43_0_0_0__LIGHT_OFF_s93_v2_clean.wav": {
+    "intent": "LIGHT_OFF",
+    "slot": null,
+    "wake_clip": "v43_0_0_0.wav",
+    "command_clip": "LIGHT_OFF_s93_v2_clean.wav"
+  },
+  "v44_0_0_0__LIGHT_ON_s93_v1_clean.wav": {
+    "intent": "LIGHT_ON",
+    "slot": null,
+    "wake_clip": "v44_0_0_0.wav",
+    "command_clip": "LIGHT_ON_s93_v1_clean.wav"
+  },
+  "v45_0_0_0__LIST_REMINDERS_s97_v2_clean.wav": {
+    "intent": "LIST_REMINDERS",
+    "slot": null,
+    "wake_clip": "v45_0_0_0.wav",
+    "command_clip": "LIST_REMINDERS_s97_v2_clean.wav"
+  },
+  "v46_0_0_0__MESSAGE_s97_v1_clean.wav": {
+    "intent": "MESSAGE",
+    "slot": null,
+    "wake_clip": "v46_0_0_0.wav",
+    "command_clip": "MESSAGE_s97_v1_clean.wav"
+  },
+  "v47_0_0_0__NEXT_s95_v1_clean.wav": {
+    "intent": "NEXT",
+    "slot": null,
+    "wake_clip": "v47_0_0_0.wav",
+    "command_clip": "NEXT_s95_v1_clean.wav"
+  },
+  "v48_0_0_0__PAUSE_s94_v1_clean.wav": {
+    "intent": "PAUSE",
+    "slot": null,
+    "wake_clip": "v48_0_0_0.wav",
+    "command_clip": "PAUSE_s94_v1_clean.wav"
+  },
+  "v4_0_0_0__PLAY_MUSIC_s99_v3_clean.wav": {
+    "intent": "PLAY_MUSIC",
+    "slot": null,
+    "wake_clip": "v4_0_0_0.wav",
+    "command_clip": "PLAY_MUSIC_s99_v3_clean.wav"
+  },
+  "v40_0_0_0__STOP_s94_v2_clean.wav": {
+    "intent": "STOP",
+    "slot": null,
+    "wake_clip": "v40_0_0_0.wav",
+    "command_clip": "STOP_s94_v2_clean.wav"
+  },
+  "v40_1_1_1__TEMPERATURE_22_s99_v1_clean.wav": {
+    "intent": "TEMPERATURE",
+    "slot": "22 degrees",
+    "wake_clip": "v40_1_1_1.wav",
+    "command_clip": "TEMPERATURE_22_s99_v1_clean.wav"
+  },
+  "v41_0_0_0__TIMER_10s_s98_v1_clean.wav": {
+    "intent": "TIMER",
+    "slot": "10 seconds",
+    "wake_clip": "v41_0_0_0.wav",
+    "command_clip": "TIMER_10s_s98_v1_clean.wav"
+  },
+  "v41_1_1_1__TIME_s99_v3_clean.wav": {
+    "intent": "TIME",
+    "slot": null,
+    "wake_clip": "v41_1_1_1.wav",
+    "command_clip": "TIME_s99_v3_clean.wav"
+  },
+  "v42_0_0_0__VOLUME_DOWN_s99_v3_clean.wav": {
+    "intent": "VOLUME_DOWN",
+    "slot": null,
+    "wake_clip": "v42_0_0_0.wav",
+    "command_clip": "VOLUME_DOWN_s99_v3_clean.wav"
+  },
+  "v43_0_0_0__VOLUME_UP_s95_v2_clean.wav": {
+    "intent": "VOLUME_UP",
+    "slot": null,
+    "wake_clip": "v43_0_0_0.wav",
+    "command_clip": "VOLUME_UP_s95_v2_clean.wav"
+  },
+  "v44_0_0_0__WEATHER_s91_v2_clean.wav": {
+    "intent": "WEATHER",
+    "slot": null,
+    "wake_clip": "v44_0_0_0.wav",
+    "command_clip": "WEATHER_s91_v2_clean.wav"
+  }
+}

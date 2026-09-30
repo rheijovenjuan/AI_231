@@ -1,0 +1,30 @@
+{
+  "n": 1842,
+  "intent_acc": 0.9929,
+  "clean": {
+    "n": 922,
+    "acc": 0.9935
+  },
+  "noisy": {
+    "n": 920,
+    "acc": 0.9924
+  },
+  "top_confusions": [
+    "VOLUME_DOWN->VOLUME_UP: 3",
+    "CALL->PLAY_MUSIC: 2",
+    "CREATE_REMINDER->LIST_REMINDERS: 2",
+    "PAUSE->VOLUME_DOWN: 2",
+    "CALL->PAUSE: 1",
+    "LIGHT_ON->PLAY_MUSIC: 1",
+    "LIST_REMINDERS->CREATE_REMINDER: 1",
+    "STOP->NEXT: 1"
+  ],
+  "slot": {
+    "match": 940,
+    "mismatch": 178,
+    "empty": 2,
+    "n": 1120,
+    "acc_of_decided": 0.8408
+  },
+  "seconds": 35.5
+}

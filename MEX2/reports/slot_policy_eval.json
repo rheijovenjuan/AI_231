@@ -1,0 +1,40 @@
+{
+  "keyword": {
+    "match": 1113,
+    "mismatch": 5,
+    "empty": 2,
+    "n": 1120,
+    "acc_of_decided": 0.9955,
+    "acc_all": 0.9938
+  },
+  "fill": {
+    "match": 1113,
+    "mismatch": 5,
+    "empty": 2,
+    "n": 1120,
+    "acc_of_decided": 0.9955,
+    "acc_all": 0.9938
+  },
+  "text": {
+    "match": 1116,
+    "mismatch": 2,
+    "empty": 2,
+    "n": 1120,
+    "acc_of_decided": 0.9982,
+    "acc_all": 0.9964
+  },
+  "text_mismatch_examples": [
+    {
+      "path": "TEMPERATURE_22/TEMPERATURE_22_s100_v2_clean.wav",
+      "text": "Change the temperature to 20 degrees.",
+      "gt": "22",
+      "got": "20"
+    },
+    {
+      "path": "TEMPERATURE_22/TEMPERATURE_22_s100_v2_noisy.wav",
+      "text": "Change the temperature to 20 degrees.",
+      "gt": "22",
+      "got": "20"
+    }
+  ]
+}

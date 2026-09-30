@@ -1,0 +1,21 @@
+# Dataset (large; re-download with train.py --download)
+data/
+samples/
+!samples/.gitkeep
+
+# Generated
+music/*
+!music/.gitkeep
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large local datasets (the optionB dataset lives in the course repo)
+*.log
+.cache/
+
+# Keep model + report outputs out of git by default (they're reproducible)
+# Uncomment to commit them:
+# !models/
+# !reports/

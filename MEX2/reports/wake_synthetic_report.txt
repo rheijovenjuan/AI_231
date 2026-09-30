@@ -1,0 +1,46 @@
+================================================================
+  'HEY RAPI' WAKE WORD - SYNTHETIC DATA TRAINING REPORT
+================================================================
+
+Wake word        : Hey Rapi
+Data source      : edge-tts neural TTS + augmentation
+Created          : 2026-09-30 11:02:33
+Elapsed          : 193.8 s
+
+--- CORPUS ---
+Clean clips      : 660  (pos=240, neg=420)
+Aug factor       : x6  ->  3960 feature vectors
+Voices           : 6 synthetic timbres
+Negative phrases : 39 unique (near-collisions + everyday speech + silence + room tone)
+
+--- MODEL ---
+Type             : 2x GMM (positive vs negative)
+Components       : 16
+Feature dim      : 82 (MFCC+delta+scalar)
+Saved to         : C:\Users\Rhei Juan\sandbox\rapi_combined\models\wakeword_synthetic.joblib
+
+Decision rule    : score = LLR(P(x|pos)-P(x|neg)); fire if score >= 2.199
+
+--- METRICS (held-out test, split by CLIP) ---
+metric           train      test
+acc              75.8%     72.5%
+precision        62.0%     59.1%
+recall           86.3%     79.4%
+f1               72.1%     67.8%
+
+ROC AUC (test)   : 80.3%
+
+--- SCORE DISTRIBUTION (test) ---
+positive  mean=  14.236  std=17.332
+negative  mean=-138.199  std=319.370
+threshold (LLR)  : 2.199
+
+--- CONFUSION (test) ---
+TP=286  FP=198  FN=74  TN=432
+
+NOTE: positives are neural TTS 'Hey Rapi' (edge-tts) +
+augmentation - the WAVs genuinely say the wake phrase.
+Raw audio: data/wake_tts/   corpus: data/synth_wake/pos/
+For production robustness, record ~200 real human 'Hey Rapi'
+clips (docs/collecting_wakeword_data.md) and retrain with the
+SAME pipeline (drop-in: identical features + GMM + threshold).
