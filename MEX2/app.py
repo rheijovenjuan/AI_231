@@ -7,14 +7,15 @@ Modes
                 Great for testing on a PC.  Repeat with --file for many.
   --mode mic    Live microphone: listen for "Hey Rapi", then a command.
                 (Needs a mic + sounddevice. This is the real demo mode.)
-  --mode gui    Open the Tkinter UI. Commands come from the on-screen test
-                buttons (and from the mic if --mic is also passed).
+  --mode gui    Open the Tkinter UI (status panels + log + Exit). Add
+                --small-screen for a 3.5in 480x320 Pi touchscreen.
 
 Examples
 --------
   python app.py --mode file --file data/PLAY_MUSIC/PLAY_MUSIC_s1_v1_clean.wav
   python app.py --mode gui
   python app.py --mode mic --gui
+  python app.py --mode mic --gui --small-screen   # 3.5in display
 """
 
 from __future__ import annotations
@@ -104,7 +105,8 @@ def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
             onnx_dir: str = ONNX_DIR, min_confidence: float = 0.45,
             wake_trigger: float = 0.0, vad_rms: float | None = None,
             transcribe: bool = True, stt_model: str = "base.en",
-            confirm: str = "voice", slot_policy: str = "text"):
+            confirm: str = "voice", slot_policy: str = "text",
+            small_screen: bool = False):
     import tkinter as tk
     from voice_assistant.ui import RapiUI
 
@@ -120,7 +122,8 @@ def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
                                 transcribe=transcribe, stt_model=stt_model,
                                 confirm=confirm, slot_policy=slot_policy)
 
-    ui = RapiUI(root, on_command=lambda cmd: _dispatch_text(assistant, ui, cmd))
+    ui = RapiUI(root, on_command=lambda cmd: _dispatch_text(assistant, ui, cmd),
+                small_screen=small_screen)
     # Route BOTH state-machine events and dispatcher actions to the UI.
     assistant.dispatcher.on_event = on_event
 
@@ -141,7 +144,7 @@ def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
         ui.log_line('Say "Hey Rapi" to wake me up.')
         threading.Thread(target=_mic_loop, args=(assistant,), daemon=True).start()
     else:
-        ui.log_line("Rapi ready (no mic). Click a test button below.")
+        ui.log_line("Rapi ready (no mic) - display only.")
 
     root.mainloop()
 
@@ -236,6 +239,9 @@ def main():
                     help="WAV file to run in file mode (repeatable)")
     ap.add_argument("--gui", action="store_true",
                     help="open GUI alongside mic mode")
+    ap.add_argument("--small-screen", action="store_true",
+                    help="compact GUI layout for a 3.5in 480x320 display "
+                         "(Raspberry Pi touchscreen; use with --gui)")
     ap.add_argument("--music-dir", default=MUSIC_DIR)
     ap.add_argument("--onnx", default=ONNX_DIR,
                     help="directory with wake.onnx / keyword.onnx / "
@@ -280,7 +286,8 @@ def main():
                     min_confidence=args.min_confidence,
                     wake_trigger=args.wake_trigger, vad_rms=args.vad_rms,
                     transcribe=args.transcribe, stt_model=args.stt_model,
-                    confirm=args.confirm, slot_policy=args.slot_policy)
+                    confirm=args.confirm, slot_policy=args.slot_policy,
+                    small_screen=args.small_screen)
         else:
             assistant = build_assistant(on_event=_print_event,
                                         onnx_dir=args.onnx,
@@ -304,7 +311,8 @@ def main():
                 min_confidence=args.min_confidence,
                 wake_trigger=args.wake_trigger, vad_rms=args.vad_rms,
                 transcribe=args.transcribe, stt_model=args.stt_model,
-                confirm=args.confirm, slot_policy=args.slot_policy)
+                confirm=args.confirm, slot_policy=args.slot_policy,
+                small_screen=args.small_screen)
 
 
 if __name__ == "__main__":

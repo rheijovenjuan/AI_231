@@ -66,6 +66,8 @@ python app.py --mode mic
 # 3. Tkinter GUI (status panels + log; Exit button closes the app)
 python app.py --mode gui
 python app.py --mode mic --gui      # GUI + mic
+python app.py --mode mic --gui --small-screen  # compact GUI for a
+                                    # 3.5in 480x320 Pi touchscreen
 ```
 
 Useful flags:
@@ -83,6 +85,8 @@ Useful flags:
 --stt-model base.en    # faster-whisper model size (tiny.en is faster)
 --confirm voice        # wake acknowledgement: spoken "Yes?" (default) /
                        # beep / off
+--small-screen         # compact GUI layout for a 3.5in 480x320 display
+                       # (Raspberry Pi touchscreen; use with --gui)
 ```
 
 Every decision is printed as `>>> INTENT` with `keywords=`/`confidence=`,

@@ -65,6 +65,8 @@ The **first** transcribing run downloads the whisper model (`base.en`,
 
 ```bash
 python app.py --mode mic --gui     # GUI with panels + log + Exit button
+python app.py --mode mic --gui --small-screen   # same, compact layout for a
+                                    # 3.5in 480x320 touchscreen HAT
 python app.py --mode mic           # headless console
 ```
 
@@ -104,7 +106,7 @@ cat > ~/mex2/run_rapi.sh <<'EOF'
 cd ~/mex2
 source venv/bin/activate
 export DISPLAY=:0
-exec python app.py --mode mic --gui
+exec python app.py --mode mic --gui        # add --small-screen for a 3.5in display
 EOF
 chmod +x ~/mex2/run_rapi.sh
 
@@ -135,6 +137,7 @@ python benchmark.py --n 50
 | `sndfile library not found` | `sudo apt install libsndfile1` |
 | No mic detected | `sd.query_devices()`, set default input in `raspi-config` |
 | `invalid sample rate [PaErrorCode -9997]` | mic has no 16 kHz mode - the app auto-falls-back to the device's native rate and resamples to 16 kHz (`[mic] device has no 16 kHz mode ... capturing at 44100 Hz`). If it still fails: `python -m sounddevice` to list devices / fix the default in `raspi-config` |
+| `[mic] input overflow` (occasional) | PortAudio dropped a chunk while the CPU was busy (Whisper/ONNX spikes) - harmless, one 30 ms gap. If constant: `--stt-model tiny.en`, close the desktop browser, check throttling (`vcgencmd measure_temp`) |
 | GUI won't start | need a display (`DISPLAY=:0`) or VNC; headless -> `--mode mic` without `--gui` |
 | Whisper download fails | run once while online, or pre-copy `~/.cache/huggingface` |
 | High latency / stutter | use `--stt-model tiny.en`, close the desktop browser, check `vcgencmd measure_temp` for throttling |

@@ -36,86 +36,102 @@ COLOR_HEX = {
 
 
 class RapiUI:
-    def __init__(self, root: tk.Tk, on_command: Callable[[str], None]):
+    def __init__(self, root: tk.Tk, on_command: Callable[[str], None],
+                 small_screen: bool = False):
         self.root = root
         self.on_command = on_command
+        self.small = small_screen
         root.title("Rapi - Voice Assistant")
-        root.geometry("760x560")
+        # 480x320 = native resolution of the common 3.5" Pi touchscreen HATs
+        root.geometry("480x320" if small_screen else "760x560")
         root.configure(bg="#1e1e1e")
         self._build()
 
     # ------------------------------------------------------------------ #
     def _build(self):
-        pad = {"padx": 10, "pady": 6}
+        sm = self.small
+        pad = {"padx": 4 if sm else 10, "pady": 2 if sm else 6}
+        f_title, f_state, f_cap = (14, 9, 8) if sm else (22, 12, 10)
+        f_thermo, f_info, f_timer = (11, 11, 13) if sm else (14, 14, 16)
+        light_size = 84 if sm else 160
+        self._vol_w, self._vol_h = (110, 10) if sm else (200, 14)
+
         top = tk.Frame(self.root, bg="#1e1e1e")
         top.pack(fill="x", **pad)
-        tk.Label(top, text="RAPI", font=("Segoe UI", 22, "bold"),
+        tk.Label(top, text="RAPI", font=("Segoe UI", f_title, "bold"),
                  fg="#4dff88", bg="#1e1e1e").pack(side="left")
-        tk.Button(top, text="Exit", width=8, relief="flat", bg="#4a1d1d",
-                  fg="#ff8a8a", activebackground="#6b2828",
-                  activeforeground="#fff",
+        tk.Button(top, text="Exit", width=5 if sm else 8, relief="flat",
+                  bg="#4a1d1d", fg="#ff8a8a", activebackground="#6b2828",
+                  activeforeground="#fff", font=("Segoe UI", f_cap),
                   command=self.root.destroy).pack(side="right")
-        self.state_lbl = tk.Label(top, text="idle", font=("Segoe UI", 12),
+        self.state_lbl = tk.Label(top, text="idle", font=("Segoe UI", f_state),
                                   fg="#aaa", bg="#1e1e1e")
-        self.state_lbl.pack(side="right", padx=(0, 10))
+        self.state_lbl.pack(side="right", padx=(0, 6 if sm else 10))
 
         # Left column: light + thermostat
         left = tk.Frame(self.root, bg="#1e1e1e")
         left.pack(side="left", fill="both", expand=True, **pad)
 
-        self.light = tk.Canvas(left, width=160, height=160, bg="#1e1e1e",
-                               highlightthickness=0)
-        self.light.pack(pady=10)
+        self.light = tk.Canvas(left, width=light_size, height=light_size,
+                               bg="#1e1e1e", highlightthickness=0)
+        self.light.pack(pady=4 if sm else 10)
+        m = light_size // 8
         self._light_rect = self.light.create_rectangle(
-            20, 20, 140, 140, fill=COLOR_HEX["off"], outline="#444", width=3)
+            m, m, light_size - m, light_size - m, fill=COLOR_HEX["off"],
+            outline="#444", width=2 if sm else 3)
         tk.Label(left, text="Smart Light", fg="#ccc", bg="#1e1e1e",
-                 font=("Segoe UI", 10)).pack()
-        self.light_info = tk.Label(left, text="off", fg="#888", bg="#1e1e1e")
+                 font=("Segoe UI", f_cap)).pack()
+        self.light_info = tk.Label(left, text="off", fg="#888", bg="#1e1e1e",
+                                   font=("Segoe UI", f_cap))
         self.light_info.pack()
 
         self.thermo_lbl = tk.Label(left, text="Thermostat: 24°C",
                                    fg="#ffe14d", bg="#1e1e1e",
-                                   font=("Segoe UI", 14, "bold"))
-        self.thermo_lbl.pack(pady=12)
+                                   font=("Segoe UI", f_thermo, "bold"))
+        self.thermo_lbl.pack(pady=6 if sm else 12)
 
         # Right column: music + info
         right = tk.Frame(self.root, bg="#1e1e1e")
         right.pack(side="right", fill="both", expand=True, **pad)
 
         tk.Label(right, text="Music", fg="#ccc", bg="#1e1e1e",
-                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+                 font=("Segoe UI", f_cap, "bold")).pack(anchor="w")
         self.music_track = tk.Label(right, text="(nothing playing)",
-                                    fg="#fff", bg="#1e1e1e")
+                                    fg="#fff", bg="#1e1e1e",
+                                    font=("Segoe UI", f_cap))
         self.music_track.pack(anchor="w")
         self.music_state = tk.Label(right, text="state: stopped",
-                                    fg="#888", bg="#1e1e1e")
+                                    fg="#888", bg="#1e1e1e",
+                                    font=("Segoe UI", f_cap))
         self.music_state.pack(anchor="w")
-        self.vol_bar = tk.Canvas(right, width=200, height=14, bg="#1e1e1e",
-                                 highlightthickness=0)
+        self.vol_bar = tk.Canvas(right, width=self._vol_w, height=self._vol_h,
+                                 bg="#1e1e1e", highlightthickness=0)
         self.vol_bar.pack(anchor="w", pady=(2, 2))
         self._vol_rect = self.vol_bar.create_rectangle(
-            0, 0, 0, 14, fill="#4dff88", outline="")
+            0, 0, 0, self._vol_h, fill="#4dff88", outline="")
         self.vol_lbl = tk.Label(right, text="volume: 70%", fg="#888",
-                                bg="#1e1e1e")
-        self.vol_lbl.pack(anchor="w", pady=(0, 8))
+                                bg="#1e1e1e", font=("Segoe UI", f_cap))
+        self.vol_lbl.pack(anchor="w", pady=(0, 4 if sm else 8))
 
         tk.Label(right, text="Info", fg="#ccc", bg="#1e1e1e",
-                 font=("Segoe UI", 12, "bold")).pack(anchor="w", pady=(6, 0))
+                 font=("Segoe UI", f_cap + 2, "bold")).pack(anchor="w",
+                                                            pady=(4, 0))
         self.info_lbl = tk.Label(right, text="", fg="#eee", bg="#1e1e1e",
-                                 font=("Segoe UI", 14), justify="left",
-                                 wraplength=300, anchor="w")
+                                 font=("Segoe UI", f_info), justify="left",
+                                 wraplength=170 if sm else 300, anchor="w")
         self.info_lbl.pack(anchor="w", fill="x")
         self.timer_lbl = tk.Label(right, text="", fg="#4dff88", bg="#1e1e1e",
-                                  font=("Segoe UI", 16, "bold"), anchor="w")
+                                  font=("Segoe UI", f_timer, "bold"),
+                                  anchor="w")
         self.timer_lbl.pack(anchor="w", fill="x")
         self._timer_left: Optional[int] = None
 
         # Bottom: event log
         bottom = tk.Frame(self.root, bg="#1e1e1e")
         bottom.pack(fill="both", expand=True, **pad)
-        self.log = scrolledtext.ScrolledText(bottom, height=8, bg="#121212",
-                                             fg="#ddd", insertbackground="#fff",
-                                             font=("Consolas", 9))
+        self.log = scrolledtext.ScrolledText(
+            bottom, height=5 if sm else 8, bg="#121212", fg="#ddd",
+            insertbackground="#fff", font=("Consolas", 8 if sm else 9))
         self.log.pack(fill="both", expand=True, side="top")
 
     # ------------------------------------------------------------------ #
@@ -209,8 +225,8 @@ class RapiUI:
         if "state" in m:
             self.music_state.config(text=f"state: {m['state']}")
         if "volume" in m:
-            w = int(200 * m["volume"])
-            self.vol_bar.coords(self._vol_rect, 0, 0, w, 14)
+            w = int(self._vol_w * m["volume"])
+            self.vol_bar.coords(self._vol_rect, 0, 0, w, self._vol_h)
             self.vol_lbl.config(text=f"volume: {int(m['volume'] * 100)}%")
 
 

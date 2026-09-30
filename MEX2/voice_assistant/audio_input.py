@@ -49,7 +49,8 @@ class Microphone:
         try:
             self.stream = self.sd.InputStream(
                 samplerate=F.SAMPLE_RATE, channels=1, dtype="float32",
-                blocksize=self.chunk, device=self.device, callback=self._cb)
+                blocksize=self.chunk, device=self.device, callback=self._cb,
+                latency="high")
         except Exception as exc:
             # Many USB mics (esp. on Raspberry Pi) have no 16 kHz mode, and
             # ALSA/PortAudio will not resample for us (PaErrorCode -9997).
@@ -65,7 +66,8 @@ class Microphone:
                   f"{rate} Hz -> resampling to {F.SAMPLE_RATE} Hz")
             self.stream = self.sd.InputStream(
                 samplerate=rate, channels=1, dtype="float32",
-                blocksize=blocksize, device=self.device, callback=self._cb)
+                blocksize=blocksize, device=self.device, callback=self._cb,
+                latency="high")
         self.stream.start()
         return self
 
