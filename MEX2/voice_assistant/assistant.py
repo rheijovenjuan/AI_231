@@ -621,7 +621,7 @@ class Assistant:
         res = self.pipe.classify(x)
         ok, intent, slots, conf, kws, msg = self._decide(text, res)
         if not ok:
-            self.on_event(confidence=round(conf, 3), keywords=kws, status=msg)
+            self.on_event(confidence=round(conf, 3), keywords=kws)
             self._reset_idle(msg)
             return
         msg = self.dispatcher.dispatch(intent, slots)
@@ -630,6 +630,10 @@ class Assistant:
         self._reset_idle(msg)
 
     def _reset_idle(self, msg: str):
+        if msg:
+            # every path back to idle must SAY what happened - the timeout
+            # and flush paths used to pass a message here that was dropped
+            self.on_event(status=msg)
         self._cmd = []
         self._onset = None
         self._speech_samples = 0
