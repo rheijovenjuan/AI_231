@@ -34,17 +34,38 @@ class Microphone:
         self.q: "queue.Queue[np.ndarray]" = queue.Queue()
         self.device = device
         self._stop = False
+        self._device_sr = F.SAMPLE_RATE
 
     def _cb(self, indata, frames, t, status):
         if status:
             print("[mic]", status)
         # PortAudio delivers float32; the pipeline expects float64.
-        self.q.put(indata[:, 0].astype(np.float64, copy=False))
+        x = indata[:, 0].astype(np.float64, copy=False)
+        if self._device_sr != F.SAMPLE_RATE:
+            x = F.resample_linear(x, self._device_sr, F.SAMPLE_RATE)
+        self.q.put(x)
 
     def __enter__(self):
-        self.stream = self.sd.InputStream(
-            samplerate=F.SAMPLE_RATE, channels=1, dtype="float32",
-            blocksize=self.chunk, device=self.device, callback=self._cb)
+        try:
+            self.stream = self.sd.InputStream(
+                samplerate=F.SAMPLE_RATE, channels=1, dtype="float32",
+                blocksize=self.chunk, device=self.device, callback=self._cb)
+        except Exception as exc:
+            # Many USB mics (esp. on Raspberry Pi) have no 16 kHz mode, and
+            # ALSA/PortAudio will not resample for us (PaErrorCode -9997).
+            # Open at the device's native rate; _cb resamples to 16 kHz.
+            info = self.sd.query_devices(self.device, "input")
+            rate = int(round(float(info.get("default_samplerate",
+                                             F.SAMPLE_RATE))))
+            if rate <= 0:
+                rate = 48000
+            self._device_sr = rate
+            blocksize = max(1, int(round(rate * self.chunk / F.SAMPLE_RATE)))
+            print(f"[mic] device has no 16 kHz mode ({exc}); capturing at "
+                  f"{rate} Hz -> resampling to {F.SAMPLE_RATE} Hz")
+            self.stream = self.sd.InputStream(
+                samplerate=rate, channels=1, dtype="float32",
+                blocksize=blocksize, device=self.device, callback=self._cb)
         self.stream.start()
         return self
 
