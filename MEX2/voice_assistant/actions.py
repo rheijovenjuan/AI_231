@@ -413,11 +413,20 @@ class ActionDispatcher:
         return msg
 
     # -- timers / alarms --------------------------------------------------- #
+    def _alert(self, **event):
+        """Fire a timed event (timer/alarm) and beep twice to announce it."""
+        self._emit(**event)
+        try:
+            from .assistant import play_beep   # lazy: assistant imports us
+            play_beep(count=2)
+        except Exception:  # noqa: BLE001 - sound is best-effort
+            pass
+
     def _do_timer(self, s):
         secs = int(s.get("duration", "60s").rstrip("s"))
         name = f"timer-{time.time()}"
         self._timers[name] = threading.Timer(
-            secs, lambda: self._emit(timer_done=f"{secs}s timer finished"))
+            secs, lambda: self._alert(timer_done=f"{secs}s timer finished"))
         self._timers[name].daemon = True    # never block app exit
         self._timers[name].start()
         self._emit(timer={"started": secs})
@@ -431,7 +440,7 @@ class ActionDispatcher:
         secs = _secs_until(t)
         if secs is not None:
             self._alarm_timer = threading.Timer(
-                secs, lambda: self._emit(alarm_done=f"Alarm! It's {t}"))
+                secs, lambda: self._alert(alarm_done=f"Alarm! It's {t}"))
             self._alarm_timer.daemon = True
             self._alarm_timer.start()
         self._emit(alarm={"set": t})

@@ -64,8 +64,8 @@ DEFAULT_VAD_RMS = 2e-4
 
 
 def play_beep(freq: float = 880.0, dur: float = 0.15, vol: float = 0.3,
-              sr: int = SR) -> None:
-    """Play a short acknowledgement tone (best-effort, never raises)."""
+              sr: int = SR, count: int = 1, gap: float = 0.18) -> None:
+    """Play ``count`` short acknowledgement beeps (best-effort, never raises)."""
     try:
         import sounddevice as sd
         t = np.linspace(0.0, dur, int(sr * dur), False)
@@ -74,7 +74,8 @@ def play_beep(freq: float = 880.0, dur: float = 0.15, vol: float = 0.3,
         if fade > 0:
             tone[:fade] *= np.linspace(0, 1, fade)
             tone[-fade:] *= np.linspace(1, 0, fade)
-        sd.play(tone, sr)
+        seg = np.concatenate([tone, np.zeros(int(sr * gap))])
+        sd.play(np.tile(seg, max(1, int(count))), sr)
         sd.wait()
     except Exception as exc:  # noqa: BLE001 - audio is optional
         print(f"[beep] audio unavailable ({exc}); continuing silently")

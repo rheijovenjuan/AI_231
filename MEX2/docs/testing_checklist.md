@@ -25,8 +25,10 @@ Use this to verify the assistant works end-to-end, on a PC and on the Pi.
       brightness; **Red/Green/Blue** changes its colour.
 - [ ] **Temp 22** → "Thermostat: 22°C" and log "adjusted temperature to 22 degrees".
 - [ ] **Remind** → log + info panel show the reminder; **list** shows it.
-- [ ] **Timer 30s** → starts; after 30 s the log shows "timer finished".
-- [ ] **Alarm 8am** → "Alarm set for 08:00 AM".
+- [ ] **Timer 30s** → starts; after 30 s the log shows "timer finished" **and
+      two beeps play**.
+- [ ] **Alarm 8am** → "Alarm set for 08:00 AM"; when it fires: log "Alarm!"
+      **and two beeps**.
 - [ ] **Call mom** / **Msg dad** → info panel "Calling mom" / "Messaging dad".
 
 ## D. Slots
