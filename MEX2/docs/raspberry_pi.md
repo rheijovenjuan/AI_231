@@ -163,8 +163,11 @@ echo "@~/mex2/run_rapi.sh" >> ~/.config/lxsession/LXDE-pi/autostart
 
 ## 9. Benchmarks
 
-Targets for a Pi 4 (4 GB) and the exact commands to measure them are in
-[`BENCHMARKS.md`](BENCHMARKS.md). Quick sanity:
+## 9. Benchmarks
+
+Measured Pi 4 numbers (wake p50 17.8 ms · keyword p50 39.4 ms · peak RSS
+147 MB · RTF 0.016) and the reproduction command are in
+[`BENCHMARKS.md`](BENCHMARKS.md) §2. Quick sanity:
 
 ```bash
 python benchmark.py --n 50

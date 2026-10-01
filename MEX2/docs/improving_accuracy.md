@@ -72,9 +72,10 @@ words + "lights in X" phrasings (`classifier.color_from_text`).
 - **Per-frame attention / mean-max pooling and spectral-contrast features** -
   the CNN mostly fixed this, but short confusables (TIME/CALL/NEXT) could
   still benefit.
-- **Pi 4 benchmark** for the full pipeline (whisper base.en is the bottleneck;
-  commands in `docs/BENCHMARKS.md`). If it is too slow, fall back to a tiny
-  streaming ASR (vosk ~40 MB) for slots only.
+- **Pi 4 full-pipeline timing including Whisper** - the ONNX path is now
+  measured (`BENCHMARKS.md` §2: 68.4 ms wake+command, RTF 0.016), but
+  whisper `base.en` int8 latency on the Pi is not; if it is too slow, fall
+  back to a tiny streaming ASR (vosk ~40 MB) for slots only.
 - **Real "Hey Rapi" negatives** from live mic recordings - see
   `collecting_wakeword_data.md`; the current FAR numbers are TTS/split based.
 - **Clean up Whisper mishears as they appear** - add the phrase as a rule or

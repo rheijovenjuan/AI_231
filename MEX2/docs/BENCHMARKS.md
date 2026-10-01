@@ -53,39 +53,39 @@ Notes:
 
 ---
 
-## 2. Raspberry Pi 4 (4 GB) — how to measure
+## 2. Raspberry Pi 4 (4 GB) — measured
 
-No Pi is attached to this workstation, so **no Pi numbers are claimed here**.
-Run the same script on the Pi and paste the table:
+Measured on a Raspberry Pi 4 (4 GB), 64-bit Raspberry Pi OS (6.18, aarch64),
+Python 3.13.5, onnxruntime 1.30.0, `--threads 2` (4 cores), 2026-10-01.
+Raw summary: [`output/onnx/benchmark_rpi4.json`](../output/onnx/benchmark_rpi4.json).
 
 ```bash
-# on the Raspberry Pi 4, 64-bit Raspberry Pi OS
-scp -r output/ rapi@<pi>:~/rapi_vcm/output/
-scp -r rapi_vcm/ runtime/ requirements_pi.txt rapi@<pi>:~/rapi_vcm/
-ssh rapi@<pi>
-sudo apt update && sudo apt install -y python3-pip libportaudio2 libsndfile1
-pip3 install -r ~/rapi_vcm/requirements_pi.txt
-cd ~/rapi_vcm
+# reproduce on the Pi
+git clone https://github.com/rheijovenjuan/AI_231.git && cd AI_231/MEX2
+./setup_pi.sh                                   # once: deps + venv
 python3 runtime/benchmark.py --model output/onnx --label rpi4 --threads 2
 ```
 
-Then append the generated `output/onnx/benchmark_rpi4.json` summary here.
+| quantity | Pi 4 p50 / p99 | PC (§1) p50 / p99 |
+|---|---:|---:|
+| model load | 699 ms | 209 ms |
+| feature extraction (2.5 s) | 9.90 / 10.04 ms | 4.17 ms |
+| wake inference | 17.75 / 32.93 ms | 2.54 / 3.40 ms |
+| command (keyword) inference | 39.38 / 65.58 ms | 7.69 / 10.06 ms |
+| wake scan over 4 s of audio | 198.9 / 301.5 ms | 32.76 ms |
+| wake + command, end-to-end (est.) | **68.4 ms** | 14.5 ms |
+| throughput | 57.9 wake/s · 24.3 cmd/s | – |
+| peak RSS | **147.1 MB** | 140.2 MB |
+| real-time factor | **0.0158** | – |
 
-What to expect (engineering estimate, **not measured**): the Pi 4's Cortex-A72
-is roughly 4–8× slower per core than the desktop part above at this workload,
-so order-of-magnitude expectations are:
+Comfortably real time: the always-listening loop needs one wake inference per
+100 ms hop (p50 17.8 ms) and a command runs one keyword inference (p50 39.4 ms);
+RTF 0.016 ≈ 1.6 % of real time, RSS 147 MB on a 4 GB board. Use `--threads 2`
+so the Pi stays responsive.
 
-| quantity | estimate (unverified) |
-|---|---:|
-| wake inference | 10 – 25 ms |
-| keyword inference | 40 – 90 ms |
-| feature extraction (2.5 s) | 15 – 30 ms |
-| peak RSS | well under 200 MB |
-
-Even at the pessimistic end the pipeline stays far below real time: the
-always-listening loop only needs one wake inference per 100 ms hop, and a
-command inference runs once per event. Use `--threads 2` so the Pi stays
-responsive.
+Not included above: Whisper (`base.en` int8) for the transcript path — it stays
+the slow part of the full demo (fall back to `--stt-model tiny.en`, or run
+`--no-transcribe` for the pure-VCM path).
 
 ---
 

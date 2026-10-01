@@ -1,0 +1,75 @@
+{
+  "label": "rpi4",
+  "timestamp": "2026-10-01 19:49:44",
+  "environment": {
+    "platform": "Linux-6.18.50+rpt-rpi-v8-aarch64-with-glibc2.41",
+    "processor": "aarch64",
+    "python": "3.13.5",
+    "onnxruntime": "1.30.0",
+    "threads": 2,
+    "cpu_count": 4
+  },
+  "artifacts": {
+    "files_kb": {
+      "wake.onnx": 113.0,
+      "keyword.onnx": 507.4,
+      "command.onnx": 506.9
+    },
+    "parameters": {
+      "command": 123303,
+      "wake": 23665,
+      "keyword": 123496
+    },
+    "model_dir": "/home/rgjuan/AI_231/MEX2/output/onnx",
+    "load_seconds": 0.699
+  },
+  "latency": {
+    "feature_extract_cmd": {
+      "mean_ms": 9.903,
+      "p50_ms": 9.897,
+      "p90_ms": 9.973,
+      "p99_ms": 10.042,
+      "min_ms": 9.754,
+      "max_ms": 10.065,
+      "iters": 300
+    },
+    "wake_inference": {
+      "mean_ms": 17.257,
+      "p50_ms": 17.753,
+      "p90_ms": 31.923,
+      "p99_ms": 32.932,
+      "min_ms": 9.364,
+      "max_ms": 36.068,
+      "iters": 300
+    },
+    "command_inference": {
+      "mean_ms": 41.212,
+      "p50_ms": 39.378,
+      "p90_ms": 52.272,
+      "p99_ms": 65.584,
+      "min_ms": 29.107,
+      "max_ms": 71.165,
+      "iters": 300
+    },
+    "scan_4s_audio": {
+      "mean_ms": 200.802,
+      "p50_ms": 198.947,
+      "p90_ms": 263.993,
+      "p99_ms": 301.549,
+      "min_ms": 131.124,
+      "max_ms": 311.966,
+      "iters": 30
+    },
+    "wake_plus_command_est_ms": 68.372
+  },
+  "throughput": {
+    "wake_inferences_per_s": 57.9,
+    "commands_per_s": 24.3
+  },
+  "memory": {
+    "peak_rss_mb": 147.1
+  },
+  "accuracy": null,
+  "wake_accuracy": null,
+  "real_time_factor": 0.0158
+}
