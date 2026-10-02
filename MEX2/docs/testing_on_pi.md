@@ -42,15 +42,15 @@ python runtime/benchmark.py --model output/onnx --label rpi4 --threads 2
 Writes `output/onnx/benchmark_rpi4.json` and prints a markdown table.
 **Always use `--threads 2`** (leaves cores free for audio/system).
 
-Expected on a Pi 4 4 GB (measured 2026-10-01, [`BENCHMARKS.md` § 2]):
+Expected on a Pi 4 4 GB (measured 2026-10-02, [`BENCHMARKS.md` § 2]):
 
 | quantity | expected |
 |---|---:|
-| model load | ~700 ms |
-| wake inference p50 / p99 | ~17.8 / ~32.9 ms |
-| keyword inference p50 / p99 | ~39.4 / ~65.6 ms |
-| scan of 4 s audio p50 | ~199 ms |
-| wake + command end-to-end (est.) | ~68 ms |
+| model load | ~650 ms |
+| wake inference p50 / p99 | ~17.2 / ~32.1 ms |
+| keyword inference p50 / p99 | ~40.0 / ~70.7 ms |
+| scan of 4 s audio p50 | ~225 ms |
+| wake + command end-to-end (est.) | ~69 ms |
 | peak RSS | ~147 MB |
 | real-time factor | ~0.016 |
 

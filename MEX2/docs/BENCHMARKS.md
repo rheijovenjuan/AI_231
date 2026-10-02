@@ -16,7 +16,7 @@ when the model card says `head: command`).
 
 ## 1. Measured — PC (Windows 11, CPU only)
 
-Run 2026-10-02, `output/onnx/benchmark_pc.json`:
+Run 2026-10-03 with the run-5 models, `output/onnx/benchmark_pc.json`:
 
 | metric | value |
 |---|---:|
@@ -24,19 +24,19 @@ Run 2026-10-02, `output/onnx/benchmark_pc.json`:
 | CPU | Intel Family 6 Model 165, 12 logical cores |
 | Python / onnxruntime | 3.13.7 / 1.30.0 |
 | threads | ORT default (all cores) |
-| **model load** | **208 ms** |
+| **model load** | **221.6 ms** |
 | `wake.onnx` size | **113.0 KB** |
 | `keyword.onnx` size | **507.4 KB** |
 | `command.onnx` size | 506.9 KB |
 | parameters (wake / keyword / command) | 23 665 / 123 496 / 123 303 |
-| wake inference p50 / p99 | **2.82 / 4.32 ms** |
-| keyword inference p50 / p99 | **9.28 / 12.31 ms** |
-| feature extraction, 2.5 s audio (p50) | 3.33 ms |
-| full wake scan of 4 s audio (p50) | 35.67 ms |
-| wake + command, end-to-end (est.) | **15.9 ms** |
-| real-time factor (audio sec / wall sec) | 0.0034 |
-| throughput | 338 wake inferences/s, 106 commands/s |
-| **peak RSS** | **139.8 MB** (whole Python process) |
+| wake inference p50 / p99 | **3.36 / 6.47 ms** |
+| keyword inference p50 / p99 | **9.71 / 11.86 ms** |
+| feature extraction, 2.5 s audio (p50) | 3.55 ms |
+| full wake scan of 4 s audio (p50) | 37.30 ms |
+| wake + command, end-to-end (est.) | **16.9 ms** |
+| real-time factor (audio sec / wall sec) | 0.00359 |
+| throughput | 284.9 wake inferences/s, 102.5 commands/s |
+| **peak RSS** | **139.6 MB** (whole Python process) |
 
 Notes:
 
@@ -57,8 +57,9 @@ Notes:
 ## 2. Raspberry Pi 4 (4 GB) — measured
 
 Measured on a Raspberry Pi 4 (4 GB), 64-bit Raspberry Pi OS (6.18, aarch64),
-Python 3.13.5, onnxruntime 1.30.0, `--threads 2` (4 cores), 2026-10-01.
-Raw summary: [`output/onnx/benchmark_rpi4.json`](../output/onnx/benchmark_rpi4.json).
+Python 3.13.5, onnxruntime 1.30.0, `--threads 2` (4 cores), 2026-10-02
+(run-5 models). Raw summary:
+[`output/onnx/benchmark_rpi4.json`](../output/onnx/benchmark_rpi4.json).
 
 ```bash
 # reproduce on the Pi
@@ -69,18 +70,18 @@ python3 runtime/benchmark.py --model output/onnx --label rpi4 --threads 2
 
 | quantity | Pi 4 p50 / p99 | PC (§1) p50 / p99 |
 |---|---:|---:|
-| model load | 699 ms | 208 ms |
-| feature extraction (2.5 s) | 9.90 / 10.04 ms | 3.33 ms |
-| wake inference | 17.75 / 32.93 ms | 2.82 / 4.32 ms |
-| command (keyword) inference | 39.38 / 65.58 ms | 9.28 / 12.31 ms |
-| wake scan over 4 s of audio | 198.9 / 301.5 ms | 35.67 ms |
-| wake + command, end-to-end (est.) | **68.4 ms** | 15.9 ms |
-| throughput | 57.9 wake/s · 24.3 cmd/s | – |
-| peak RSS | **147.1 MB** | 139.8 MB |
-| real-time factor | **0.0158** | – |
+| model load | 649 ms | 221.6 ms |
+| feature extraction (2.5 s) | 9.99 / 10.14 ms | 3.55 ms |
+| wake inference | 17.18 / 32.08 ms | 3.36 / 6.47 ms |
+| command (keyword) inference | 39.96 / 70.73 ms | 9.71 / 11.86 ms |
+| wake scan over 4 s of audio | 224.9 / 286.8 ms | 37.30 ms |
+| wake + command, end-to-end (est.) | **69.3 ms** | 16.9 ms |
+| throughput | 59.8 wake/s · 23.5 cmd/s | 284.9 wake/s · 102.5 cmd/s |
+| peak RSS | **147.0 MB** | 139.6 MB |
+| real-time factor | **0.0160** | 0.00359 |
 
 Comfortably real time: the always-listening loop needs one wake inference per
-100 ms hop (p50 17.8 ms) and a command runs one keyword inference (p50 39.4 ms);
+100 ms hop (p50 17.2 ms) and a command runs one keyword inference (p50 40.0 ms);
 RTF 0.016 ≈ 1.6 % of real time, RSS 147 MB on a 4 GB board. Use `--threads 2`
 so the Pi stays responsive.
 
