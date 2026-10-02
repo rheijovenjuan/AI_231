@@ -85,7 +85,7 @@ print(pipe.threshold)                          # wake threshold from model_card
 # full recording: wake scan + keyword spot
 wave = F.load_audio("recording.wav")           # 16 kHz mono float32
 print(pipe.scan(wave))
-# {'detected': True, 'wake_score': 0.97, 'threshold': 0.4,
+# {'detected': True, 'wake_score': 0.97, 'threshold': 0.9,
 #  'wake_offset_sec': 0.4, 'intent': 'TIMER', 'confidence': 0.96,
 #  'keywords': [{'keyword': 'timer', 'p': 1.0},
 #               {'keyword': '10 seconds', 'p': 0.98}],

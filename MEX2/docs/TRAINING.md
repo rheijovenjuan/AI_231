@@ -324,8 +324,13 @@ Effect on the test split (details in [`ACCURACY.md`](ACCURACY.md)):
 | keyword intent (test) | 99.24 % | **99.24 %** (seed-exact reproduction) |
 | command baseline intent (test) | - | **99.62 %** |
 | wake TPR @ 0.40 | 99.75 % | **99.715 %** |
-| wake FAR @ 0.40 (full clip) | 0.000 % | **0.315 %** (6/1904; streaming false wakes still 0/19) |
+| wake FAR @ 0.40 (full clip) | 0.000 % | **0.315 %** (6/1904) |
 | real recordings >= 0.40 | 10/11 (worst 0.038) | **11/11 (worst 0.996)** |
+
+The shipped threshold is now **0.900** (see [`ACCURACY.md`](ACCURACY.md)
+§ 5): TPR **99.544 %**, FAR **0.000 %** (0/1904), streaming false accepts
+**0/19** steady and **0/19** at start-up — the old full-ring windowing
+scored start-up zeros and could fire 6/19 at 0.40.
 
 Artefacts of this run are committed for review:
 

@@ -406,7 +406,8 @@ class Assistant:
 
         self.state = State.IDLE
         self.ring = np.zeros(int(RING_SEC * SR), dtype=np.float32)
-        self._ring_fill = self.ring.shape[0]   # idle audio currently in ring
+        self._wake_window = int(self.pipe.wake_seconds * SR)  # exact scored
+        self._ring_fill = 0                   # real audio samples in ring
         self._wake_streak = 0                  # consecutive scans >= threshold
         self._scan_acc_ms = 0
         self._cmd: list = []
@@ -482,11 +483,13 @@ class Assistant:
         if self._rms(self.ring) < self.vad_rms:
             self._wake_streak = 0
             return                      # silence: no inference at all
-        if self._ring_fill < self.ring.shape[0]:
+        if self._ring_fill < self._wake_window:
             self._scan_acc_ms = 0
-            return                      # ring still refilling after a wake
+            return              # scored window not yet all real audio
         self._scan_acc_ms = 0
-        score = self.pipe.wake_score(self.ring)
+        # Score the trailing wake_seconds window only: CMVN over the whole
+        # ring mixes zeros into the normalisation and saturates the score.
+        score = self.pipe.wake_score(self.ring[-self._wake_window:])
         if score >= self.trigger:
             self._wake_streak += 1      # must hold up over two scans
         else:

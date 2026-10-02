@@ -230,20 +230,25 @@ Operating point selected on the **validation** split as
 `(1 − 0.001)`-quantile of negative scores (**0.8194**), then frozen; test
 metrics at that point are TPR 99.54 % / FAR 0.105 %.
 
-The **shipped** `model_card.json` threshold is **0.400**: the whole
-0.38–0.565 band sits on the same test TPR plateau (99.715 %, FAR 0.315 %),
-and 0.400 keeps margin for the *streaming* detector, which fires only after
-**two consecutive 100 ms windows** above threshold — a borderline clip whose
-windows score 0.52 / 0.96 fires at 0.400 but never builds a streak at
-0.600 and above.
+The **shipped** `model_card.json` threshold is **0.900**: it sits at the top
+of the test FAR-0 plateau (0.865-0.900 all give TPR 99.544 % / FAR 0.000 %),
+so none of the 1 904 test negatives false-accept. It also clears every
+*streaming* false accept measured on the PC: plain command speech never
+builds a two-window streak above 0.416 and background music tops out at
+0.825, while all 42 streaming wake clips (11 real + 12 TTS + 19
+wake+command) still fire with a worst two-window streak of 0.980. The
+streaming detector scores only the trailing 1.2 s of **real** audio as two
+consecutive 100 ms windows - it never scores the zero-padded 2.0 s ring
+old versions did, whose start-up zeros made CMVN saturate the score on
+ordinary sound right after launch.
 
 | metric | value |
 |---|---:|
 | test windows | 3 658 (1 754 positive / 1 904 negative) |
-| threshold (shipped) | 0.400 |
+| threshold (shipped) | 0.900 |
 | threshold (val-selected) | 0.8194 |
-| **true-positive rate (shipped 0.400)** | **99.715 %** (0.99715) |
-| false-accept rate (at 0.400, full clip) | 0.315 % (6 / 1 904) |
+| **true-positive rate (shipped 0.900)** | **99.544 %** (0.99544) |
+| false-accept rate (at 0.900, full clip) | **0.000 %** (0 / 1 904) |
 | TPR / FAR at val-selected 0.8194 | 99.544 % / 0.105 % |
 | equal-error rate | 0.329 % (0.003286) |
 | best epoch (validation, early stop) | 21 / 34 |
@@ -252,11 +257,12 @@ Trade-off curve measured on the test split:
 
 | target FAR | threshold | TPR |
 |---|---:|---:|
+| **0.00 % (shipped)** | **0.900** | **99.54 %** |
 | 0.00 % | 0.865 | 99.54 % |
 | 0.05 % | 0.840 | 99.54 % |
 | **0.105 % (val-selected)** | 0.8194 | 99.54 % |
 | 0.21 % | 0.700 | 99.54 % |
-| **0.315 % (shipped)** | **0.400** | **99.715 %** |
+| 0.315 % (former shipped) | 0.400 | 99.715 % |
 | 1 % | 0.010 | 100.00 % |
 
 Full curve: [`output/metrics/wake_thresholds.csv`](../output/metrics/wake_thresholds.csv)
@@ -272,10 +278,14 @@ Full curve: [`output/metrics/wake_thresholds.csv`](../output/metrics/wake_thresh
 | run-3 (synthetic only) | 10 / 11 | **0.038** (`hey_rapi_004` — total miss) |
 | **run-4 (this retrain)** | **11 / 11** | **0.996** |
 
-Streaming false accepts on the 19 command-only clips (no wake phrase):
-**0 / 19 with both runs** — run-4's highest full-clip score rose
-0.102 → 0.571, but that single window never sustains the two-window
-streak, so nothing fires.
+Run-4's worst score (0.996) also clears the shipped 0.900 bar **11 / 11**.
+
+Streaming false accepts at the shipped 0.900 on the 19 command-only clips
+(no wake phrase): **0 / 19** in steady state and at start-up, and **0 / 2**
+for the two music tracks (top score 0.825). The start-up figure depends on
+the fix in `voice_assistant/assistant.py`: the old code scored the full
+2.0 s ring, whose zero padding made CMVN saturate the score on ordinary
+sound right after launch (6 / 19 command clips fired at the old 0.400).
 
 ---
 

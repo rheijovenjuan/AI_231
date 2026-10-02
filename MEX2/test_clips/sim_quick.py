@@ -51,7 +51,7 @@ def main() -> int:
     for f in files:
         a.state = a.state.__class__.IDLE
         a.ring[:] = 0
-        a._ring_fill = a.ring.shape[0]
+        a._ring_fill = 0
         a._wake_streak = 0
         a._scan_acc_ms = 0
         events.clear()

@@ -182,7 +182,7 @@
     "cmd_seconds": 2.5,
     "wake_seconds": 1.2
   },
-  "wake_threshold": 0.4,
+  "wake_threshold": 0.9,
   "opset": 17,
   "intents_count": 19,
   "parity": {

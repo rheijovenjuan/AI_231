@@ -167,6 +167,7 @@ def listen(pipeline, sr=DEFAULT_SR, frame_ms=30, hop_ms=100,
                                      backend=backend, device=device)
     ring = RingBuffer(buffer_sec, sr)
     wl = int(pipeline.wake_seconds * sr)
+    filled = 0            # real samples pushed (ring starts silent)
     frames_per_hop = max(int(hop_ms / frame_ms), 1)
 
     print(f"[mic] backend={name} sr={sr} frame={frame_ms}ms "
@@ -187,6 +188,7 @@ def listen(pipeline, sr=DEFAULT_SR, frame_ms=30, hop_ms=100,
         while True:
             frame = read()
             ring.push(frame)
+            filled = min(filled + int(np.size(frame)), ring.n)
             stats["frames"] += 1
             step += 1
             if max_seconds is not None and time.time() - t_start > max_seconds:
@@ -198,6 +200,8 @@ def listen(pipeline, sr=DEFAULT_SR, frame_ms=30, hop_ms=100,
             frame_rms = float(np.sqrt(np.mean(frame ** 2) + 1e-12))
 
             if not capturing:
+                if filled < wl:
+                    continue      # scored window still holds start-up zeros
                 if rms < vad_rms:
                     continue                      # silence: skip inference
                 score = pipeline.wake_score(ring.last(pipeline.wake_seconds))

@@ -49,7 +49,7 @@ Notes:
   their feature extraction — the per-event cost once the wake word fires.
 * Accuracy attached to this run (keyword head): intent 99.24 %, slot 99.29 %,
   keyword macro F1 0.9912, wake TPR 99.54 % @ FAR 0.105 %
-  (val-selected threshold 0.8194; the shipped threshold is 0.400 — see
+  (val-selected threshold 0.8194; the shipped threshold is 0.900 — see
   [`ACCURACY.md`](ACCURACY.md) § 5).
 
 ---

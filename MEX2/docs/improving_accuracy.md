@@ -13,9 +13,9 @@ section lists what is still open.
 | hybrid transcript + intent (same 1510) | **99.93 %** (6 rescued by the transcript, 0 regressions) |
 | text-slot rules on ground-truth transcripts (18375) | **100 %** correct intent |
 | state-machine sim (19 wake+command clips, transcribe order) | **19/19**, 0 ordering violations |
-| wake detector, test split, shipped threshold 0.40 | TPR **99.72 %**, FAR **0.315 %** full clip (val-selected 0.8194: TPR 99.54 %, FAR 0.105 %) |
+| wake detector, test split, shipped threshold 0.90 | TPR **99.54 %**, FAR **0.000 %** full clip (val-selected 0.8194: TPR 99.54 %, FAR 0.105 %) |
 | wake on 11 real user recordings | **11/11** detected, worst score **0.996** (before: 10/11, worst 0.038) |
-| wake false accepts on 19 command-only clips (streaming) | **0/19** (top full-clip score 0.102 → 0.571, never a 2-window streak) |
+| wake false accepts on 19 command-only clips (streaming) | **0/19** at 0.90 in steady state and at start-up (old code's zero-ring CMVN bug fired 6/19 at 0.40; music 0/2) |
 
 ## What was done
 

@@ -133,7 +133,7 @@ python app.py --mode mic --gui --device 2  # or a name: --device "USB"
 ## 7. Tuning knobs for the Pi
 
 ```bash
---wake-trigger 0.0     # raise (e.g. 0.40 -> 0.55) if false wakes bother you
+--wake-trigger 0.0     # raise (e.g. 0.90 -> 0.95) if false wakes bother you
 --min-confidence 0.45  # refuse to act on low-confidence keywords
 --vad-rms 2e-4         # speech energy gate; raise in noisy rooms
 --stt-model tiny.en    # faster transcription, less RAM
@@ -143,7 +143,7 @@ python app.py --mode mic --gui --device 2  # or a name: --device "USB"
 ```
 
 The shipped wake threshold lives in `output/onnx/model_card.json`
-(`wake_threshold`, 0.40) - edit it or override with `--wake-trigger`.
+(`wake_threshold`, 0.90) - edit it or override with `--wake-trigger`.
 
 ## 8. Run at boot (optional)
 

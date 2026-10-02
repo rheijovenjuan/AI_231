@@ -36,7 +36,7 @@ evidence.
 
 | head | input | params | file | output |
 |---|---|---:|---:|---|
-| **wake** | `[1, 40, 120]` (1.2 s, 40 mel) | **23 665** | 113 KB | sigmoid wake score (shipped threshold 0.400) |
+| **wake** | `[1, 40, 120]` (1.2 s, 40 mel) | **23 665** | 113 KB | sigmoid wake score (shipped threshold 0.900) |
 | **keyword (shipped)** | `[1, 40, 250]` (2.5 s) | **123 496** | 507 KB | 40 multi-label sigmoids → keyword rule → intent + slots |
 | **command (baseline)** | `[1, 40, 250]` (2.5 s) | **123 303** | 507 KB | 19 intent + 20 slot logits |
 
@@ -54,8 +54,8 @@ Python 3.13.5, onnxruntime 1.30.0, **`--threads 2`** (4 cores),
 | quantity | value |
 |---|---:|
 | accuracy — keyword intent / slot (test split, same files) | **99.24 % / 99.29 %** |
-| wake TPR @ shipped 0.40 (test) | **99.72 %** |
-| wake FAR @ 0.40 (test, full clip) | **0.315 %** (val-selected 0.8194: TPR 99.54 %, FAR 0.105 %) |
+| wake TPR @ shipped 0.90 (test) | **99.54 %** |
+| wake FAR @ 0.90 (test, full clip) | **0.000 %** (0/1904; val-selected 0.8194: TPR 99.54 %, FAR 0.105 %) |
 | streaming false wakes, 19 command-only clips | **0 / 19** |
 | real-voice recordings detected (11 clips) | **11 / 11** |
 | latency — wake inference p50 / p90 / p99 | **17.8 / 31.9 / 32.9 ms** |

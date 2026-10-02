@@ -34,7 +34,7 @@ python record_wake.py --device 2      # pick a mic (index or name substring)
 python record_wake.py --out wakeword_data/negative --prefix room_tone --seconds 5
 ```
 
-Score a clip against the shipped `wake.onnx` (target: > 0.40):
+Score a clip against the shipped `wake.onnx` (target: > 0.90):
 
 ```bash
 python runtime/pc_test.py --model output/onnx --file wakeword_data/positive/hey_rapi_001.wav
@@ -42,7 +42,7 @@ python runtime/pc_test.py --model output/onnx --file wakeword_data/positive/hey_
 
 **Result of the 2026-10-02 round** (11 clips recorded with `record_wake.py`,
 then mixed into the DGX retrain as 40 augmented variants per clip with a
-clip-level 7/1/3 train/val/test split): all **11/11** score >= 0.40 with the
+clip-level 7/1/3 train/val/test split): all **11/11** score >= 0.90 with the
 retrained model - worst full-clip score **0.996** (the pre-retrain model
 missed `hey_rapi_004` at **0.038**). Measured numbers live in
 [`ACCURACY.md` § 5](ACCURACY.md) and the retrain itself in

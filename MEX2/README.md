@@ -32,7 +32,7 @@ voice-command-model project):
 
 | file | purpose |
 |------|---------|
-| `wake.onnx` | "Hey Rapi" detector (threshold from `model_card.json`, 0.40) |
+| `wake.onnx` | "Hey Rapi" detector (threshold from `model_card.json`, 0.90) |
 | `keyword.onnx` | 40-keyword multi-label spotter + per-keyword thresholds |
 | `command.onnx` | softmax baseline head (same features, not used by the app) |
 | `model_card.json` | classes, thresholds, keyword thresholds, metrics |
@@ -162,7 +162,7 @@ The ONNX `wake.onnx` used by this app was trained on edge-tts audio **plus 11
 real user recordings** (`wakeword_data/positive/`, recorded with
 `record_wake.py`, augmented 40x with clip-level split hygiene on the DGX -
 [docs/TRAINING.md](docs/TRAINING.md) § 10); all 11 recordings now score
->= 0.40 (worst 0.996 - before the retrain one clip scored 0.038).
+>= 0.90 (worst 0.996 - before the retrain one clip scored 0.038).
 
 ## Raspberry Pi
 

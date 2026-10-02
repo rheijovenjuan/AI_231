@@ -82,8 +82,8 @@ case.
 The **combined app (`rapi_combined`) does not use this GMM at all** - it runs
 `wake.onnx`, a small CNN trained in the sibling voice-command-model project
 (run-4: 8k edge-tts positives + 10k command negatives + hard negatives + noise
-+ 11 real user recordings x 40 augmented variants; test split TPR 99.72 % at
-the shipped 0.40 threshold, FAR 0.315 % full-clip, real recordings 11/11
++ 11 real user recordings x 40 augmented variants; test split TPR 99.54 % at
+the shipped 0.90 threshold, FAR 0.000 % full-clip, real recordings 11/11
 detected - see its `docs/ACCURACY.md` § 5). This script stays as the
 dependency-light legacy/demo path.
 
@@ -103,8 +103,8 @@ The combined app no longer resolves this synthetic model at runtime - the
 wiring now goes through the ONNX path:
 
 - `app.py` → `runtime.pipeline.VoicePipeline` → `wake.onnx`, threshold read
-  from `output/onnx/model_card.json` (`wake_threshold`, shipped 0.40;
-  override with `--wake-trigger`).
+  from `output/onnx/model_card.json` (`wake_threshold`, shipped 0.90;
+    override with `--wake-trigger`).
 - This script's calibrated GMM threshold lives on only as an offline artifact:
   `threshold_llr` in `reports/wake_synthetic_report.json`.
 

@@ -24,7 +24,7 @@ python test_clips/check_end2end.py             # expect: wake 19/19,
                                                # intent 18/19 (v4 pre-existing,
                                                # see ACCURACY.md § 6), exit 0
 
-# wake scores on the committed real recordings (target >= 0.40)
+# wake scores on the committed real recordings (target >= 0.90)
 python runtime/pc_test.py --dir wakeword_data/positive   # expect: 11/11
 
 # wake scores on the 12 held-out TTS wake clips
@@ -66,7 +66,7 @@ python app.py --mode mic --gui        # same + status/log window
 Check, in order:
 
 1. **Wake** — say "Hey Rapi": the acknowledgement beep plays, log shows
-   the wake score ≥ 0.40. Try it from 1–2 m away and with the
+   the wake score ≥ 0.90. Try it from 1–2 m away and with the
    recordings played through a phone speaker.
 2. **Command** — after the beep, say e.g. "set alarm for 8 am" →
    `ALARM conf=…`, action runs.
@@ -95,9 +95,9 @@ python app.py --mode mic --no-asr               # no Whisper at all —
                                                 # acoustic keyword path only
                                                 # (fastest; fixed vocab slots)
 python app.py --mode mic --stt-model tiny.en    # smaller/faster Whisper
-python app.py --mode mic --wake-trigger 0.55    # raise wake threshold if
+python app.py --mode mic --wake-trigger 0.95    # raise wake threshold if
                                                 # false wakes bother you
-                                                # (0 = card value 0.400)
+                                                # (0 = card value 0.900)
 python app.py --mode mic --confirm beep         # ack style: voice | beep | off
 python app.py --mode mic --device 2             # pick the USB mic
 ```
@@ -112,7 +112,7 @@ python record_wake.py --count 10                # -> wakeword_data/positive/
 python runtime/pc_test.py --file wakeword_data/positive/hey_rapi_001.wav
 ```
 
-Target: wake score ≥ 0.40 (the committed 11 clips all score ≥ 0.99).
+Target: wake score ≥ 0.90 (the committed 11 clips all score ≥ 0.99).
 Score-guide and retrain pointer: [`collecting_wakeword_data.md`](collecting_wakeword_data.md).
 
 ## 6. Acceptance table
@@ -121,7 +121,7 @@ Score-guide and retrain pointer: [`collecting_wakeword_data.md`](collecting_wake
 |---:|---|---|---|
 | 1 | `sim_quick.py` | 19/19, exit 0 | § 1 |
 | 2 | `check_end2end.py` | wake 19/19, intent ≥ 18/19 | § 1 |
-| 3 | `pc_test --dir wakeword_data/positive` | 11/11 ≥ 0.40 | § 1 |
+| 3 | `pc_test --dir wakeword_data/positive` | 11/11 ≥ 0.90 | § 1 |
 | 4 | benchmark (`--threads 2`) | wake p50 ≤ 25 ms, keyword p50 ≤ 60 ms, RSS ≤ 200 MB, RTF ≤ 0.05 | § 2 |
 | 5 | live wake + command | fires reliably, action runs | § 3 |
 | 6 | endpointing behaviours | pause kept, 3.5 s cap, 8 s timeout | § 3 |
