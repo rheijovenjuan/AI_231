@@ -17,12 +17,14 @@ cd ~/AI_231/MEX2 && source .venv/bin/activate
 
 ```bash
 # fast full regression, no Whisper / beeps / TTS (~10 s)
-python test_clips/sim_quick.py                 # expect: intent 19/19, exit 0
+python test_clips/sim_quick.py                 # expect: intent 18/19, exit 0
+                                                # (v45 endpoint-window miss,
+                                                #  see ACCURACY.md § 6)
 
 # wake + command over the 19 combined clips (ground truth file)
 python test_clips/check_end2end.py             # expect: wake 19/19,
-                                               # intent 18/19 (v4 pre-existing,
-                                               # see ACCURACY.md § 6), exit 0
+                                               # intent 19/19 (run-5 fixed the
+                                               # old NEXT miss), exit 0
 
 # wake scores on the committed real recordings (target >= 0.90)
 python runtime/pc_test.py --dir wakeword_data/positive   # expect: 11/11
@@ -119,8 +121,8 @@ Score-guide and retrain pointer: [`collecting_wakeword_data.md`](collecting_wake
 
 | # | check | expected | where |
 |---:|---|---|---|
-| 1 | `sim_quick.py` | 19/19, exit 0 | § 1 |
-| 2 | `check_end2end.py` | wake 19/19, intent ≥ 18/19 | § 1 |
+| 1 | `sim_quick.py` | 18/19, exit 0 | § 1 |
+| 2 | `check_end2end.py` | wake 19/19, intent 19/19 | § 1 |
 | 3 | `pc_test --dir wakeword_data/positive` | 11/11 ≥ 0.90 | § 1 |
 | 4 | benchmark (`--threads 2`) | wake p50 ≤ 25 ms, keyword p50 ≤ 60 ms, RSS ≤ 200 MB, RTF ≤ 0.05 | § 2 |
 | 5 | live wake + command | fires reliably, action runs | § 3 |
