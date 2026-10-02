@@ -44,18 +44,21 @@ def build_assistant(on_event, onnx_dir: str = ONNX_DIR,
                     wake_trigger: float = 0.0,
                     vad_rms: float | None = None,
                     transcribe: bool = True,
+                    show_transcript: bool = True,
                     stt_model: str = "base.en",
                     confirm: str = "voice",
                     slot_policy: str = "text") -> Assistant:
     """Wake word + command recognition run on the ONNX models (output/onnx).
 
-    transcribe=True prints the STT transcription before the intent result;
-    confirm="voice" speaks "Yes?" on wake (beep/off for the alternatives);
+    transcribe=True runs Whisper (intent rules + arbitrary slots need it);
+    show_transcript=False still transcribes but keeps the transcript out of
+    the log/UI; confirm="voice" speaks "Yes?" on wake (beep/off alternatives);
     slot_policy="text" lets the transcript override the acoustic slot value.
     """
     kw = dict(onnx_dir=onnx_dir, music_dir=MUSIC_DIR, on_event=on_event,
               wake_threshold=wake_threshold, wake_trigger=wake_trigger,
               min_confidence=min_confidence, transcribe=transcribe,
+              show_transcript=show_transcript,
               stt_model=stt_model, confirm=confirm,
               slot_policy=slot_policy)
     if vad_rms is not None:
@@ -66,12 +69,15 @@ def build_assistant(on_event, onnx_dir: str = ONNX_DIR,
 def run_file_mode(files, onnx_dir: str = ONNX_DIR,
                   min_confidence: float = 0.45,
                   transcribe: bool = True,
+                  show_transcript: bool = True,
                   stt_model: str = "base.en",
                   slot_policy: str = "text"):
     """Run each WAV through the classifier + dispatcher, print results."""
     assistant = build_assistant(on_event=_print_event, onnx_dir=onnx_dir,
                                 min_confidence=min_confidence,
-                                transcribe=transcribe, stt_model=stt_model,
+                                transcribe=transcribe,
+                                show_transcript=show_transcript,
+                                stt_model=stt_model,
                                 confirm="off", slot_policy=slot_policy)
     print(f"Models: {os.path.abspath(assistant.pipe.onnx_dir)} "
           f"(head={assistant.pipe.head}, threshold={assistant.pipe.threshold:.3f})")
@@ -104,7 +110,8 @@ def _print_event(**kw):
 def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
             onnx_dir: str = ONNX_DIR, min_confidence: float = 0.45,
             wake_trigger: float = 0.0, vad_rms: float | None = None,
-            transcribe: bool = True, stt_model: str = "base.en",
+            transcribe: bool = True, show_transcript: bool = True,
+            stt_model: str = "base.en",
             confirm: str = "voice", slot_policy: str = "text",
             small_screen: bool = False, mic_device=None):
     import tkinter as tk
@@ -119,7 +126,9 @@ def run_gui(with_mic: bool, music_dir: str = MUSIC_DIR,
     assistant = build_assistant(on_event=on_event, onnx_dir=onnx_dir,
                                 min_confidence=min_confidence,
                                 wake_trigger=wake_trigger, vad_rms=vad_rms,
-                                transcribe=transcribe, stt_model=stt_model,
+                                transcribe=transcribe,
+                                show_transcript=show_transcript,
+                                stt_model=stt_model,
                                 confirm=confirm, slot_policy=slot_policy)
 
     ui = RapiUI(root, on_command=lambda cmd: _dispatch_text(assistant, ui, cmd),
@@ -259,10 +268,14 @@ def main():
     ap.add_argument("--vad-rms", type=float, default=None,
                     help="energy gate for speech onset/silence (mean square "
                          "per 30 ms chunk; default 2e-4)")
-    ap.add_argument("--transcribe", action=argparse.BooleanOptionalAction,
-                    default=True,
-                    help="print the STT transcription before the intent "
-                         "(needs faster-whisper; --no-transcribe to disable)")
+    ap.add_argument("--no-asr", action="store_true",
+                    help="skip Whisper entirely (acoustic keyword path only: "
+                         "fastest, but slots limited to the fixed keyword "
+                         "vocab)")
+    ap.add_argument("--transcribe", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("--no-transcribe", action="store_true",
+                    help="keep the STT transcript out of the log/UI (Whisper "
+                         "still runs for intent + slots)")
     ap.add_argument("--stt-model", default="base.en",
                     help="faster-whisper model size (tiny.en/base.en/...)")
     ap.add_argument("--confirm", choices=["voice", "beep", "off"],
@@ -282,7 +295,8 @@ def main():
             ap.error("--mode file requires at least one --file")
         run_file_mode(args.file, onnx_dir=args.onnx,
                       min_confidence=args.min_confidence,
-                      transcribe=args.transcribe,
+                      transcribe=not args.no_asr,
+                      show_transcript=not args.no_transcribe,
                       stt_model=args.stt_model,
                       slot_policy=args.slot_policy)
     elif args.mode == "mic":
@@ -290,7 +304,9 @@ def main():
             run_gui(with_mic=True, onnx_dir=args.onnx,
                     min_confidence=args.min_confidence,
                     wake_trigger=args.wake_trigger, vad_rms=args.vad_rms,
-                    transcribe=args.transcribe, stt_model=args.stt_model,
+                    transcribe=not args.no_asr,
+                    show_transcript=not args.no_transcribe,
+                    stt_model=args.stt_model,
                     confirm=args.confirm, slot_policy=args.slot_policy,
                     small_screen=args.small_screen, mic_device=args.device)
         else:
@@ -299,14 +315,15 @@ def main():
                                         min_confidence=args.min_confidence,
                                         wake_trigger=args.wake_trigger,
                                         vad_rms=args.vad_rms,
-                                        transcribe=args.transcribe,
+                                        transcribe=not args.no_asr,
+                                        show_transcript=not args.no_transcribe,
                                         stt_model=args.stt_model,
                                         confirm=args.confirm,
                                         slot_policy=args.slot_policy)
             print(f"Models: {os.path.abspath(args.onnx)} "
                   f"(head={assistant.pipe.head}, "
                   f"trigger={assistant.trigger:.3f})")
-            if args.transcribe and assistant.transcriber is None:
+            if not args.no_asr and assistant.transcriber is None:
                 print("[stt] faster-whisper not installed - run "
                       "`pip install faster-whisper` for transcriptions "
                       "(continuing without)")
@@ -315,7 +332,9 @@ def main():
         run_gui(with_mic=False, onnx_dir=args.onnx,
                 min_confidence=args.min_confidence,
                 wake_trigger=args.wake_trigger, vad_rms=args.vad_rms,
-                transcribe=args.transcribe, stt_model=args.stt_model,
+                transcribe=not args.no_asr,
+                show_transcript=not args.no_transcribe,
+                stt_model=args.stt_model,
                 confirm=args.confirm, slot_policy=args.slot_policy,
                 small_screen=args.small_screen, mic_device=args.device)
 

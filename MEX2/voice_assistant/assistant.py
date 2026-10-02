@@ -363,6 +363,7 @@ class Assistant:
                  beeps: bool = True,
                  confirm: str = "voice",
                  transcribe: bool = False,
+                 show_transcript: bool = True,
                  stt_model: str = "base.en",
                  slot_policy: str = "text"):
         import sys
@@ -385,7 +386,8 @@ class Assistant:
         self.confirm = confirm if confirm in ("voice", "beep", "off") else "voice"
         self._confirm_wav = (confirm_mod.ensure_confirmation()
                              if self.confirm == "voice" else None)
-        # transcription (shown before the intent result)
+        # transcription (shown before the intent result unless suppressed)
+        self.show_transcript = bool(show_transcript)
         self.transcriber = None
         if transcribe and Transcriber.available():
             self.transcriber = Transcriber(stt_model)
@@ -638,7 +640,7 @@ class Assistant:
         self.on_event(state=State.PROCESSING.value, status="Thinking...")
         x = self._trim_tail(x)
         text = self._transcribe(x)
-        if text:
+        if text and self.show_transcript:
             # transcription comes FIRST so you can verify what was heard
             self.on_event(text=text)
         res = self.pipe.classify(x)
@@ -678,5 +680,5 @@ class Assistant:
             msg = self.dispatcher.dispatch(intent, slots)
         return {"intent": intent, "confidence": round(conf, 3),
                 "keywords": kws, "slot": res.get("slot"), "slots": slots,
-                "text": text,
+                "text": text if self.show_transcript else "",
                 "status": msg, "dispatched": ok}

@@ -7,7 +7,7 @@ the Pi: the trained ONNX models ship inside `output/onnx/` of this repo.
 Memory budget on 4 GB: OS ~250 MB + onnxruntime ~100 MB + faster-whisper
 `base.en` int8 ~400-500 MB -> comfortably under 1 GB total. If you are tight
 (forget-me-not desktop use), run with `--stt-model tiny.en` or
-`--no-transcribe`.
+`--no-asr`.
 
 ## 1. System packages
 
@@ -137,7 +137,8 @@ python app.py --mode mic --gui --device 2  # or a name: --device "USB"
 --min-confidence 0.45  # refuse to act on low-confidence keywords
 --vad-rms 2e-4         # speech energy gate; raise in noisy rooms
 --stt-model tiny.en    # faster transcription, less RAM
---no-transcribe        # acoustic-only (fastest, no whisper at all)
+--no-asr               # acoustic-only (fastest, no whisper at all)
+--no-transcribe        # keep whisper for intent/slots, hide its transcript
 --confirm beep         # instead of spoken "Yes?"
 ```
 

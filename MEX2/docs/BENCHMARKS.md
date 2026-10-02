@@ -85,7 +85,7 @@ so the Pi stays responsive.
 
 Not included above: Whisper (`base.en` int8) for the transcript path — it stays
 the slow part of the full demo (fall back to `--stt-model tiny.en`, or run
-`--no-transcribe` for the pure-VCM path).
+`--no-asr` for the pure-VCM path).
 
 ---
 
