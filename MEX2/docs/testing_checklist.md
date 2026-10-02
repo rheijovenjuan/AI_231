@@ -10,6 +10,8 @@ Use this to verify the assistant works end-to-end, on a PC and on the Pi.
 - [ ] `reports/command_confusion.png` and `wakeword_scores.png` are generated.
 
 ## B. Inference (no mic)
+- [ ] `python test_clips/sim_quick.py` → **19/19** (fast smoke: full
+      wake→command regression in ~15 s, no Whisper/beeps — run this first).
 - [ ] `python app.py --mode file --file data/PLAY_MUSIC/...wav` → intent
       `PLAY_MUSIC`, status "Playing …".
 - [ ] Repeat for WEATHER, TIME, LIGHT_ON, LIGHT_OFF, STOP, COLOR, TEMPERATURE.
@@ -43,7 +45,7 @@ Use this to verify the assistant works end-to-end, on a PC and on the Pi.
 - [ ] `python app.py --mode mic --gui` starts; mic is detected.
 - [ ] Saying "Hey Rapi" flips state to **listening** ("Yes? I'm listening.").
 - [ ] A following command is classified and the UI updates.
-- [ ] Silence times out back to **idle** after ~6 s.
+- [ ] Silence times out back to **idle** after ~8 s.
 - [ ] No false wake on random talk (watch the log for a few minutes).
 
 ## F. Benchmarks (PC vs Pi)
@@ -56,6 +58,6 @@ Use this to verify the assistant works end-to-end, on a PC and on the Pi.
 
 ## G. Edge cases
 - [ ] Very quiet command still detected (lower energy threshold if needed).
-- [ ] Long command (>6 s) is cut off gracefully.
+- [ ] Long command (>8 s total) is cut off gracefully.
 - [ ] Unknown/garbled audio → "I don't know how to …" (no crash).
 - [ ] Repeated commands don't leak memory (RAM flat over 100 commands).

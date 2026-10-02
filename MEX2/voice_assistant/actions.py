@@ -36,6 +36,8 @@ class MusicPlayer:
         self._ducked = False            # listening: music kept at low volume
         self._track_idx = 0
         self.tracks = self._scan()
+        self._preloaded: Optional[str] = None  # basename warmup() pre-loaded
+        self._warmed = False
 
     def _scan(self) -> List[str]:
         if not os.path.isdir(self.music_dir):
@@ -45,6 +47,37 @@ class MusicPlayer:
             os.path.join(self.music_dir, f) for f in os.listdir(self.music_dir)
             if f.lower().endswith(exts))
 
+    def warmup(self):
+        """Initialise the audio backend + preload a track in the background.
+
+        `import pygame` + `mixer.init` (ALSA/PipeWire/Bluetooth sink open) +
+        `music.load` can take 0.5-1s+ on a Pi - doing it at startup makes the
+        first "play music" start immediately instead of paying it then.
+        """
+        if self._warmed:
+            return
+        self._warmed = True
+
+        def _go():
+            with self._lock:              # play() uses the same lock
+                try:
+                    if self.state != "stopped":
+                        return             # already playing: nothing to do
+                    if not self.tracks:
+                        self.tracks = self._scan()
+                    if not self.tracks:
+                        return
+                    self._ensure_player()
+                    if isinstance(self._player, str):
+                        return             # winsound: nothing to preload
+                    path = self.tracks[random.randrange(len(self.tracks))]
+                    self._player.mixer.music.load(path)
+                    self._preloaded = os.path.basename(path)
+                except Exception:  # noqa: BLE001 - warm-up is best-effort
+                    pass
+
+        threading.Thread(target=_go, daemon=True).start()
+
     def _ensure_player(self):
         """Lazy-import a backend so the Pi only pays for what it uses."""
         if self._player is None:
@@ -53,8 +86,28 @@ class MusicPlayer:
                 # NB: the kwarg is `frequency` - `freq` raises TypeError
                 # and used to drop us silently onto the winsound fallback
                 # (which cannot play the mp3s in the music folder).
-                pygame.mixer.init(frequency=16000, size=-16, channels=1,
-                                  buffer=512)
+                # On Windows WASAPI can be locked by another app
+                # (Spotify/Discord) and SDL then retries ~40 s - holding
+                # the GIL - before failing; directsound opens in ~0.04 s
+                # either way, so try it first there. Other platforms keep
+                # their default (ALSA/PipeWire on the Pi).
+                drivers = ["directsound", None] if os.name == "nt" else [None]
+                err = None
+                for drv in drivers:
+                    try:
+                        pygame.mixer.quit()        # clean slate per attempt
+                        if drv:
+                            os.environ["SDL_AUDIODRIVER"] = drv
+                        else:
+                            os.environ.pop("SDL_AUDIODRIVER", None)
+                        pygame.mixer.init(frequency=16000, size=-16,
+                                          channels=1, buffer=512)
+                        err = None
+                        break
+                    except Exception as e:  # noqa: BLE001
+                        err = e
+                if err is not None:
+                    raise err
                 self._player = pygame
             except Exception as exc:  # noqa: BLE001
                 print(f"[music] pygame unavailable ({exc}); "
@@ -98,8 +151,14 @@ class MusicPlayer:
                                    if self._last_track in names
                                    else random.randrange(len(self.tracks)))
             else:
-                # nothing played yet: take any file from the folder
-                self._track_idx = random.randrange(len(self.tracks))
+                # nothing played yet: prefer the track warmup() already
+                # loaded (first play skips music.load), else pick any file
+                names = [os.path.basename(p) for p in self.tracks]
+                if self._preloaded in names:
+                    self._track_idx = names.index(self._preloaded)
+                else:
+                    self._track_idx = random.randrange(len(self.tracks))
+                self._preloaded = None
             self._start_locked()
 
     def _start_locked(self):
@@ -272,6 +331,7 @@ def _secs_until(alarm_time: str) -> Optional[float]:
 class ActionDispatcher:
     def __init__(self, music_dir: str, on_event: Optional[Callable] = None):
         self.music = MusicPlayer(music_dir)
+        self.music.warmup()   # first "play music" shouldn't pay init latency
         self.on_event = on_event or (lambda **_: None)
         self.lights = {"on": False, "brightness": 100, "color": "white"}
         self.thermostat = 24
@@ -418,7 +478,7 @@ class ActionDispatcher:
         self._emit(**event)
         try:
             from .assistant import play_beep   # lazy: assistant imports us
-            play_beep(count=2)
+            play_beep(count=2, vol=0.8)        # louder than the wake ack (0.3)
         except Exception:  # noqa: BLE001 - sound is best-effort
             pass
 

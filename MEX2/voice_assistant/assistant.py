@@ -51,10 +51,14 @@ RING_SEC = 2.0           # wake scan history
 SCAN_HOP_MS = 100        # score the wake model every 100 ms of audio
 SETTLE_SEC = 0.30        # deprecated: replaced by gap-based settle below
 MAX_SETTLE_SEC = 0.75    # wait this long for a post-wake gap at most
-TRAILING_SILENCE = 0.50  # end of command = this much quiet
+TRAILING_SILENCE = 0.90  # end of command = this much quiet (0.5 cut phrases
+                         # like "set volume to | 100%" in half mid-pause)
+MAX_SPEECH_SEC = 3.50    # slow-speaker cap; pad_crop centre-crops to the
+                         # model's 2.5 s window, and the transcript rules
+                         # still see the FULL segment text
 MIN_SPEECH_SEC = 0.15    # shorter than this -> "didn't catch that"
-MAX_SPEECH_SEC = 2.50    # matches the model's 2.5 s command window
-LISTEN_TIMEOUT = 6.0     # give up waiting for a command
+LISTEN_TIMEOUT = 8.0     # give up waiting for a command (settle + speech +
+                         # trailing silence must fit)
 WAKE_THRESHOLD = 0.0     # 0 = take the threshold from model_card.json
 WAKE_TRIGGER_FLOOR = 0.0  # >0 raises the calm trigger bar over card threshold
 # Energy gate (mean square per 30 ms chunk).  6e-3 (rms 0.077) was far too
@@ -612,9 +616,27 @@ class Assistant:
             print(f"[stt] failed: {exc}")
             return ""
 
+    def _trim_tail(self, x: np.ndarray) -> np.ndarray:
+        """Drop accumulated trailing silence (endpoint waits 0.9 s of it).
+
+        Shorter audio in = faster Whisper + cleaner transcript; the classifier
+        pad-crops to its window anyway.
+        """
+        w = int(0.03 * SR)
+        if x.shape[0] <= w:
+            return x
+        e = np.array([np.mean(x[i:i + w] ** 2)
+                      for i in range(0, x.shape[0] - w, w)])
+        idx = np.nonzero(e >= self.vad_rms * 0.5)[0]
+        if idx.size == 0:
+            return x
+        end = min(x.shape[0], (int(idx[-1]) + 1) * w + int(0.2 * SR))
+        return x[:end]
+
     def _process_command(self, x: np.ndarray):
         self.state = State.PROCESSING
         self.on_event(state=State.PROCESSING.value, status="Thinking...")
+        x = self._trim_tail(x)
         text = self._transcribe(x)
         if text:
             # transcription comes FIRST so you can verify what was heard

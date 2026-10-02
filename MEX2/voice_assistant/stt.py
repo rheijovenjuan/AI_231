@@ -48,6 +48,9 @@ class Transcriber:
         if model is None:
             return ""
         x = np.asarray(wave, dtype=np.float32).reshape(-1)
+        # beam 1 + temperature 0 = pure greedy: no fallback retry loops
+        # (keeps worst-case latency predictable on the Pi)
         segs, _info = model.transcribe(x, beam_size=1, language="en",
-                                       vad_filter=False)
+                                       vad_filter=False, temperature=0.0,
+                                       condition_on_previous_text=False)
         return " ".join(s.text.strip() for s in segs).strip()
