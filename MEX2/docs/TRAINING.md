@@ -87,7 +87,7 @@ cd ~/rapi_vcm/dataset/ai231_tmp && git sparse-checkout set MEX2/OptionB
 | speakers | 150 (`s1`–`s150`), 134 foreign / 16 Filipino-English |
 | acoustic conditions | `_clean.wav`, `_noisy.wav` |
 | transcript | `manifest.csv` (path, label, intent, speaker, split, phrase, condition, transcript, slot, slot_value, duration) |
-| splits (speaker-disjoint) | train 14,677 · val 1,856 · test 1,842 |
+| splits (speaker-disjoint) | source: train 14,677 · val 1,856 · test 1,842; +94 real-voice clips (§11) → working set 18,469 (14,752 / 1,875 / 1,842) |
 
 > The dataset's own README quotes 27,956 active files "on DGX2"; the GitHub
 > tree actually contains 18,375 WAVs and a matching `manifest.csv`. The
@@ -104,7 +104,8 @@ Label spaces (`rapi_vcm/labels.py`, `rapi_vcm/keywords.py`):
   color time weather`) + the 19 slot values. Labels are derived from the
   `transcript` column of `manifest.csv` (no ASR in the loop):
   `transcript → keywords` is a closed-form string match checked against every
-  row — **18 375 / 18 375 correct**. The reverse map,
+  row — **18 375 / 18 375 correct** on the source corpus, **18 469 / 18 469**
+  after the run-5 real-voice merge (§11). The reverse map,
   `keywords → (intent, slot)`, is equally closed-form and deterministic
   (priority rules for overlaps; empty set → `PLAY_MUSIC`).
   Inspect both with `python -m rapi_vcm.keywords dataset/manifest.csv`.
@@ -131,7 +132,8 @@ python train/extract_features.py --dataset $DATA --out $FEAT --jobs 24
 ```
 
 Outputs: `cmd_X.npy`, `cmd_intent.npy`, `cmd_slot.npy`, `cmd_label.npy`,
-`cmd_split.npy`, `cmd_len.npy`, `cmd_kw.npy` (18 375 × 40 multi-hot),
+`cmd_split.npy`, `cmd_len.npy`, `cmd_kw.npy` (18 375 × 40 multi-hot for the
+source corpus, 18 469 × 40 after §11's merge),
 `cmd_meta.json` (includes the `keywords` list).
 
 The same `features.py` module is used at inference time on the PC and on the
@@ -229,7 +231,8 @@ a value. The keyword head has no separate slot head — the slot value comes
 from the keyword rule.
 
 `pos_weight` is the one knob that moved the numbers (test intent accuracy,
-1 842 samples): raw `neg/pos` (mean 26, cap 50) → **99.24 %** (shipped);
+1 842 samples): raw `neg/pos` (mean 26, cap 50) → **99.29 %** (run-5 shipped;
+99.24 % in run-4);
 `sqrt(neg/pos)` → 99.08 %; cap 20 → 98.91 %. Thresholds are tuned *after*
 training, on validation only — see `ACCURACY.md` §2.
 
@@ -343,3 +346,67 @@ output/training/
 ├── wake_meta.json dataset composition (incl. real splits)
 └── (metrics live in output/metrics/, models in output/onnx/)
 ```
+
+---
+
+## 11. Command real-voice retrain (2026-10-02, run-5)
+
+The keyword head previously saw only TTS speakers; on the developer's own
+voice it scored **42.1 %** on a 19-clip held-out slice (CALL 3/14, COLOR
+5/5). Run-5 mixes real recordings into the command corpus.
+
+**Record** with [`record_command.py`](../record_command.py) (beep cues,
+dead-air detection, JSON status file):
+
+```bash
+python record_command.py                 # interactive: prompts one clip at a time
+python record_command.py --intent call   # batch CALL clips until Ctrl+C
+python record_command.py --intent color --split val   # e.g. the val holdout clips
+```
+
+The script writes WAVs + a manifest under
+[`command_data/`](../command_data/) with `speaker=real1`, `label` in
+`CALL`/`COLOR_<VAL>`, `intent` in `CALL`/`COLOR`, and a clip-level
+`split` column (`--split`, default `train`). Run-5 used **96 recordings →
+94 kept** (2 dead-air clips dropped): 74 CALL + 20 COLOR (5 per colour).
+
+**Val holdout (clip-level)**: every 5th CALL (14) and every 4th COLOR (5)
+→ 19 val clips, 75 train — the same precedent as the 11 wake recordings
+(one speaker spans train/val; the test split is untouched and stays
+speaker-disjoint).
+
+**Upload + merge** (DGX, `MEX2/OptionB` working manifest):
+
+```bash
+# upload command_data/ (put_tree / scp), then on the DGX:
+cp $MANIFEST $MANIFEST.bak_pre_real1
+# append the real1 rows to $MANIFEST (path,label,intent,speaker,split,phrase_id,
+# variant_id,transcript,slot,slot_value,duration_sec)
+python -m rapi_vcm.keywords $MANIFEST   # vocab self-check: 18 469 / 18 469
+```
+
+**Retrain** (re-extract features first — new rows change `cmd_kw.npy`):
+
+```bash
+bash ~/rapi_vcm/run_keyword.sh --reextract   # extract (18 469, 40, 250) + keyword train
+bash ~/rapi_vcm/run_train_cmd.sh             # softmax baseline
+bash ~/rapi_vcm/run_eval_export.sh           # baseline eval + ONNX
+bash ~/rapi_vcm/run_eval_keyword.sh          # keyword eval, thresholds, ONNX export
+```
+
+Effect (details in [`ACCURACY.md`](ACCURACY.md) § 2, "Real-voice slice"):
+
+| metric | run-4 | run-5 |
+|---|---:|---:|
+| real-val intent (19 clips) | 42.1 % | **78.9 %** |
+| real-train CALL (60 clips) | 33.3 % | **93.3 %** |
+| keyword intent (test) | 99.24 % | **99.29 %** |
+| keyword slot (test) | 99.29 % | **99.46 %** |
+| keyword macro F1 (test) | 0.9912 | **0.9924** |
+| baseline intent (test) | 99.62 % | **99.84 %** |
+| shipped global threshold | 0.55 | **0.75** (call 0.25, color 0.75) |
+
+Wake artifacts are byte-identical to run-4 — only the keyword/command
+heads moved. Artefacts: `output/training/logs/real1_retrain.log`,
+checkpoints and history overwritten in place, `output/onnx/*.onnx`,
+`output/metrics/*`.

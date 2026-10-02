@@ -130,12 +130,13 @@ def trim_speech(x: np.ndarray, frame_ms: int = 30,
 
 
 def phrase_pool(intent: str):
+    # label = OptionB folder name: CALL / COLOR_RED / ... (folder_to_intent)
     if intent == "call":
         return [(t, v, "CALL") for t, v in CALL_PHRASES]
     if intent == "color":
-        return [(t, v, "COLOR") for t, v in COLOR_PHRASES]
+        return [(t, v, f"COLOR_{v.upper()}") for t, v in COLOR_PHRASES]
     return ([(t, v, "CALL") for t, v in CALL_PHRASES]
-            + [(t, v, "COLOR") for t, v in COLOR_PHRASES])
+            + [(t, v, f"COLOR_{v.upper()}") for t, v in COLOR_PHRASES])
 
 
 def next_phrases(intent: str):
@@ -152,7 +153,7 @@ def next_phrases(intent: str):
             i += 1
     ci = ki = 0
     call = [(t, v, "CALL") for t, v in CALL_PHRASES]
-    color = [(t, v, "COLOR") for t, v in COLOR_PHRASES]
+    color = [(t, v, f"COLOR_{v.upper()}") for t, v in COLOR_PHRASES]
     step = 0
     while True:
         if step % 3 == 1:                       # every 3rd prompt is COLOR
@@ -276,16 +277,17 @@ def main() -> int:
         path = os.path.join(args.out, rel)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         sf.write(path, x, F.SAMPLE_RATE)
-        row = {"path": rel, "label": label, "intent": label,
+        row = {"path": rel, "label": label,
+               "intent": "COLOR" if label.startswith("COLOR") else label,
                "speaker": args.speaker, "split": args.split,
                "phrase_id": phrase_id, "variant_id": "clean",
                "transcript": transcript,
-               "slot": "color" if label == "COLOR" else "",
+               "slot": "color" if label.startswith("COLOR") else "",
                "slot_value": slot_value,
                "duration_sec": f"{len(x) / F.SAMPLE_RATE:.3f}"}
         append_manifest(man_path, row)
         taken.add(rel)
-        done[label] += 1
+        done["CALL" if label == "CALL" else "COLOR"] += 1
         print(f"  saved {rel}  {len(x) / F.SAMPLE_RATE:.2f}s  "
               f"peak={peak:.2f}  slot={slot_value or '-'}")
         if args.play:

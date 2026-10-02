@@ -1,18 +1,18 @@
 {
-  "best_epoch": 54,
-  "best_val_intent_acc": 0.994073275862069,
+  "best_epoch": 50,
+  "best_val_intent_acc": 0.9957333333333334,
   "epochs_run": 60,
   "parameters": 123303,
   "gpu": "1",
   "final_val": {
     "epoch": 60,
-    "train_loss": 0.008388477618593657,
-    "loss": 0.04342290450786722,
-    "intent_acc": 0.9935344827586207,
-    "slot_acc_all": 0.9946120689655172,
-    "slot_acc_relevant": 0.9919064748201439,
-    "n": 1856,
+    "train_loss": 0.00909051456357957,
+    "loss": 0.0353200421889623,
+    "intent_acc": 0.9941333333333333,
+    "slot_acc_all": 0.992,
+    "slot_acc_relevant": 0.9892569382273948,
+    "n": 1875,
     "lr": 1.2781307517440925e-08,
-    "seconds": 3.3346023559570312
+    "seconds": 3.1573703289031982
   }
 }

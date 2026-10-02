@@ -17,21 +17,26 @@ Two command heads are measured:
 
 | split | utterances | speakers |
 |---|---:|---|
-| train | 14 677 | training speakers |
-| validation | 1 856 | validation speakers |
+| train | 14 752 | training speakers + `real1` (75) |
+| validation | 1 875 | validation speakers + `real1` (19) |
 | **test** | **1 842** | `s91`–`s100` |
-| total | 18 375 | 31 folders |
+| total | 18 469 | 31 folders |
 
 * 19 intent classes, 6 of them carrying a spoken value (slot).
 * Splits are **speaker-disjoint**: no voice seen in training appears in the
-  test metrics.
+  test metrics. The 94 real-voice command clips (`speaker=real1`, recorded
+  with [`record_command.py`](../record_command.py), committed under
+  [`command_data/`](../command_data/)) stay **out of the test split**: 75 in
+  train, 19 in val (clip-level holdout, the same precedent as the 11 wake
+  recordings — one speaker spans train/val).
 * Wake-word data is separate (see §5): 26 797 windows
   (10 433 positive / 16 364 negative), split 19 837 / 3 302 / 3 658 —
   includes the 11 real user recordings (40 augmented variants each,
   recording-level split).
 
 > The dataset README on GitHub claims 27 956 files; the actual repository
-> contains **18 375 WAVs** (verified with `git ls-files`). All figures here use
+> contains **18 375 WAVs** (verified with `git ls-files`); the DGX working
+> set adds the 94 real-voice clips for **18 469 rows**. All figures here use
 > what is actually present.
 
 ---
@@ -49,7 +54,7 @@ acknowledged it reports which of **40 keywords** are present (multi-label BCE,
   `18/22/26 degrees`, `20/60/100 percent`, `red / blue / green / yellow`,
   `drink water / study / exercise`
 * `transcript → keywords` and `keywords → (intent, slot)` are closed-form and
-  verified against every row of `manifest.csv`: **18 375 / 18 375 correct**
+  verified against every row of `manifest.csv`: **18 469 / 18 469 correct**
   (`python -m rapi_vcm.keywords dataset/manifest.csv`).
 * Rule priority resolves overlaps (`COLOR` > `CREATE_REMINDER` > `TIMER` >
   `ALARM` > `TEMPERATURE` > `BRIGHTNESS` > `VOLUME_*` > `LIGHT_*` > `NEXT` >
@@ -59,16 +64,16 @@ acknowledged it reports which of **40 keywords** are present (multi-label BCE,
 | metric | value |
 |---|---:|
 | samples | 1 842 |
-| **intent accuracy (rule over keywords)** | **99.24 %** (0.99240) |
-| **slot accuracy** (utterances with a value) | **99.29 %** (0.99286, n = 1 120) |
-| slot accuracy, all utterances (incl. `NONE`) | 99.51 % (0.99511) |
-| keyword micro precision / recall | 0.9886 / 0.9973 |
-| keyword macro F1 | 0.99123 |
-| exact keyword-set match | 97.88 % |
-| downstream macro F1 (19 classes) | 0.98761 |
-| best epoch (validation) | 47 / 60 |
+| **intent accuracy (rule over keywords)** | **99.29 %** (0.99294) |
+| **slot accuracy** (utterances with a value) | **99.46 %** (0.99464, n = 1 120) |
+| slot accuracy, all utterances (incl. `NONE`) | 99.57 % (0.99566) |
+| keyword micro precision / recall | 0.9920 / 0.9953 |
+| keyword macro F1 | 0.99239 |
+| exact keyword-set match | 98.15 % |
+| downstream macro F1 (19 classes) | 0.99008 |
+| best epoch (validation) | 50 / 60 |
 
-Fourteen errors out of 1 842 utterances.
+Thirteen errors out of 1 842 utterances.
 
 ### Threshold selection
 
@@ -78,60 +83,83 @@ accuracy), then frozen and reported on test:
 
 | scheme | val intent | test intent | test slot |
 |---|---:|---:|---:|
-| single global threshold 0.55 | 98.87 % | 99.24 % | 99.29 % |
-| **per-keyword (greedy on val)** | **99.03 %** | **99.24 %** | **99.29 %** |
-| per-keyword F1 (rejected) | 99.08 % | 98.91 % | 99.55 % |
-| `pos_weight = sqrt(neg/pos)` (rejected) | 98.33 % | 99.08 % | 99.38 % |
+| single global threshold 0.75 | 98.51 % | 99.24 % | 99.46 % |
+| **per-keyword (greedy on val)** | **98.88 %** | **99.29 %** | **99.46 %** |
+| per-keyword F1 (rejected, run-3) | 99.08 % | 98.91 % | 99.55 % |
+| `pos_weight = sqrt(neg/pos)` (rejected, run-3) | 98.33 % | 99.08 % | 99.38 % |
 
-The shipped array keeps most keywords at 0.55, `stop` at 0.80 and
-`up`/`down` at 0.20 (they only fire together with `volume`). It lives in
-`model_card.json → keyword_thresholds` and is read by `runtime/pipeline.py`.
+The shipped array keeps most keywords at 0.75, with `down`/`lights` at 0.20
+(they only fire together with `volume`/`on`), `call` at 0.25 (the
+under-represented class on real voices), `stop` at 0.65 and `timer` at
+0.55. It lives in `model_card.json → keyword_thresholds` and is read by
+`runtime/pipeline.py`.
 
 ### Per intent
 
 | intent | precision | recall | F1 | support |
 |---|---:|---:|---:|---:|
-| PLAY_MUSIC | 0.9667 | 1.0000 | 0.9831 | 58 |
+| PLAY_MUSIC | 0.9355 | 1.0000 | 0.9667 | 58 |
 | WEATHER | 1.0000 | 1.0000 | 1.0000 | 52 |
 | TIME | 1.0000 | 1.0000 | 1.0000 | 53 |
-| LIGHT_ON | 0.9815 | 0.9815 | 0.9815 | 54 |
+| LIGHT_ON | 0.9636 | 0.9815 | 0.9725 | 54 |
 | LIGHT_OFF | 1.0000 | 1.0000 | 1.0000 | 58 |
-| PAUSE | 0.9811 | 0.9455 | 0.9630 | 55 |
-| STOP | 0.9811 | 0.9630 | 0.9720 | 54 |
-| NEXT | 0.9672 | 1.0000 | 0.9833 | 59 |
-| VOLUME_UP | 0.9672 | 1.0000 | 0.9833 | 59 |
-| VOLUME_DOWN | 0.9615 | 0.9615 | 0.9615 | 52 |
+| PAUSE | 0.9815 | 0.9636 | 0.9725 | 55 |
+| STOP | 1.0000 | 1.0000 | 1.0000 | 54 |
+| NEXT | 1.0000 | 1.0000 | 1.0000 | 59 |
+| VOLUME_UP | 0.9833 | 1.0000 | 0.9916 | 59 |
+| VOLUME_DOWN | 1.0000 | 0.9808 | 0.9903 | 52 |
 | CALL | 1.0000 | 0.9444 | 0.9714 | 54 |
 | MESSAGE | 1.0000 | 1.0000 | 1.0000 | 57 |
-| LIST_REMINDERS | 0.9655 | 0.9825 | 0.9739 | 57 |
+| LIST_REMINDERS | 0.9649 | 0.9649 | 0.9649 | 57 |
 | TIMER | 1.0000 | 1.0000 | 1.0000 | 176 |
-| ALARM | 1.0000 | 1.0000 | 1.0000 | 173 |
+| ALARM | 0.9943 | 1.0000 | 0.9971 | 173 |
 | TEMPERATURE | 1.0000 | 1.0000 | 1.0000 | 180 |
 | BRIGHTNESS | 1.0000 | 1.0000 | 1.0000 | 180 |
-| COLOR | 1.0000 | 1.0000 | 1.0000 | 231 |
-| CREATE_REMINDER | 0.9944 | 0.9889 | 0.9916 | 180 |
+| COLOR | 1.0000 | 0.9913 | 0.9957 | 231 |
+| CREATE_REMINDER | 0.9889 | 0.9889 | 0.9889 | 180 |
 
 Confusion matrix (test split, downstream intent):
 [`output/metrics/keyword_confusion.png`](../output/metrics/keyword_confusion.png),
 tables in [`output/metrics/keyword_per_class.csv`](../output/metrics/keyword_per_class.csv)
 and [`keyword_per_keyword.csv`](../output/metrics/keyword_per_keyword.csv).
 
-The 14 errors break down as:
+The 13 errors break down as:
 
 | direction | count |
 |---|---:|
-| `PAUSE` → other | 3 |
 | `CALL` → other | 3 |
-| `STOP` → other | 2 |
-| `VOLUME_DOWN` → other | 2 |
-| `CREATE_REMINDER` → other | 2 |
-| `LIST_REMINDERS` → other | 1 |
+| `PAUSE` → other | 2 |
+| `CREATE_REMINDER` → `LIST_REMINDERS` | 2 |
+| `LIST_REMINDERS` → `CREATE_REMINDER` | 2 |
+| `COLOR` → other | 2 |
 | `LIGHT_ON` → other | 1 |
-| incoming false positives | 2 each → `PLAY_MUSIC`, `NEXT`, `VOLUME_UP`, `VOLUME_DOWN`, `LIST_REMINDERS`; 1 each → `LIGHT_ON`, `PAUSE`, `STOP`, `CREATE_REMINDER` |
+| `VOLUME_DOWN` → other | 1 |
+| incoming false positives | 4 → `PLAY_MUSIC`; 2 each → `LIGHT_ON`, `CREATE_REMINDER`, `LIST_REMINDERS`; 1 each → `PAUSE`, `ALARM`, `VOLUME_UP` |
 
-Worst keywords by F1: `play` 0.9625, `call` 0.9630, `down` 0.9720,
-`pause` 0.9720, `on` 0.9720, `volume` 0.9823 — the short, acoustically thin
-command words. All 19 slot keywords score ≥ 0.9821.
+Worst keywords by F1: `100 percent` 0.9677, `play` 0.9689, `call` 0.9720,
+`on` 0.9725, `pause` 0.9725, `8 am` 0.9739 — the short, acoustically thin
+command words. All other keywords score ≥ 0.9811.
+
+### Real-voice slice (run-5)
+
+94 clips of the developer's own voice (`speaker=real1`, recorded with
+[`record_command.py`](../record_command.py), committed under
+[`command_data/`](../command_data/)) were mixed in for run-5 — 74 CALL /
+20 COLOR after two dead-air clips were dropped, 75 train / 19 val. On the
+19 held-out *val* clips (never trained on), the shipped keyword head:
+
+| slice | before (run-4) | after (run-5) |
+|---|---:|---:|
+| CALL intent correct | 3 / 14 (21.4 %) | **10 / 14 (71.4 %)** |
+| COLOR intent correct | 5 / 5 (100 %) | 5 / 5 (100 %) |
+| all | 8 / 19 (42.1 %) | **15 / 19 (78.9 %)** |
+| `call` keyword active | 5 / 14 | **13 / 14** |
+
+On the 75 train clips: CALL 33.3 % → **93.3 %**, COLOR 86.7 % → **100 %**.
+Test-split metrics moved with it (intent 99.24 → 99.29, slot 99.29 → 99.46)
+and the test split contains no real audio, so the real-voice gain is not
+leakage. Remaining real-voice misses are call/color co-activations; more
+real CALL mass would close them.
 
 ---
 
@@ -143,53 +171,51 @@ the reference implementation (`train/evaluate.py`).
 | metric | value |
 |---|---:|
 | samples | 1 842 |
-| **intent accuracy** | **99.62 %** (0.99620) |
-| top-2 accuracy | 99.89 % (0.99891) |
-| macro F1 | 0.99400 |
-| **slot accuracy** (utterances with a value) | **99.64 %** (0.99643, n = 1 120) |
-| slot accuracy, all utterances (incl. `NONE`) | 99.78 % (0.99783) |
-| slot accuracy given correct intent | 99.64 % (0.99643) |
-| best epoch (validation) | 54 / 60 |
+| **intent accuracy** | **99.84 %** (0.99837) |
+| top-2 accuracy | 99.95 % (0.99946) |
+| macro F1 | 0.99742 |
+| **slot accuracy** (utterances with a value) | **99.38 %** (0.99375, n = 1 120) |
+| slot accuracy, all utterances (incl. `NONE`) | 99.62 % (0.99620) |
+| slot accuracy given correct intent | 99.38 % (0.99375) |
+| best epoch (validation) | 50 / 60 |
 
-Seven errors out of 1 842 utterances.
+Three errors out of 1 842 utterances.
 
 ### Per class
 
 | intent | precision | recall | F1 | support |
 |---|---:|---:|---:|---:|
-| PLAY_MUSIC | 0.9667 | 1.0000 | 0.9831 | 58 |
+| PLAY_MUSIC | 0.9831 | 1.0000 | 0.9915 | 58 |
 | WEATHER | 1.0000 | 1.0000 | 1.0000 | 52 |
-| TIME | 0.9808 | 0.9623 | 0.9714 | 53 |
+| TIME | 1.0000 | 0.9623 | 0.9808 | 53 |
 | LIGHT_ON | 1.0000 | 1.0000 | 1.0000 | 54 |
 | LIGHT_OFF | 1.0000 | 1.0000 | 1.0000 | 58 |
 | PAUSE | 1.0000 | 1.0000 | 1.0000 | 55 |
 | STOP | 0.9818 | 1.0000 | 0.9908 | 54 |
-| NEXT | 0.9833 | 1.0000 | 0.9916 | 59 |
+| NEXT | 1.0000 | 1.0000 | 1.0000 | 59 |
 | VOLUME_UP | 1.0000 | 1.0000 | 1.0000 | 59 |
 | VOLUME_DOWN | 1.0000 | 1.0000 | 1.0000 | 52 |
-| CALL | 1.0000 | 0.9444 | 0.9714 | 54 |
-| MESSAGE | 1.0000 | 0.9825 | 0.9912 | 57 |
-| LIST_REMINDERS | 0.9828 | 1.0000 | 0.9913 | 57 |
-| TIMER | 1.0000 | 1.0000 | 1.0000 | 176 |
-| ALARM | 0.9943 | 1.0000 | 0.9971 | 173 |
+| CALL | 1.0000 | 0.9815 | 0.9907 | 54 |
+| MESSAGE | 1.0000 | 1.0000 | 1.0000 | 57 |
+| LIST_REMINDERS | 1.0000 | 1.0000 | 1.0000 | 57 |
+| TIMER | 0.9944 | 1.0000 | 0.9972 | 176 |
+| ALARM | 1.0000 | 1.0000 | 1.0000 | 173 |
 | TEMPERATURE | 1.0000 | 1.0000 | 1.0000 | 180 |
 | BRIGHTNESS | 1.0000 | 1.0000 | 1.0000 | 180 |
-| COLOR | 1.0000 | 0.9957 | 0.9978 | 231 |
+| COLOR | 1.0000 | 1.0000 | 1.0000 | 231 |
 | CREATE_REMINDER | 1.0000 | 1.0000 | 1.0000 | 180 |
 
 Confusion matrix (test split):
 [`output/metrics/command_confusion.png`](../output/metrics/command_confusion.png),
 raw table in [`output/metrics/command_per_class.csv`](../output/metrics/command_per_class.csv).
 
-The 7 errors, exactly as the precision/recall columns imply:
+The 3 errors, exactly as the precision/recall columns imply:
 
 | direction | count |
 |---|---:|
-| `CALL` → other | 3 |
 | `TIME` → other | 2 |
-| `MESSAGE` → other | 1 |
-| `COLOR` → other | 1 |
-| incoming false positives | 2 → `PLAY_MUSIC`, 1 each → `TIME`, `STOP`, `NEXT`, `LIST_REMINDERS`, `ALARM` |
+| `CALL` → other | 1 |
+| incoming false positives | 1 each → `PLAY_MUSIC`, `STOP`, `TIMER` |
 
 Every slot intent (`TIMER`, `ALARM`, `TEMPERATURE`, `BRIGHTNESS`, `COLOR`,
 `CREATE_REMINDER`) has recall ≥ 0.995.
@@ -202,10 +228,10 @@ Every slot intent (`TIMER`, `ALARM`, `TEMPERATURE`, `BRIGHTNESS`, `COLOR`,
 
 | head | max abs diff | argmax / top-1 identical |
 |---|---:|---|
-| keyword logits (shipped) | 2.48e-05 | yes |
-| command intent logits | 1.14e-05 | yes |
-| command slot logits | 1.14e-05 | yes |
-| wake logit | 4.77e-06 | yes |
+| keyword logits (shipped) | 3.91e-05 | yes |
+| command intent logits | 2.67e-05 | yes |
+| command slot logits | 2.34e-05 | yes |
+| wake logit | 3.81e-06 | yes |
 
 Numerically equivalent — any difference in behaviour between the training host
 and the Pi is measurement noise, not the export.
@@ -301,22 +327,21 @@ models over the whole set.
 | metric | result |
 |---|---:|
 | wake detected | **19 / 19** (100 %) |
-| intent correct | **18 / 19** (94.7 %) |
+| intent correct | **19 / 19** (100 %) |
 | slot correct (6 utterances carry a value) | **6 / 6** (100 %) |
 
-The single miss is `PLAY_MUSIC_s99_v3_clean` → `NEXT`: the clip is correctly
-woken and the keywords `play` (0.999) and `music` (1.000) fire, but the
-out-of-vocabulary word also nudges `next` to 0.5688, just over its 0.55
-threshold, and the rule gives `NEXT` priority. This is the same marginal
-keyword that appears in the test-set error table (`next` F1 0.9833);
-it is a threshold-robustness issue, not a wiring bug — the softmax baseline
-classifies this clip correctly at 99.62 % intent accuracy.
+The run-4 miss (`PLAY_MUSIC_s99_v3_clean` → `NEXT`, `next` nudged to 0.5688
+over its old 0.55 threshold) is fixed with the run-5 model: all 19 intents
+classify correctly, including that clip.
 
-**Negative control** — running the 19 command-only clips (no wake word) with
-wake detection enabled rejects **18 / 19**; `MESSAGE_s97_v1_clean` is falsely
-accepted at score 0.90. This matches the ~0.1 % FAR measured over 1 861
-negative windows: individual hard negatives exist, so keep the threshold at
-0.30 or raise it in a noisy room.
+**Negative control** — running the 19 command-only clips (no wake word)
+rejects **18 / 19** in `pc_test`'s single-scan mode; `STOP_s94_v2_clean`
+contains one isolated 1.2 s window scoring 0.91. The app fires only after
+two consecutive scans ≥ 0.90 (README: "top full-clip score 0.571 never
+sustains the 2-window streak"), so streaming false accepts stay **0 / 19**
+(the ~0.1 % per-window FAR over 1 861 negative windows is unchanged — the
+wake model and threshold were untouched). Individual hard negatives exist,
+so keep the shipped threshold at 0.90 or raise it in a noisy room.
 
 Reproduce:
 
@@ -331,11 +356,11 @@ python runtime/pc_test.py --model output/onnx --dir test_clips/combined --show-s
 
 ## 7. How to read these numbers
 
-* **99.24 % intent accuracy (keyword head)** is measured on unseen speakers
+* **99.29 % intent accuracy (keyword head)** is measured on unseen speakers
   with the exact feature pipeline used on the Pi — it is the number that
-  matters for day-to-day use. The softmax baseline reaches 99.62 % on the
-  same split; the keyword head costs 0.38 pt (7 extra errors) in exchange for
-  reporting *which words were said*, which is what the app consumes.
+  matters for day-to-day use. The softmax baseline reaches 99.84 % on the
+  same split; the keyword head costs 0.55 pt (10 extra errors) in exchange
+  for reporting *which words were said*, which is what the app consumes.
 * Both heads are exported: `runtime/pipeline.py` prefers `keyword.onnx` when
   the model card says `head: keyword` and falls back to `command.onnx`
   otherwise, so the baseline stays one file rename away.

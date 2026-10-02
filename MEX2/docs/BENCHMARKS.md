@@ -47,8 +47,8 @@ Notes:
   (~3 ms) → ~6 ms. Scanning every 100 ms costs well under 10 % of one core.
 * "wake + command est." = one wake inference + one command inference +
   their feature extraction — the per-event cost once the wake word fires.
-* Accuracy attached to this run (keyword head): intent 99.24 %, slot 99.29 %,
-  keyword macro F1 0.9912, wake TPR 99.54 % @ FAR 0.105 %
+* Accuracy attached to this run (keyword head): intent 99.29 %, slot 99.46 %,
+  keyword macro F1 0.9924, wake TPR 99.54 % @ FAR 0.105 %
   (val-selected threshold 0.8194; the shipped threshold is 0.900 — see
   [`ACCURACY.md`](ACCURACY.md) § 5).
 

@@ -212,8 +212,9 @@ Selection procedures (documented in `ACCURACY.md`), both on the
   i.e. a false-accept rate of **0.1 %**. Tune per room with `--threshold` if
   your environment is noisier.
 * **keyword thresholds** — greedy coordinate ascent over a fixed grid,
-  objective = downstream *intent* accuracy (global 0.55 baseline; shipped
-  array keeps 0.55 with `stop` 0.80 and `up`/`down` 0.20).
+   objective = downstream *intent* accuracy (global 0.75 baseline; shipped
+   array keeps 0.75 with `down`/`lights` 0.20, `call` 0.25, `stop` 0.65 and
+   `timer` 0.55).
 
 ---
 

@@ -1,0 +1,95 @@
+path,label,intent,speaker,split,phrase_id,variant_id,transcript,slot,slot_value,duration_sec
+CALL/CALL_real1_r1_take1.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.870
+CALL/CALL_real1_r2_take1.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,0.330
+CALL/CALL_real1_r3_take1.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,0.360
+CALL/CALL_real1_r4_take1.wav,CALL,CALL,real1,train,r4,clean,Call mom,,,2.490
+CALL/CALL_real1_r5_take1.wav,CALL,CALL,real1,val,r5,clean,Call dad,,,0.660
+CALL/CALL_real1_r1_take2.wav,CALL,CALL,real1,train,r1,clean,Call,,,2.250
+CALL/CALL_real1_r2_take2.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,1.200
+CALL/CALL_real1_r3_take2.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,2.490
+CALL/CALL_real1_r5_take2.wav,CALL,CALL,real1,train,r5,clean,Call dad,,,1.680
+CALL/CALL_real1_r6_take1.wav,CALL,CALL,real1,val,r6,clean,Call Sarah,,,0.660
+CALL/CALL_real1_r8_take1.wav,CALL,CALL,real1,train,r8,clean,Call John,,,1.680
+CALL/CALL_real1_r9_take1.wav,CALL,CALL,real1,train,r9,clean,Call Emily,,,1.110
+CALL/CALL_real1_r1_take3.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.840
+CALL/CALL_real1_r2_take3.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,0.540
+CALL/CALL_real1_r3_take3.wav,CALL,CALL,real1,val,r3,clean,Make a phone call,,,1.410
+CALL/CALL_real1_r1_take4.wav,CALL,CALL,real1,train,r1,clean,Call,,,1.860
+CALL/CALL_real1_r2_take4.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,0.990
+CALL/CALL_real1_r3_take4.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,0.690
+CALL/CALL_real1_r4_take3.wav,CALL,CALL,real1,train,r4,clean,Call mom,,,1.380
+CALL/CALL_real1_r5_take3.wav,CALL,CALL,real1,val,r5,clean,Call dad,,,1.110
+CALL/CALL_real1_r1_take5.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.630
+CALL/CALL_real1_r2_take5.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,1.530
+CALL/CALL_real1_r3_take5.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,1.530
+CALL/CALL_real1_r1_take6.wav,CALL,CALL,real1,train,r1,clean,Call,,,1.320
+CALL/CALL_real1_r2_take6.wav,CALL,CALL,real1,val,r2,clean,Place a call,,,1.320
+CALL/CALL_real1_r3_take6.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,0.390
+CALL/CALL_real1_r1_take7.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.930
+CALL/CALL_real1_r2_take7.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,1.710
+CALL/CALL_real1_r3_take7.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,1.770
+CALL/CALL_real1_r1_take8.wav,CALL,CALL,real1,val,r1,clean,Call,,,0.600
+CALL/CALL_real1_r2_take8.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,0.990
+CALL/CALL_real1_r3_take8.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,1.110
+CALL/CALL_real1_r4_take4.wav,CALL,CALL,real1,train,r4,clean,Call mom,,,0.840
+CALL/CALL_real1_r5_take4.wav,CALL,CALL,real1,train,r5,clean,Call dad,,,0.870
+CALL/CALL_real1_r6_take2.wav,CALL,CALL,real1,val,r6,clean,Call Sarah,,,0.960
+CALL/CALL_real1_r7_take2.wav,CALL,CALL,real1,train,r7,clean,Call Daniel,,,1.080
+CALL/CALL_real1_r8_take2.wav,CALL,CALL,real1,train,r8,clean,Call John,,,1.050
+CALL/CALL_real1_r9_take2.wav,CALL,CALL,real1,train,r9,clean,Call Emily,,,0.840
+CALL/CALL_real1_r10_take1.wav,CALL,CALL,real1,train,r10,clean,Call the office,,,1.020
+CALL/CALL_real1_r11_take1.wav,CALL,CALL,real1,val,r11,clean,Call me back,,,0.840
+CALL/CALL_real1_r12_take1.wav,CALL,CALL,real1,train,r12,clean,Can you call Sarah,,,1.230
+CALL/CALL_real1_r1_take9.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.600
+CALL/CALL_real1_r2_take9.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,0.870
+CALL/CALL_real1_r3_take9.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,1.260
+CALL/CALL_real1_r4_take5.wav,CALL,CALL,real1,val,r4,clean,Call mom,,,0.750
+CALL/CALL_real1_r5_take5.wav,CALL,CALL,real1,train,r5,clean,Call dad,,,2.490
+CALL/CALL_real1_r6_take3.wav,CALL,CALL,real1,train,r6,clean,Call Sarah,,,1.410
+CALL/CALL_real1_r7_take3.wav,CALL,CALL,real1,train,r7,clean,Call Daniel,,,1.620
+CALL/CALL_real1_r8_take3.wav,CALL,CALL,real1,train,r8,clean,Call John,,,1.200
+CALL/CALL_real1_r9_take3.wav,CALL,CALL,real1,val,r9,clean,Call Emily,,,2.220
+CALL/CALL_real1_r10_take2.wav,CALL,CALL,real1,train,r10,clean,Call the office,,,1.620
+CALL/CALL_real1_r11_take2.wav,CALL,CALL,real1,train,r11,clean,Call me back,,,1.560
+CALL/CALL_real1_r12_take2.wav,CALL,CALL,real1,train,r12,clean,Can you call Sarah,,,1.500
+CALL/CALL_real1_r1_take10.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.570
+CALL/CALL_real1_r2_take10.wav,CALL,CALL,real1,val,r2,clean,Place a call,,,0.870
+CALL/CALL_real1_r3_take10.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,1.290
+CALL/CALL_real1_r4_take6.wav,CALL,CALL,real1,train,r4,clean,Call mom,,,1.560
+CALL/CALL_real1_r5_take6.wav,CALL,CALL,real1,train,r5,clean,Call dad,,,0.840
+CALL/CALL_real1_r6_take4.wav,CALL,CALL,real1,train,r6,clean,Call Sarah,,,1.290
+CALL/CALL_real1_r7_take4.wav,CALL,CALL,real1,val,r7,clean,Call Daniel,,,1.140
+CALL/CALL_real1_r8_take4.wav,CALL,CALL,real1,train,r8,clean,Call John,,,0.780
+CALL/CALL_real1_r9_take4.wav,CALL,CALL,real1,train,r9,clean,Call Emily,,,0.960
+CALL/CALL_real1_r10_take3.wav,CALL,CALL,real1,train,r10,clean,Call the office,,,0.810
+CALL/CALL_real1_r11_take3.wav,CALL,CALL,real1,train,r11,clean,Call me back,,,0.750
+CALL/CALL_real1_r12_take3.wav,CALL,CALL,real1,val,r12,clean,Can you call Sarah,,,1.590
+CALL/CALL_real1_r1_take11.wav,CALL,CALL,real1,train,r1,clean,Call,,,0.990
+CALL/CALL_real1_r2_take11.wav,CALL,CALL,real1,train,r2,clean,Place a call,,,1.560
+CALL/CALL_real1_r3_take11.wav,CALL,CALL,real1,train,r3,clean,Make a phone call,,,1.170
+CALL/CALL_real1_r4_take7.wav,CALL,CALL,real1,train,r4,clean,Call mom,,,1.860
+CALL/CALL_real1_r5_take7.wav,CALL,CALL,real1,val,r5,clean,Call dad,,,1.530
+CALL/CALL_real1_r6_take5.wav,CALL,CALL,real1,train,r6,clean,Call Sarah,,,0.930
+CALL/CALL_real1_r7_take5.wav,CALL,CALL,real1,train,r7,clean,Call Daniel,,,1.050
+CALL/CALL_real1_r8_take5.wav,CALL,CALL,real1,train,r8,clean,Call John,,,0.780
+CALL/CALL_real1_r9_take5.wav,CALL,CALL,real1,train,r9,clean,Call Emily,,,1.050
+COLOR_RED/COLOR_RED_real1_r1_take1.wav,COLOR_RED,COLOR,real1,train,r1,clean,Color red,color,red,0.900
+COLOR_BLUE/COLOR_BLUE_real1_r2_take1.wav,COLOR_BLUE,COLOR,real1,train,r2,clean,Color blue,color,blue,0.810
+COLOR_GREEN/COLOR_GREEN_real1_r3_take1.wav,COLOR_GREEN,COLOR,real1,train,r3,clean,Color green,color,green,1.020
+COLOR_YELLOW/COLOR_YELLOW_real1_r4_take1.wav,COLOR_YELLOW,COLOR,real1,val,r4,clean,Color yellow,color,yellow,2.340
+COLOR_RED/COLOR_RED_real1_r5_take1.wav,COLOR_RED,COLOR,real1,train,r5,clean,Change the lights to red,color,red,2.400
+COLOR_BLUE/COLOR_BLUE_real1_r6_take1.wav,COLOR_BLUE,COLOR,real1,train,r6,clean,Change the lights to blue,color,blue,1.740
+COLOR_GREEN/COLOR_GREEN_real1_r7_take1.wav,COLOR_GREEN,COLOR,real1,train,r7,clean,Change the lights to green,color,green,1.560
+COLOR_YELLOW/COLOR_YELLOW_real1_r8_take1.wav,COLOR_YELLOW,COLOR,real1,val,r8,clean,Change the lights to yellow,color,yellow,1.590
+COLOR_RED/COLOR_RED_real1_r9_take1.wav,COLOR_RED,COLOR,real1,train,r9,clean,Set the lights to red,color,red,1.470
+COLOR_BLUE/COLOR_BLUE_real1_r10_take1.wav,COLOR_BLUE,COLOR,real1,train,r10,clean,Set the lights to blue,color,blue,1.230
+COLOR_GREEN/COLOR_GREEN_real1_r11_take1.wav,COLOR_GREEN,COLOR,real1,train,r11,clean,Set the lights to green,color,green,2.040
+COLOR_YELLOW/COLOR_YELLOW_real1_r12_take1.wav,COLOR_YELLOW,COLOR,real1,val,r12,clean,Set the lights to yellow,color,yellow,2.190
+COLOR_RED/COLOR_RED_real1_r1_take2.wav,COLOR_RED,COLOR,real1,train,r1,clean,Color red,color,red,1.830
+COLOR_BLUE/COLOR_BLUE_real1_r2_take2.wav,COLOR_BLUE,COLOR,real1,train,r2,clean,Color blue,color,blue,1.890
+COLOR_GREEN/COLOR_GREEN_real1_r3_take2.wav,COLOR_GREEN,COLOR,real1,train,r3,clean,Color green,color,green,0.840
+COLOR_YELLOW/COLOR_YELLOW_real1_r4_take2.wav,COLOR_YELLOW,COLOR,real1,val,r4,clean,Color yellow,color,yellow,1.560
+COLOR_RED/COLOR_RED_real1_r5_take2.wav,COLOR_RED,COLOR,real1,train,r5,clean,Change the lights to red,color,red,2.070
+COLOR_BLUE/COLOR_BLUE_real1_r6_take2.wav,COLOR_BLUE,COLOR,real1,train,r6,clean,Change the lights to blue,color,blue,2.460
+COLOR_GREEN/COLOR_GREEN_real1_r7_take2.wav,COLOR_GREEN,COLOR,real1,train,r7,clean,Change the lights to green,color,green,1.320
+COLOR_YELLOW/COLOR_YELLOW_real1_r8_take2.wav,COLOR_YELLOW,COLOR,real1,val,r8,clean,Change the lights to yellow,color,yellow,1.500
