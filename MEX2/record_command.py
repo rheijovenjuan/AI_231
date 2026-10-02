@@ -80,6 +80,20 @@ COLOR_PHRASES = [
 ]
 
 
+def beep(freq: float = 880.0, dur: float = 0.15, vol: float = 0.3) -> None:
+    """Short 'speak now' tone right before capture (best-effort)."""
+    try:
+        t = np.linspace(0.0, dur, int(F.SAMPLE_RATE * dur), False)
+        tone = vol * np.sin(2 * np.pi * freq * t)
+        fade = int(0.01 * F.SAMPLE_RATE)
+        tone[:fade] *= np.linspace(0.0, 1.0, fade)
+        tone[-fade:] *= np.linspace(1.0, 0.0, fade)
+        sd.play(tone.astype(np.float32), F.SAMPLE_RATE)
+        sd.wait()
+    except Exception as exc:  # noqa: BLE001 - audio is optional
+        print(f"  (beep unavailable: {exc})")
+
+
 def record(seconds: float, device) -> np.ndarray:
     """Capture `seconds` at 16 kHz mono; fall back to native rate + resample
     if the device refuses to open at 16 kHz (same approach as record_wake)."""
@@ -219,8 +233,9 @@ def main() -> int:
         tag = f"[{session + 1}]" + (f"/{args.count}" if args.count else "")
         print(f"\n{tag} {label}: {transcript!r}")
         if args.count:
-            print("  speak in 3... 2... 1...")
-            time.sleep(1.5)
+            time.sleep(1.2)               # reading time for the phrase
+            print("  *beep* - speak now")
+            beep()
         else:
             try:
                 ans = input("  Enter = record, r = redo last, s = skip, "
@@ -239,8 +254,9 @@ def main() -> int:
                 cur = prev
                 transcript, slot_value, label, phrase_id = cur
                 print(f"  {label}: {transcript!r}")
-            print("  recording in 1...")
-            time.sleep(1.0)
+            time.sleep(0.5)               # settle after the keypress
+            print("  *beep* - speak now")
+            beep()
 
         x = record(args.seconds, args.device)
         peak = float(np.max(np.abs(x))) if x.size else 0.0
