@@ -1,0 +1,57 @@
+[train-wake] using GPU 1
+[wake] CUDA_VISIBLE_DEVICES=1 device=cuda n_gpu=1
+[wake] using GPU 0 -> NVIDIA A100-SXM4-40GB
+[wake] train=19837 val=3302
+[wake] parameters=23665
+[001/40] loss=0.8729 val_loss=0.5910 TPR@FAR<=0.1%=0.0040 far=0.0011 thr=0.605 (10.0s)
+[002/40] loss=0.7200 val_loss=0.3038 TPR@FAR<=0.1%=0.1772 far=0.0011 thr=0.717 (1.8s)
+[003/40] loss=0.5325 val_loss=0.3828 TPR@FAR<=0.1%=0.6988 far=0.0011 thr=0.365 (2.0s)
+[004/40] loss=0.4661 val_loss=0.0963 TPR@FAR<=0.1%=0.8403 far=0.0011 thr=0.740 (1.8s)
+[005/40] loss=0.2817 val_loss=0.0466 TPR@FAR<=0.1%=0.9549 far=0.0011 thr=0.918 (1.8s)
+[006/40] loss=0.1995 val_loss=0.0439 TPR@FAR<=0.1%=0.8531 far=0.0011 thr=0.963 (1.9s)
+[007/40] loss=0.1594 val_loss=0.0360 TPR@FAR<=0.1%=0.9495 far=0.0011 thr=0.961 (1.8s)
+[008/40] loss=0.1257 val_loss=0.0334 TPR@FAR<=0.1%=0.9562 far=0.0011 thr=0.719 (1.8s)
+[009/40] loss=0.1132 val_loss=0.0258 TPR@FAR<=0.1%=0.9629 far=0.0011 thr=0.783 (1.8s)
+[010/40] loss=0.1010 val_loss=0.0225 TPR@FAR<=0.1%=0.9427 far=0.0011 thr=0.900 (1.8s)
+[011/40] loss=0.0617 val_loss=0.0210 TPR@FAR<=0.1%=0.9670 far=0.0011 thr=0.778 (1.8s)
+[012/40] loss=0.0583 val_loss=0.0391 TPR@FAR<=0.1%=0.9899 far=0.0011 thr=0.162 (1.8s)
+[013/40] loss=0.0656 val_loss=0.0304 TPR@FAR<=0.1%=0.9885 far=0.0011 thr=0.281 (1.9s)
+[014/40] loss=0.0433 val_loss=0.0368 TPR@FAR<=0.1%=0.9906 far=0.0011 thr=0.111 (1.8s)
+[015/40] loss=0.0430 val_loss=0.0161 TPR@FAR<=0.1%=0.9919 far=0.0011 thr=0.362 (1.8s)
+[016/40] loss=0.0349 val_loss=0.0424 TPR@FAR<=0.1%=0.9879 far=0.0011 thr=0.181 (1.8s)
+[017/40] loss=0.0403 val_loss=0.0093 TPR@FAR<=0.1%=0.9919 far=0.0011 thr=0.779 (1.8s)
+[018/40] loss=0.0303 val_loss=0.0078 TPR@FAR<=0.1%=0.9946 far=0.0011 thr=0.656 (1.9s)
+[019/40] loss=0.0255 val_loss=0.0144 TPR@FAR<=0.1%=0.9906 far=0.0011 thr=0.495 (1.8s)
+[020/40] loss=0.0248 val_loss=0.0095 TPR@FAR<=0.1%=0.9919 far=0.0011 thr=0.633 (1.8s)
+[021/40] loss=0.0205 val_loss=0.0071 TPR@FAR<=0.1%=0.9973 far=0.0011 thr=0.819 (1.7s)
+[022/40] loss=0.0254 val_loss=0.0083 TPR@FAR<=0.1%=0.9973 far=0.0011 thr=0.362 (1.8s)
+[023/40] loss=0.0194 val_loss=0.0060 TPR@FAR<=0.1%=0.9966 far=0.0011 thr=0.357 (1.8s)
+[024/40] loss=0.0191 val_loss=0.0130 TPR@FAR<=0.1%=0.9946 far=0.0011 thr=0.439 (1.8s)
+[025/40] loss=0.0159 val_loss=0.0118 TPR@FAR<=0.1%=0.9885 far=0.0011 thr=0.758 (1.8s)
+[026/40] loss=0.0139 val_loss=0.0103 TPR@FAR<=0.1%=0.9899 far=0.0011 thr=0.761 (1.9s)
+[027/40] loss=0.0134 val_loss=0.0096 TPR@FAR<=0.1%=0.9933 far=0.0011 thr=0.483 (1.8s)
+[028/40] loss=0.0096 val_loss=0.0100 TPR@FAR<=0.1%=0.9960 far=0.0011 thr=0.252 (1.8s)
+[029/40] loss=0.0150 val_loss=0.0221 TPR@FAR<=0.1%=0.9953 far=0.0011 thr=0.078 (1.8s)
+[030/40] loss=0.0112 val_loss=0.0084 TPR@FAR<=0.1%=0.9973 far=0.0011 thr=0.201 (1.8s)
+[031/40] loss=0.0111 val_loss=0.0095 TPR@FAR<=0.1%=0.9953 far=0.0011 thr=0.368 (1.8s)
+[032/40] loss=0.0114 val_loss=0.0067 TPR@FAR<=0.1%=0.9966 far=0.0011 thr=0.363 (1.8s)
+[033/40] loss=0.0087 val_loss=0.0107 TPR@FAR<=0.1%=0.9953 far=0.0011 thr=0.246 (1.8s)
+[034/40] loss=0.0090 val_loss=0.0160 TPR@FAR<=0.1%=0.9939 far=0.0011 thr=0.126 (1.8s)
+[wake] early stop at epoch 34
+{
+  "best_epoch": 21,
+  "best_val_tpr_at_far": 0.9973045822102425,
+  "epochs_run": 34,
+  "parameters": 23665,
+  "gpu": "1",
+  "final_val": {
+    "epoch": 34,
+    "train_loss": 0.00903745776189393,
+    "val_loss": 0.01596412993967533,
+    "tpr": 0.9939353099730458,
+    "far": 0.0011001100110011,
+    "threshold": 0.12568046152591705,
+    "lr": 0.00019925415993480788,
+    "seconds": 1.7744638919830322
+  }
+}

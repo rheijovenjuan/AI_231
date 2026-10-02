@@ -81,10 +81,11 @@ case.
 
 The **combined app (`rapi_combined`) does not use this GMM at all** - it runs
 `wake.onnx`, a small CNN trained in the sibling voice-command-model project
-(run-3: 8k edge-tts positives + 10k command negatives + hard negatives + noise;
-test split TPR 99.75 % at the shipped 0.40 threshold, FAR 0.000 %, see its
-`docs/ACCURACY.md`). This script stays as the dependency-light legacy/demo
-path.
+(run-4: 8k edge-tts positives + 10k command negatives + hard negatives + noise
++ 11 real user recordings x 40 augmented variants; test split TPR 99.72 % at
+the shipped 0.40 threshold, FAR 0.315 % full-clip, real recordings 11/11
+detected - see its `docs/ACCURACY.md` § 5). This script stays as the
+dependency-light legacy/demo path.
 
 ## Files produced
 

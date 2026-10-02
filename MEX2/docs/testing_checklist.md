@@ -1,6 +1,8 @@
 # Testing checklist
 
 Use this to verify the assistant works end-to-end, on a PC and on the Pi.
+For the Pi specifically (benchmark + on-device acceptance), use
+[`testing_on_pi.md`](testing_on_pi.md).
 
 ## A. Build & train
 - [ ] `pip install -r requirements.txt` succeeds (CPU only).

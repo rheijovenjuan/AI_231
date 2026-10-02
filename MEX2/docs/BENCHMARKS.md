@@ -16,7 +16,7 @@ when the model card says `head: command`).
 
 ## 1. Measured — PC (Windows 11, CPU only)
 
-Run 2026-09-29, `output/onnx/benchmark_pc.json`:
+Run 2026-10-02, `output/onnx/benchmark_pc.json`:
 
 | metric | value |
 |---|---:|
@@ -24,19 +24,19 @@ Run 2026-09-29, `output/onnx/benchmark_pc.json`:
 | CPU | Intel Family 6 Model 165, 12 logical cores |
 | Python / onnxruntime | 3.13.7 / 1.30.0 |
 | threads | ORT default (all cores) |
-| **model load** | **209 ms** |
+| **model load** | **208 ms** |
 | `wake.onnx` size | **113.0 KB** |
 | `keyword.onnx` size | **507.4 KB** |
 | `command.onnx` size | 506.9 KB |
 | parameters (wake / keyword / command) | 23 665 / 123 496 / 123 303 |
-| wake inference p50 / p99 | **2.54 / 3.40 ms** |
-| keyword inference p50 / p99 | **7.69 / 10.06 ms** |
-| feature extraction, 2.5 s audio (p50) | 4.17 ms |
-| full wake scan of 4 s audio (p50) | 32.76 ms |
-| wake + command, end-to-end (est.) | **14.5 ms** |
-| real-time factor (audio sec / wall sec) | 0.0028 |
-| throughput | 393 wake inferences/s, 130 commands/s |
-| **peak RSS** | **140.2 MB** (whole Python process) |
+| wake inference p50 / p99 | **2.82 / 4.32 ms** |
+| keyword inference p50 / p99 | **9.28 / 12.31 ms** |
+| feature extraction, 2.5 s audio (p50) | 3.33 ms |
+| full wake scan of 4 s audio (p50) | 35.67 ms |
+| wake + command, end-to-end (est.) | **15.9 ms** |
+| real-time factor (audio sec / wall sec) | 0.0034 |
+| throughput | 338 wake inferences/s, 106 commands/s |
+| **peak RSS** | **139.8 MB** (whole Python process) |
 
 Notes:
 
@@ -48,8 +48,9 @@ Notes:
 * "wake + command est." = one wake inference + one command inference +
   their feature extraction — the per-event cost once the wake word fires.
 * Accuracy attached to this run (keyword head): intent 99.24 %, slot 99.29 %,
-  keyword macro F1 0.9912, wake TPR 99.75 % @ FAR 0.11 %
-  (see [`ACCURACY.md`](ACCURACY.md)).
+  keyword macro F1 0.9912, wake TPR 99.54 % @ FAR 0.105 %
+  (val-selected threshold 0.8194; the shipped threshold is 0.400 — see
+  [`ACCURACY.md`](ACCURACY.md) § 5).
 
 ---
 
@@ -68,14 +69,14 @@ python3 runtime/benchmark.py --model output/onnx --label rpi4 --threads 2
 
 | quantity | Pi 4 p50 / p99 | PC (§1) p50 / p99 |
 |---|---:|---:|
-| model load | 699 ms | 209 ms |
-| feature extraction (2.5 s) | 9.90 / 10.04 ms | 4.17 ms |
-| wake inference | 17.75 / 32.93 ms | 2.54 / 3.40 ms |
-| command (keyword) inference | 39.38 / 65.58 ms | 7.69 / 10.06 ms |
-| wake scan over 4 s of audio | 198.9 / 301.5 ms | 32.76 ms |
-| wake + command, end-to-end (est.) | **68.4 ms** | 14.5 ms |
+| model load | 699 ms | 208 ms |
+| feature extraction (2.5 s) | 9.90 / 10.04 ms | 3.33 ms |
+| wake inference | 17.75 / 32.93 ms | 2.82 / 4.32 ms |
+| command (keyword) inference | 39.38 / 65.58 ms | 9.28 / 12.31 ms |
+| wake scan over 4 s of audio | 198.9 / 301.5 ms | 35.67 ms |
+| wake + command, end-to-end (est.) | **68.4 ms** | 15.9 ms |
 | throughput | 57.9 wake/s · 24.3 cmd/s | – |
-| peak RSS | **147.1 MB** | 140.2 MB |
+| peak RSS | **147.1 MB** | 139.8 MB |
 | real-time factor | **0.0158** | – |
 
 Comfortably real time: the always-listening loop needs one wake inference per

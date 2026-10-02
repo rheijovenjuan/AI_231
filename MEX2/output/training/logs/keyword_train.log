@@ -1,0 +1,91 @@
+[keywords] vocabulary self-check
+18375/18375 rows correct (40 keywords)
+[extract] cmd_kw.npy already present - skipping
+[train] keyword spotter (1 GPU)
+[train] CUDA_VISIBLE_DEVICES=1 device=cuda n_gpu=1
+[train] using GPU 0 -> NVIDIA A100-SXM4-40GB
+[train] train=14677 val=1856 keywords=40
+[train] pos_weight max=34.54 mean=26.01
+[train] parameters=123496
+[001/60] loss=1.3225 val_loss=1.2887 intent=0.1196 slot=0.0339 exact=0.0000 mf1=0.1264 lr=3.14e-04 (4.8s)
+[002/60] loss=1.1837 val_loss=1.0823 intent=0.1466 slot=0.0383 exact=0.0000 mf1=0.1551 lr=8.44e-04 (3.4s)
+[003/60] loss=0.9980 val_loss=0.9325 intent=0.1665 slot=0.0560 exact=0.0000 mf1=0.2207 lr=1.57e-03 (3.2s)
+[004/60] loss=0.8272 val_loss=0.7178 intent=0.2403 slot=0.2117 exact=0.0005 mf1=0.2744 lr=2.29e-03 (3.1s)
+[005/60] loss=0.6425 val_loss=0.5387 intent=0.3847 slot=0.3416 exact=0.0048 mf1=0.3681 lr=2.81e-03 (3.1s)
+[006/60] loss=0.4599 val_loss=0.3473 intent=0.5911 slot=0.4962 exact=0.0124 mf1=0.4818 lr=3.00e-03 (3.1s)
+[007/60] loss=0.3196 val_loss=0.2496 intent=0.6773 slot=0.5312 exact=0.0485 mf1=0.5702 lr=3.00e-03 (3.2s)
+[008/60] loss=0.2495 val_loss=0.2021 intent=0.7489 slot=0.6180 exact=0.1099 mf1=0.6459 lr=2.99e-03 (3.2s)
+[009/60] loss=0.1981 val_loss=0.1827 intent=0.7958 slot=0.5684 exact=0.1708 mf1=0.6896 lr=2.98e-03 (3.2s)
+[010/60] loss=0.1676 val_loss=0.1462 intent=0.7990 slot=0.6519 exact=0.2155 mf1=0.7156 lr=2.96e-03 (3.1s)
+[011/60] loss=0.1415 val_loss=0.1166 intent=0.8508 slot=0.6961 exact=0.3491 mf1=0.7742 lr=2.94e-03 (3.1s)
+[012/60] loss=0.1164 val_loss=0.1102 intent=0.8642 slot=0.6897 exact=0.3427 mf1=0.7757 lr=2.91e-03 (3.1s)
+[013/60] loss=0.1017 val_loss=0.0808 intent=0.8895 slot=0.7909 exact=0.4607 mf1=0.8135 lr=2.88e-03 (3.1s)
+[014/60] loss=0.0934 val_loss=0.0865 intent=0.9079 slot=0.8217 exact=0.5102 mf1=0.8355 lr=2.84e-03 (3.2s)
+[015/60] loss=0.0861 val_loss=0.0991 intent=0.9025 slot=0.8405 exact=0.5609 mf1=0.8462 lr=2.80e-03 (3.1s)
+[016/60] loss=0.0785 val_loss=0.0782 intent=0.9181 slot=0.8621 exact=0.6325 mf1=0.8753 lr=2.75e-03 (3.1s)
+[017/60] loss=0.0658 val_loss=0.0626 intent=0.9321 slot=0.9095 exact=0.7053 mf1=0.8958 lr=2.70e-03 (3.1s)
+[018/60] loss=0.0565 val_loss=0.0797 intent=0.9224 slot=0.9116 exact=0.6514 mf1=0.8747 lr=2.65e-03 (3.2s)
+[019/60] loss=0.0555 val_loss=0.0719 intent=0.9526 slot=0.9149 exact=0.7802 mf1=0.9164 lr=2.59e-03 (3.1s)
+[020/60] loss=0.0497 val_loss=0.0675 intent=0.9461 slot=0.9316 exact=0.7780 mf1=0.9184 lr=2.53e-03 (3.1s)
+[021/60] loss=0.0454 val_loss=0.0628 intent=0.9499 slot=0.9353 exact=0.7996 mf1=0.9238 lr=2.46e-03 (3.1s)
+[022/60] loss=0.0445 val_loss=0.0517 intent=0.9547 slot=0.9601 exact=0.8244 mf1=0.9319 lr=2.39e-03 (3.1s)
+[023/60] loss=0.0433 val_loss=0.0449 intent=0.9688 slot=0.9596 exact=0.8491 mf1=0.9399 lr=2.32e-03 (3.2s)
+[024/60] loss=0.0354 val_loss=0.0653 intent=0.9348 slot=0.9526 exact=0.7834 mf1=0.9162 lr=2.25e-03 (3.2s)
+[025/60] loss=0.0349 val_loss=0.0508 intent=0.9634 slot=0.9510 exact=0.8491 mf1=0.9381 lr=2.17e-03 (3.2s)
+[026/60] loss=0.0303 val_loss=0.0444 intent=0.9623 slot=0.9655 exact=0.8793 mf1=0.9562 lr=2.09e-03 (3.1s)
+[027/60] loss=0.0280 val_loss=0.0438 intent=0.9704 slot=0.9758 exact=0.9046 mf1=0.9583 lr=2.01e-03 (3.2s)
+[028/60] loss=0.0257 val_loss=0.0413 intent=0.9698 slot=0.9671 exact=0.9089 mf1=0.9619 lr=1.93e-03 (3.2s)
+[029/60] loss=0.0259 val_loss=0.0495 intent=0.9661 slot=0.9639 exact=0.8955 mf1=0.9575 lr=1.84e-03 (3.2s)
+[030/60] loss=0.0260 val_loss=0.0547 intent=0.9591 slot=0.9709 exact=0.8933 mf1=0.9548 lr=1.76e-03 (3.2s)
+[031/60] loss=0.0258 val_loss=0.0477 intent=0.9666 slot=0.9704 exact=0.8987 mf1=0.9594 lr=1.67e-03 (3.2s)
+[032/60] loss=0.0247 val_loss=0.0394 intent=0.9714 slot=0.9731 exact=0.9030 mf1=0.9602 lr=1.59e-03 (3.1s)
+[033/60] loss=0.0218 val_loss=0.0368 intent=0.9639 slot=0.9650 exact=0.8885 mf1=0.9547 lr=1.50e-03 (3.1s)
+[034/60] loss=0.0212 val_loss=0.0392 intent=0.9736 slot=0.9838 exact=0.9332 mf1=0.9724 lr=1.41e-03 (3.2s)
+[035/60] loss=0.0178 val_loss=0.0342 intent=0.9714 slot=0.9704 exact=0.9009 mf1=0.9592 lr=1.32e-03 (3.2s)
+[036/60] loss=0.0165 val_loss=0.0333 intent=0.9763 slot=0.9865 exact=0.9321 mf1=0.9746 lr=1.24e-03 (3.2s)
+[037/60] loss=0.0155 val_loss=0.0361 intent=0.9747 slot=0.9822 exact=0.9321 mf1=0.9732 lr=1.15e-03 (3.2s)
+[038/60] loss=0.0174 val_loss=0.0363 intent=0.9763 slot=0.9811 exact=0.9300 mf1=0.9718 lr=1.07e-03 (3.2s)
+[039/60] loss=0.0154 val_loss=0.0341 intent=0.9774 slot=0.9758 exact=0.9321 mf1=0.9724 lr=9.86e-04 (3.1s)
+[040/60] loss=0.0147 val_loss=0.0432 intent=0.9758 slot=0.9752 exact=0.9300 mf1=0.9694 lr=9.04e-04 (3.2s)
+[041/60] loss=0.0144 val_loss=0.0292 intent=0.9838 slot=0.9833 exact=0.9418 mf1=0.9751 lr=8.25e-04 (3.4s)
+[042/60] loss=0.0143 val_loss=0.0334 intent=0.9768 slot=0.9801 exact=0.9267 mf1=0.9680 lr=7.49e-04 (3.2s)
+[043/60] loss=0.0126 val_loss=0.0325 intent=0.9817 slot=0.9865 exact=0.9418 mf1=0.9754 lr=6.74e-04 (3.1s)
+[044/60] loss=0.0126 val_loss=0.0385 intent=0.9811 slot=0.9828 exact=0.9418 mf1=0.9746 lr=6.03e-04 (3.1s)
+[045/60] loss=0.0122 val_loss=0.0328 intent=0.9817 slot=0.9838 exact=0.9440 mf1=0.9745 lr=5.35e-04 (3.2s)
+[046/60] loss=0.0118 val_loss=0.0381 intent=0.9828 slot=0.9828 exact=0.9391 mf1=0.9735 lr=4.70e-04 (3.3s)
+[047/60] loss=0.0119 val_loss=0.0331 intent=0.9876 slot=0.9833 exact=0.9515 mf1=0.9781 lr=4.08e-04 (3.2s)
+[048/60] loss=0.0106 val_loss=0.0343 intent=0.9801 slot=0.9844 exact=0.9440 mf1=0.9749 lr=3.50e-04 (3.2s)
+[049/60] loss=0.0106 val_loss=0.0375 intent=0.9784 slot=0.9855 exact=0.9418 mf1=0.9748 lr=2.96e-04 (3.2s)
+[050/60] loss=0.0100 val_loss=0.0349 intent=0.9849 slot=0.9860 exact=0.9494 mf1=0.9774 lr=2.46e-04 (3.2s)
+[051/60] loss=0.0089 val_loss=0.0357 intent=0.9860 slot=0.9881 exact=0.9569 mf1=0.9809 lr=2.00e-04 (3.3s)
+[052/60] loss=0.0085 val_loss=0.0347 intent=0.9860 slot=0.9881 exact=0.9542 mf1=0.9796 lr=1.59e-04 (3.2s)
+[053/60] loss=0.0092 val_loss=0.0335 intent=0.9811 slot=0.9822 exact=0.9450 mf1=0.9754 lr=1.22e-04 (3.2s)
+[054/60] loss=0.0091 val_loss=0.0351 intent=0.9828 slot=0.9860 exact=0.9531 mf1=0.9792 lr=8.99e-05 (3.3s)
+[055/60] loss=0.0088 val_loss=0.0358 intent=0.9822 slot=0.9855 exact=0.9537 mf1=0.9794 lr=6.26e-05 (3.2s)
+[056/60] loss=0.0090 val_loss=0.0372 intent=0.9822 slot=0.9849 exact=0.9504 mf1=0.9775 lr=4.01e-05 (3.2s)
+[057/60] loss=0.0086 val_loss=0.0364 intent=0.9817 slot=0.9860 exact=0.9510 mf1=0.9779 lr=2.25e-05 (3.2s)
+[058/60] loss=0.0086 val_loss=0.0363 intent=0.9828 slot=0.9860 exact=0.9510 mf1=0.9783 lr=9.98e-06 (3.2s)
+[059/60] loss=0.0077 val_loss=0.0365 intent=0.9833 slot=0.9860 exact=0.9520 mf1=0.9786 lr=2.46e-06 (3.2s)
+[060/60] loss=0.0090 val_loss=0.0366 intent=0.9833 slot=0.9860 exact=0.9520 mf1=0.9786 lr=1.28e-08 (3.3s)
+{
+  "best_epoch": 47,
+  "best_val_intent_acc": 0.9876077586206896,
+  "epochs_run": 60,
+  "parameters": 123496,
+  "keywords": 40,
+  "gpu": "1",
+  "final_val": {
+    "epoch": 60,
+    "train_loss": 0.008970834829501416,
+    "loss": 0.036555488818678365,
+    "exact_match": 0.9520474137931034,
+    "keyword_macro_f1": 0.9785588979721069,
+    "keyword_micro_p": 0.9717904329299927,
+    "keyword_micro_r": 0.993233323097229,
+    "intent_acc": 0.9832974137931034,
+    "slot_acc": 0.9859913793103449,
+    "n": 1856,
+    "lr": 1.2781307517440925e-08,
+    "seconds": 3.251310348510742
+  }
+}

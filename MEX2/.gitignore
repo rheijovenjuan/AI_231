@@ -13,6 +13,8 @@ venv/
 
 # Large local datasets (the optionB dataset lives in the course repo)
 *.log
+# Training logs under output/training/ are submission evidence - track them
+!output/training/logs/*.log
 .cache/
 
 # Keep model + report outputs out of git by default (they're reproducible)

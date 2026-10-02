@@ -1,6 +1,6 @@
 {
   "label": "pc",
-  "timestamp": "2026-09-29 13:24:53",
+  "timestamp": "2026-10-02 17:02:17",
   "environment": {
     "platform": "Windows-11-10.0.26200-SP0",
     "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
@@ -20,54 +20,54 @@
       "wake": 23665,
       "keyword": 123496
     },
-    "model_dir": "C:\\Users\\Rhei Juan\\Documents\\Default Project\\output\\onnx",
-    "load_seconds": 0.209
+    "model_dir": "C:\\Users\\Rhei Juan\\sandbox\\rapi_combined\\output\\onnx",
+    "load_seconds": 0.208
   },
   "latency": {
     "feature_extract_cmd": {
-      "mean_ms": 4.007,
-      "p50_ms": 4.169,
-      "p90_ms": 4.464,
-      "p99_ms": 4.781,
-      "min_ms": 3.121,
-      "max_ms": 5.229,
+      "mean_ms": 3.495,
+      "p50_ms": 3.334,
+      "p90_ms": 4.118,
+      "p99_ms": 4.752,
+      "min_ms": 3.046,
+      "max_ms": 4.851,
       "iters": 300
     },
     "wake_inference": {
-      "mean_ms": 2.626,
-      "p50_ms": 2.541,
-      "p90_ms": 2.992,
-      "p99_ms": 3.404,
-      "min_ms": 2.37,
-      "max_ms": 3.896,
+      "mean_ms": 2.955,
+      "p50_ms": 2.816,
+      "p90_ms": 3.722,
+      "p99_ms": 4.318,
+      "min_ms": 2.359,
+      "max_ms": 5.252,
       "iters": 300
     },
     "command_inference": {
-      "mean_ms": 7.897,
-      "p50_ms": 7.691,
-      "p90_ms": 9.206,
-      "p99_ms": 10.06,
-      "min_ms": 6.607,
-      "max_ms": 10.72,
+      "mean_ms": 9.449,
+      "p50_ms": 9.281,
+      "p90_ms": 10.707,
+      "p99_ms": 12.31,
+      "min_ms": 6.592,
+      "max_ms": 44.77,
       "iters": 300
     },
     "scan_4s_audio": {
-      "mean_ms": 38.227,
-      "p50_ms": 32.759,
-      "p90_ms": 40.805,
-      "p99_ms": 125.419,
-      "min_ms": 30.185,
-      "max_ms": 157.98,
+      "mean_ms": 35.816,
+      "p50_ms": 35.672,
+      "p90_ms": 37.208,
+      "p99_ms": 38.651,
+      "min_ms": 33.034,
+      "max_ms": 39.076,
       "iters": 30
     },
-    "wake_plus_command_est_ms": 14.53
+    "wake_plus_command_est_ms": 15.899
   },
   "throughput": {
-    "wake_inferences_per_s": 380.8,
-    "commands_per_s": 126.6
+    "wake_inferences_per_s": 338.4,
+    "commands_per_s": 105.8
   },
   "memory": {
-    "peak_rss_mb": 140.2
+    "peak_rss_mb": 139.8
   },
   "accuracy": {
     "split": 2,
@@ -218,29 +218,29 @@
   },
   "wake_accuracy": {
     "split": 2,
-    "n_samples": 3478,
-    "n_positive": 1617,
-    "n_negative": 1861,
-    "threshold": 0.3031441569328308,
-    "tpr_at_threshold": 0.9975262832405689,
-    "far_at_threshold": 0.0010746910263299302,
+    "n_samples": 3658,
+    "n_positive": 1754,
+    "n_negative": 1904,
+    "threshold": 0.8193860650062561,
+    "tpr_at_threshold": 0.9954389965792474,
+    "far_at_threshold": 0.0010504201680672268,
     "tpr_at_far_1pct": {
       "tpr": 1.0,
-      "far": 0.008597528210639442,
-      "threshold": 0.01
+      "far": 0.009978991596638655,
+      "threshold": 0.05
     },
     "tpr_at_far_0p1pct": {
-      "tpr": 0.9975262832405689,
-      "far": 0.0005373455131649651,
-      "threshold": 0.35000000000000003
+      "tpr": 0.9954389965792474,
+      "far": 0.0005252100840336134,
+      "threshold": 0.86
     },
     "tpr_at_far_0p01pct": {
-      "tpr": 0.9975262832405689,
+      "tpr": 0.9954389965792474,
       "far": 0.0,
-      "threshold": 0.41500000000000004
+      "threshold": 0.9
     },
-    "equal_error_rate": 0.0011557747030227373,
-    "best_epoch": 18
+    "equal_error_rate": 0.0032860065348830404,
+    "best_epoch": 21
   },
-  "real_time_factor": 0.00284
+  "real_time_factor": 0.00335
 }

@@ -1,0 +1,31 @@
+/home/rhei.joven.juan/rapi_vcm/run_wake.sh: line 1: ﻿set: command not found
+[wake] start Friday, 02 October, 2026 04:14:58 PM PST EXTRA=--real /home/rhei.joven.juan/rapi_vcm/real_wake/positive --real-per-clip 40
+[tts] 49 candidate voices
+[tts] synthesising 1323 base clips (49 voices x 3 texts x 3 rates x 3 pitches)
+[tts] 1323/1323 base clips ok
+[tts] 276/276 hard negatives ok
+[build] 1323 base clips x 6 variants
+[real] 11 recordings -> train=7 val=1 test=3 x 40 variants
+{
+  "n": 26797,
+  "counts": {
+    "positive": 10433,
+    "negative": 16364
+  },
+  "splits": {
+    "0": 19837,
+    "1": 3302,
+    "2": 3658
+  },
+  "pos_per_split": {
+    "0": 7195,
+    "1": 1484,
+    "2": 1754
+  },
+  "neg_per_split": {
+    "0": 12642,
+    "1": 1818,
+    "2": 1904
+  }
+}
+[wake] done Friday, 02 October, 2026 04:19:43 PM PST

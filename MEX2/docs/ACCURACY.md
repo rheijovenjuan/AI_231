@@ -25,8 +25,10 @@ Two command heads are measured:
 * 19 intent classes, 6 of them carrying a spoken value (slot).
 * Splits are **speaker-disjoint**: no voice seen in training appears in the
   test metrics.
-* Wake-word data is separate (see §5): 26 414 windows
-  (9 938 positive / 16 476 negative), split 19 698 / 3 238 / 3 478.
+* Wake-word data is separate (see §5): 26 797 windows
+  (10 433 positive / 16 364 negative), split 19 837 / 3 302 / 3 658 —
+  includes the 11 real user recordings (40 augmented variants each,
+  recording-level split).
 
 > The dataset README on GitHub claims 27 956 files; the actual repository
 > contains **18 375 WAVs** (verified with `git ls-files`). All figures here use
@@ -212,40 +214,68 @@ and the Pi is measurement noise, not the export.
 
 ## 5. Wake-word detector (test split)
 
+Retrained 2026-10-02 with **real user recordings** mixed in (see below).
+Positives: 49 edge-tts voices × 3 texts × 3 rates × 3 pitches (1 323 base
+clips, 100 % synthesis success) with noise/gain/window augmentation **plus
+11 clips recorded with `record_wake.py` × 40 augmented variants and 55 real
+voice + command-tail mixes** — the recordings are split **by original clip**
+(7 train / 1 val / 3 test), so no augmented variant leaks across splits.
+Negatives: 10 000 OptionB utterances, ~4 000 TTS near-misses ("hey puppy",
+"hey Rapi" mispronunciations, other names) and 2 500 noise segments.
+Totals: **10 433 positive / 16 364 negative windows**; test split
+**3 658 (1 754 pos / 1 904 neg)** — full breakdown in
+[`output/training/wake_meta.json`](../output/training/wake_meta.json).
+
 Operating point selected on the **validation** split as
-`(1 − 0.001)`-quantile of negative scores (0.3031), then frozen. The
-**shipped** `model_card.json` threshold is **0.400**: it sits on the same
-TPR plateau (99.75 %) with test-split FAR 0.000 %, and trades a little
-cross-corpus sensitivity for far fewer false wakes on real speech.
+`(1 − 0.001)`-quantile of negative scores (**0.8194**), then frozen; test
+metrics at that point are TPR 99.54 % / FAR 0.105 %.
+
+The **shipped** `model_card.json` threshold is **0.400**: the whole
+0.38–0.565 band sits on the same test TPR plateau (99.715 %, FAR 0.315 %),
+and 0.400 keeps margin for the *streaming* detector, which fires only after
+**two consecutive 100 ms windows** above threshold — a borderline clip whose
+windows score 0.52 / 0.96 fires at 0.400 but never builds a streak at
+0.600 and above.
 
 | metric | value |
 |---|---:|
-| test windows | 3 478 (1 617 positive / 1 861 negative) |
+| test windows | 3 658 (1 754 positive / 1 904 negative) |
 | threshold (shipped) | 0.400 |
-| threshold (val-quantile) | 0.3031 |
-| **true-positive rate** | **99.75 %** (0.99753) |
-| **false-accept rate (at 0.400)** | **0.000 %** |
-| equal-error rate | 0.116 % (0.001156) |
-| best epoch (validation, early stop) | 18 / 31 |
+| threshold (val-selected) | 0.8194 |
+| **true-positive rate (shipped 0.400)** | **99.715 %** (0.99715) |
+| false-accept rate (at 0.400, full clip) | 0.315 % (6 / 1 904) |
+| TPR / FAR at val-selected 0.8194 | 99.544 % / 0.105 % |
+| equal-error rate | 0.329 % (0.003286) |
+| best epoch (validation, early stop) | 21 / 34 |
 
 Trade-off curve measured on the test split:
 
 | target FAR | threshold | TPR |
 |---|---:|---:|
+| 0.00 % | 0.865 | 99.54 % |
+| 0.05 % | 0.840 | 99.54 % |
+| **0.105 % (val-selected)** | 0.8194 | 99.54 % |
+| 0.21 % | 0.700 | 99.54 % |
+| **0.315 % (shipped)** | **0.400** | **99.715 %** |
 | 1 % | 0.010 | 100.00 % |
-| 0.1 % | 0.350 | 99.75 % |
-| 0.107 % (val-selected) | 0.3031 | 99.75 % |
-| **0.000 % (shipped)** | **0.400** | **99.75 %** |
-| 0.01 % | 0.415 | 99.75 % |
 
 Full curve: [`output/metrics/wake_thresholds.csv`](../output/metrics/wake_thresholds.csv)
-(199 operating points).
+(198 operating points).
 
-Positives are 49 edge-tts voices × 3 texts × 3 rates × 3 pitches
-(1 323 base clips, 100 % synthesis success) with noise/gain/window
-augmentation; negatives are 10 000 OptionB utterances, ~4 000 TTS near-misses
-("hey puppy", "hey Rapi" mispronunciations, other names) and 2 500 noise
-segments.
+### Real-voice recordings (why the retrain)
+
+11 clips recorded with `record_wake.py`
+([`wakeword_data/positive/`](../wakeword_data/positive/)):
+
+| model | clips ≥ 0.40 | worst full-clip score |
+|---|---:|---:|
+| run-3 (synthetic only) | 10 / 11 | **0.038** (`hey_rapi_004` — total miss) |
+| **run-4 (this retrain)** | **11 / 11** | **0.996** |
+
+Streaming false accepts on the 19 command-only clips (no wake phrase):
+**0 / 19 with both runs** — run-4's highest full-clip score rose
+0.102 → 0.571, but that single window never sustains the two-window
+streak, so nothing fires.
 
 ---
 

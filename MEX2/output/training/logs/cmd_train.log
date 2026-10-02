@@ -1,0 +1,83 @@
+[train] using GPU 1 (CUDA_VISIBLE_DEVICES pinned inside the script)
+[train] CUDA_VISIBLE_DEVICES=1 device=cuda n_gpu=1
+[train] using GPU 0 -> NVIDIA A100-SXM4-40GB
+[train] train=14677 val=1856
+[train] parameters=123303
+[001/60] loss=4.0807 val_loss=3.8522 intent=0.1848 slot=0.0000 lr=3.14e-04 (7.3s)
+[002/60] loss=3.5739 val_loss=3.3404 intent=0.2144 slot=0.0432 lr=8.44e-04 (3.2s)
+[003/60] loss=3.1826 val_loss=3.2103 intent=0.2376 slot=0.0558 lr=1.57e-03 (3.3s)
+[004/60] loss=2.9268 val_loss=2.5517 intent=0.4273 slot=0.1709 lr=2.29e-03 (3.4s)
+[005/60] loss=2.2154 val_loss=1.5874 intent=0.6923 slot=0.3426 lr=2.81e-03 (3.2s)
+[006/60] loss=1.3426 val_loss=0.9096 intent=0.8491 slot=0.5755 lr=3.00e-03 (3.2s)
+[007/60] loss=0.8593 val_loss=0.6071 intent=0.9224 slot=0.6745 lr=3.00e-03 (3.1s)
+[008/60] loss=0.5538 val_loss=0.3600 intent=0.9585 slot=0.7941 lr=2.99e-03 (3.2s)
+[009/60] loss=0.4012 val_loss=0.2528 intent=0.9666 slot=0.9029 lr=2.98e-03 (3.2s)
+[010/60] loss=0.3028 val_loss=0.2010 intent=0.9693 slot=0.9029 lr=2.96e-03 (3.2s)
+[011/60] loss=0.2258 val_loss=0.1410 intent=0.9822 slot=0.9388 lr=2.94e-03 (3.2s)
+[012/60] loss=0.1826 val_loss=0.1172 intent=0.9828 slot=0.9433 lr=2.91e-03 (3.3s)
+[013/60] loss=0.1470 val_loss=0.1051 intent=0.9833 slot=0.9586 lr=2.88e-03 (3.2s)
+[014/60] loss=0.1410 val_loss=0.1013 intent=0.9844 slot=0.9712 lr=2.84e-03 (3.2s)
+[015/60] loss=0.1131 val_loss=0.0890 intent=0.9860 slot=0.9676 lr=2.80e-03 (3.2s)
+[016/60] loss=0.0970 val_loss=0.0958 intent=0.9828 slot=0.9775 lr=2.75e-03 (3.2s)
+[017/60] loss=0.0899 val_loss=0.0907 intent=0.9838 slot=0.9622 lr=2.70e-03 (3.2s)
+[018/60] loss=0.0744 val_loss=0.0822 intent=0.9860 slot=0.9775 lr=2.65e-03 (3.2s)
+[019/60] loss=0.0723 val_loss=0.0935 intent=0.9811 slot=0.9748 lr=2.59e-03 (3.2s)
+[020/60] loss=0.0597 val_loss=0.0823 intent=0.9876 slot=0.9784 lr=2.53e-03 (3.2s)
+[021/60] loss=0.0582 val_loss=0.0726 intent=0.9887 slot=0.9766 lr=2.46e-03 (3.2s)
+[022/60] loss=0.0513 val_loss=0.0645 intent=0.9871 slot=0.9748 lr=2.39e-03 (3.2s)
+[023/60] loss=0.0471 val_loss=0.0624 intent=0.9844 slot=0.9892 lr=2.32e-03 (3.2s)
+[024/60] loss=0.0434 val_loss=0.0517 intent=0.9892 slot=0.9874 lr=2.25e-03 (3.2s)
+[025/60] loss=0.0408 val_loss=0.0684 intent=0.9892 slot=0.9811 lr=2.17e-03 (3.2s)
+[026/60] loss=0.0356 val_loss=0.0634 intent=0.9908 slot=0.9793 lr=2.09e-03 (3.1s)
+[027/60] loss=0.0282 val_loss=0.0642 intent=0.9908 slot=0.9847 lr=2.01e-03 (3.2s)
+[028/60] loss=0.0370 val_loss=0.0669 intent=0.9898 slot=0.9838 lr=1.93e-03 (3.2s)
+[029/60] loss=0.0339 val_loss=0.0512 intent=0.9887 slot=0.9901 lr=1.84e-03 (3.2s)
+[030/60] loss=0.0275 val_loss=0.0527 intent=0.9919 slot=0.9856 lr=1.76e-03 (3.2s)
+[031/60] loss=0.0234 val_loss=0.0572 intent=0.9919 slot=0.9892 lr=1.67e-03 (3.2s)
+[032/60] loss=0.0215 val_loss=0.0592 intent=0.9892 slot=0.9865 lr=1.59e-03 (3.2s)
+[033/60] loss=0.0222 val_loss=0.0554 intent=0.9914 slot=0.9910 lr=1.50e-03 (3.2s)
+[034/60] loss=0.0223 val_loss=0.0578 intent=0.9898 slot=0.9856 lr=1.41e-03 (3.2s)
+[035/60] loss=0.0212 val_loss=0.0560 intent=0.9892 slot=0.9865 lr=1.32e-03 (3.2s)
+[036/60] loss=0.0195 val_loss=0.0432 intent=0.9930 slot=0.9883 lr=1.24e-03 (3.1s)
+[037/60] loss=0.0157 val_loss=0.0487 intent=0.9919 slot=0.9874 lr=1.15e-03 (3.2s)
+[038/60] loss=0.0141 val_loss=0.0414 intent=0.9930 slot=0.9856 lr=1.07e-03 (3.2s)
+[039/60] loss=0.0189 val_loss=0.0503 intent=0.9930 slot=0.9856 lr=9.86e-04 (3.3s)
+[040/60] loss=0.0148 val_loss=0.0447 intent=0.9935 slot=0.9874 lr=9.04e-04 (4.6s)
+[041/60] loss=0.0150 val_loss=0.0427 intent=0.9930 slot=0.9901 lr=8.25e-04 (4.4s)
+[042/60] loss=0.0136 val_loss=0.0557 intent=0.9914 slot=0.9856 lr=7.49e-04 (3.2s)
+[043/60] loss=0.0134 val_loss=0.0536 intent=0.9919 slot=0.9847 lr=6.74e-04 (4.6s)
+[044/60] loss=0.0128 val_loss=0.0501 intent=0.9914 slot=0.9865 lr=6.03e-04 (4.7s)
+[045/60] loss=0.0115 val_loss=0.0513 intent=0.9925 slot=0.9874 lr=5.35e-04 (3.2s)
+[046/60] loss=0.0111 val_loss=0.0498 intent=0.9914 slot=0.9865 lr=4.70e-04 (5.0s)
+[047/60] loss=0.0122 val_loss=0.0469 intent=0.9919 slot=0.9865 lr=4.08e-04 (5.0s)
+[048/60] loss=0.0099 val_loss=0.0482 intent=0.9925 slot=0.9883 lr=3.50e-04 (5.5s)
+[049/60] loss=0.0090 val_loss=0.0495 intent=0.9919 slot=0.9856 lr=2.96e-04 (3.3s)
+[050/60] loss=0.0095 val_loss=0.0471 intent=0.9919 slot=0.9892 lr=2.46e-04 (4.8s)
+[051/60] loss=0.0083 val_loss=0.0453 intent=0.9930 slot=0.9883 lr=2.00e-04 (4.8s)
+[052/60] loss=0.0091 val_loss=0.0455 intent=0.9930 slot=0.9874 lr=1.59e-04 (3.2s)
+[053/60] loss=0.0090 val_loss=0.0451 intent=0.9930 slot=0.9892 lr=1.22e-04 (3.2s)
+[054/60] loss=0.0101 val_loss=0.0432 intent=0.9941 slot=0.9910 lr=8.99e-05 (3.3s)
+[055/60] loss=0.0088 val_loss=0.0449 intent=0.9930 slot=0.9892 lr=6.26e-05 (3.2s)
+[056/60] loss=0.0085 val_loss=0.0452 intent=0.9935 slot=0.9901 lr=4.01e-05 (3.3s)
+[057/60] loss=0.0068 val_loss=0.0438 intent=0.9935 slot=0.9910 lr=2.25e-05 (3.4s)
+[058/60] loss=0.0084 val_loss=0.0435 intent=0.9935 slot=0.9919 lr=9.98e-06 (3.2s)
+[059/60] loss=0.0098 val_loss=0.0434 intent=0.9935 slot=0.9919 lr=2.46e-06 (3.2s)
+[060/60] loss=0.0084 val_loss=0.0434 intent=0.9935 slot=0.9919 lr=1.28e-08 (3.3s)
+{
+  "best_epoch": 54,
+  "best_val_intent_acc": 0.994073275862069,
+  "epochs_run": 60,
+  "parameters": 123303,
+  "gpu": "1",
+  "final_val": {
+    "epoch": 60,
+    "train_loss": 0.008388477618593657,
+    "loss": 0.04342290450786722,
+    "intent_acc": 0.9935344827586207,
+    "slot_acc_all": 0.9946120689655172,
+    "slot_acc_relevant": 0.9919064748201439,
+    "n": 1856,
+    "lr": 1.2781307517440925e-08,
+    "seconds": 3.3346023559570312
+  }
+}

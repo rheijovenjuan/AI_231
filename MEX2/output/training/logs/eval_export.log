@@ -1,0 +1,146 @@
+[eval] test-split metrics
+[command] split=2 n=1842 intent_acc=0.9962 macro_f1=0.9940 slot_acc=0.9964
+[wake] split=2 n=3658 TPR@thr=0.9954 FAR@thr=0.00105 thr=0.819 EER=0.0033
+{
+  "command": {
+    "split": 2,
+    "n_samples": 1842,
+    "intent_accuracy": 0.996199782844734,
+    "top2_accuracy": 0.998914223669924,
+    "macro_f1": 0.9939860034510644,
+    "slot_accuracy": 0.9964285714285714,
+    "slot_accuracy_all_including_none": 0.997828447339848,
+    "slot_accuracy_when_intent_correct": 0.9964253798033958,
+    "n_slot_samples": 1120,
+    "best_epoch": 54,
+    "per_class_f1": {
+      "PLAY_MUSIC": 0.9831,
+      "WEATHER": 1.0,
+      "TIME": 0.9714,
+      "LIGHT_ON": 1.0,
+      "LIGHT_OFF": 1.0,
+      "PAUSE": 1.0,
+      "STOP": 0.9908,
+      "NEXT": 0.9916,
+      "VOLUME_UP": 1.0,
+      "VOLUME_DOWN": 1.0,
+      "CALL": 0.9714,
+      "MESSAGE": 0.9912,
+      "LIST_REMINDERS": 0.9913,
+      "TIMER": 1.0,
+      "ALARM": 0.9971,
+      "TEMPERATURE": 1.0,
+      "BRIGHTNESS": 1.0,
+      "COLOR": 0.9978,
+      "CREATE_REMINDER": 1.0
+    },
+    "per_class_support": {
+      "PLAY_MUSIC": 58,
+      "WEATHER": 52,
+      "TIME": 53,
+      "LIGHT_ON": 54,
+      "LIGHT_OFF": 58,
+      "PAUSE": 55,
+      "STOP": 54,
+      "NEXT": 59,
+      "VOLUME_UP": 59,
+      "VOLUME_DOWN": 52,
+      "CALL": 54,
+      "MESSAGE": 57,
+      "LIST_REMINDERS": 57,
+      "TIMER": 176,
+      "ALARM": 173,
+      "TEMPERATURE": 180,
+      "BRIGHTNESS": 180,
+      "COLOR": 231,
+      "CREATE_REMINDER": 180
+    }
+  },
+  "wake": {
+    "split": 2,
+    "n_samples": 3658,
+    "n_positive": 1754,
+    "n_negative": 1904,
+    "threshold": 0.8193860650062561,
+    "tpr_at_threshold": 0.9954389965792474,
+    "far_at_threshold": 0.0010504201680672268,
+    "tpr_at_far_1pct": {
+      "tpr": 1.0,
+      "far": 0.009978991596638655,
+      "threshold": 0.05
+    },
+    "tpr_at_far_0p1pct": {
+      "tpr": 0.9954389965792474,
+      "far": 0.0005252100840336134,
+      "threshold": 0.86
+    },
+    "tpr_at_far_0p01pct": {
+      "tpr": 0.9954389965792474,
+      "far": 0.0,
+      "threshold": 0.9
+    },
+    "equal_error_rate": 0.0032860065348830404,
+    "best_epoch": 21
+  }
+}
+[export] onnx
+[export] parity {
+  "command_intent_max_abs_diff": 1.3113021850585938e-05,
+  "command_slot_max_abs_diff": 1.71661376953125e-05,
+  "wake_max_abs_diff": 5.7220458984375e-06,
+  "command_argmax_equal": true,
+  "keyword_max_abs_diff": 3.62396240234375e-05,
+  "keyword_top1_equal": true
+}
+{
+  "files": {
+    "command.onnx": 506.9,
+    "wake.onnx": 113.0,
+    "keyword.onnx": 507.4
+  },
+  "parameters": {
+    "command": 123303,
+    "wake": 23665,
+    "keyword": 123496
+  },
+  "wake_threshold": 0.8193860650062561
+}
+[done] artifacts in /home/rhei.joven.juan/rapi_vcm/out
+/home/rhei.joven.juan/rapi_vcm/out:
+total 1130
+drwxrwxr-x  4 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:44 .
+drwxrwxr-x 11 rhei.joven.juan rhei.joven.juan   4096 Oct  2 16:13 ..
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan 507700 Oct  2 16:25 command_best.pt
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan   3882 Oct  2 16:26 command_history.csv
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan    442 Oct  2 16:26 command_summary.json
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan 508592 Oct  2 16:30 keyword_best.pt
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan   4390 Oct  2 16:31 keyword_history.csv
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan    580 Oct  2 16:31 keyword_summary.json
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan   4082 Oct  2 16:30 keyword_val.json
+drwxrwxr-x  2 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:50 metrics
+drwxrwxr-x  2 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:50 onnx
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan 105473 Oct  2 16:21 wake_best.pt
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan   2150 Oct  2 16:22 wake_history.csv
+-rw-rw-r--  1 rhei.joven.juan rhei.joven.juan    407 Oct  2 16:22 wake_summary.json
+
+/home/rhei.joven.juan/rapi_vcm/out/metrics:
+total 171
+drwxrwxr-x 2 rhei.joven.juan rhei.joven.juan  4096 Sep 29 12:50 .
+drwxrwxr-x 4 rhei.joven.juan rhei.joven.juan  4096 Sep 29 12:44 ..
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 75382 Oct  2 16:32 command_confusion.png
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan   569 Oct  2 16:32 command_per_class.csv
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 76957 Oct  2 16:32 keyword_confusion.png
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan  2856 Oct  2 16:32 keyword_metrics.json
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan   587 Oct  2 16:32 keyword_per_class.csv
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan  1124 Oct  2 16:32 keyword_per_keyword.csv
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan  1973 Oct  2 16:32 metrics.json
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan  4470 Oct  2 16:32 wake_thresholds.csv
+
+/home/rhei.joven.juan/rapi_vcm/out/onnx:
+total 1140
+drwxrwxr-x 2 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:50 .
+drwxrwxr-x 4 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:44 ..
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 519066 Oct  2 16:32 command.onnx
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 519606 Oct  2 16:32 keyword.onnx
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan   3132 Oct  2 16:32 model_card.json
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 115735 Oct  2 16:32 wake.onnx

@@ -1,0 +1,22 @@
+{
+  "best_epoch": 47,
+  "best_val_intent_acc": 0.9876077586206896,
+  "epochs_run": 60,
+  "parameters": 123496,
+  "keywords": 40,
+  "gpu": "1",
+  "final_val": {
+    "epoch": 60,
+    "train_loss": 0.008970834829501416,
+    "loss": 0.036555488818678365,
+    "exact_match": 0.9520474137931034,
+    "keyword_macro_f1": 0.9785588979721069,
+    "keyword_micro_p": 0.9717904329299927,
+    "keyword_micro_r": 0.993233323097229,
+    "intent_acc": 0.9832974137931034,
+    "slot_acc": 0.9859913793103449,
+    "n": 1856,
+    "lr": 1.2781307517440925e-08,
+    "seconds": 3.251310348510742
+  }
+}

@@ -1,0 +1,91 @@
+[eval] keyword spotter on the test split
+[keyword] split=2 n=1842 thr=per-keyword (per-keyword (greedy, intent acc), val 0.9903 (global 0.9887 @ 0.55))
+[keyword] micro P/R=0.9886/0.9973 macro_f1=0.9912 exact=0.9788 intent_acc=0.9924 slot_acc=0.9929
+[compare] softmax baseline intent=0.996199782844734 vs keyword 0.9924
+{
+  "split": 2,
+  "n_samples": 1842,
+  "threshold": 0.55,
+  "threshold_source": "per-keyword (greedy, intent acc), val 0.9903 (global 0.9887 @ 0.55)",
+  "keyword_thresholds": [
+    0.55,
+    0.55,
+    0.55,
+    0.8,
+    0.55,
+    0.2,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.2,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55,
+    0.55
+  ],
+  "keyword_micro_precision": 0.9885630498533724,
+  "keyword_micro_recall": 0.9973372781065089,
+  "keyword_macro_f1": 0.991234838874024,
+  "keyword_exact_match": 0.9788273615635179,
+  "intent_accuracy": 0.992399565689468,
+  "slot_accuracy": 0.9928571428571429,
+  "slot_accuracy_all_including_none": 0.995114006514658,
+  "n_slot_samples": 1120,
+  "macro_f1_downstream": 0.9876130582039715,
+  "best_epoch": 47
+}
+[export] onnx
+[export] parity {
+  "command_intent_max_abs_diff": 1.2159347534179688e-05,
+  "command_slot_max_abs_diff": 1.33514404296875e-05,
+  "wake_max_abs_diff": 2.86102294921875e-06,
+  "command_argmax_equal": true,
+  "keyword_max_abs_diff": 3.24249267578125e-05,
+  "keyword_top1_equal": true
+}
+{
+  "files": {
+    "command.onnx": 506.9,
+    "wake.onnx": 113.0,
+    "keyword.onnx": 507.4
+  },
+  "parameters": {
+    "command": 123303,
+    "wake": 23665,
+    "keyword": 123496
+  },
+  "wake_threshold": 0.8193860650062561
+}
+total 1140
+drwxrwxr-x 2 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:50 .
+drwxrwxr-x 4 rhei.joven.juan rhei.joven.juan   4096 Sep 29 12:44 ..
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 519066 Oct  2 16:32 command.onnx
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 519606 Oct  2 16:32 keyword.onnx
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan   3133 Oct  2 16:32 model_card.json
+-rw-rw-r-- 1 rhei.joven.juan rhei.joven.juan 115735 Oct  2 16:32 wake.onnx

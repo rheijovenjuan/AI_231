@@ -40,6 +40,14 @@ Score a clip against the shipped `wake.onnx` (target: > 0.40):
 python runtime/pc_test.py --model output/onnx --file wakeword_data/positive/hey_rapi_001.wav
 ```
 
+**Result of the 2026-10-02 round** (11 clips recorded with `record_wake.py`,
+then mixed into the DGX retrain as 40 augmented variants per clip with a
+clip-level 7/1/3 train/val/test split): all **11/11** score >= 0.40 with the
+retrained model - worst full-clip score **0.996** (the pre-retrain model
+missed `hey_rapi_004` at **0.038**). Measured numbers live in
+[`ACCURACY.md` § 5](ACCURACY.md) and the retrain itself in
+[`TRAINING.md` § 10](TRAINING.md).
+
 CMD-only alternative (needs ffmpeg): record with
 
 ```bash
@@ -70,6 +78,11 @@ wakeword_data/
 ```
 
 ## Retrain
+
+> **The ONNX wake model is retrained on the DGX, not with the GMM path
+> below.** The 2026-10-02 retrain that consumed `wakeword_data/positive/`
+> is documented in [`TRAINING.md` § 10](TRAINING.md); the GMM instructions
+> here apply only to the legacy `models/wakeword_synthetic.joblib` path.
 
 Add a small script (or extend `train.py`) that:
 1. Loads all positives → `pos_feats`, all negatives → `neg_feats`

@@ -4,7 +4,7 @@ Status: the big-ticket items from the original version of this document are
 **done and measured**. The first table is where things stand; the last
 section lists what is still open.
 
-## Where it stands (measured 2026-09)
+## Where it stands (measured 2026-10)
 
 | check | result |
 |---|---|
@@ -13,8 +13,9 @@ section lists what is still open.
 | hybrid transcript + intent (same 1510) | **99.93 %** (6 rescued by the transcript, 0 regressions) |
 | text-slot rules on ground-truth transcripts (18375) | **100 %** correct intent |
 | state-machine sim (19 wake+command clips, transcribe order) | **19/19**, 0 ordering violations |
-| wake detector, test split, shipped threshold 0.40 | TPR **99.75 %**, FAR **0.000 %** |
-| wake false accepts on 19 command-only clips | **0/19** (top score 0.102) |
+| wake detector, test split, shipped threshold 0.40 | TPR **99.72 %**, FAR **0.315 %** full clip (val-selected 0.8194: TPR 99.54 %, FAR 0.105 %) |
+| wake on 11 real user recordings | **11/11** detected, worst score **0.996** (before: 10/11, worst 0.038) |
+| wake false accepts on 19 command-only clips (streaming) | **0/19** (top full-clip score 0.102 → 0.571, never a 2-window streak) |
 
 ## What was done
 
@@ -31,8 +32,9 @@ python train.py --download --max-per-intent 900
 ### 2. Better features / stronger classifier (replaced, not tuned)
 The GMM / logistic-regression options were superseded by small CNN heads
 trained on DGX and exported to ONNX (`command.onnx`, `keyword.onnx`,
-`wake.onnx`): MFCC + delta input, hard-negative wake training (run-3: 10k
-command negatives + TTS near-misses "hey rappy" etc.), export parity
+`wake.onnx`): log-mel + CMVN input, hard-negative wake training (run-3: 10k
+command negatives + TTS near-misses "hey rappy" etc.; run-4 added 11 real
+user recordings × 40 augmented variants), export parity
 ≤ 1.5e-5 against PyTorch (see `docs/ACCURACY.md`).
 
 ### 3. Disambiguate the confusable pairs (hybrid policy)

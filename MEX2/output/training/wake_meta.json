@@ -1,0 +1,50 @@
+{
+  "n": 26797,
+  "shape": [
+    26797,
+    40,
+    120
+  ],
+  "seconds": 1.2,
+  "frames": 120,
+  "wake_texts": [
+    "Hey Rapi",
+    "Hey Rapi!",
+    "Hey, Rapi"
+  ],
+  "n_voices": 49,
+  "base_tts_clips": 1323,
+  "hard_negative_clips": 276,
+  "real_recordings": 11,
+  "real_variants": 495,
+  "real_per_split": {
+    "0": 7,
+    "1": 1,
+    "2": 3
+  },
+  "counts": {
+    "positive": 10433,
+    "negative": 16364
+  },
+  "splits": {
+    "0": 19837,
+    "1": 3302,
+    "2": 3658
+  },
+  "pos_per_split": {
+    "0": 7195,
+    "1": 1484,
+    "2": 1754
+  },
+  "neg_per_split": {
+    "0": 12642,
+    "1": 1818,
+    "2": 1904
+  },
+  "voice_split_size": {
+    "0": 34,
+    "1": 7,
+    "2": 8
+  },
+  "seed": 20260929
+}

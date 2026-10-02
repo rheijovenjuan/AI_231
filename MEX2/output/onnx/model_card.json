@@ -186,11 +186,11 @@
   "opset": 17,
   "intents_count": 19,
   "parity": {
-    "command_intent_max_abs_diff": 1.33514404296875e-05,
-    "command_slot_max_abs_diff": 1.430511474609375e-05,
-    "wake_max_abs_diff": 3.814697265625e-06,
+    "command_intent_max_abs_diff": 1.3113021850585938e-05,
+    "command_slot_max_abs_diff": 1.71661376953125e-05,
+    "wake_max_abs_diff": 5.7220458984375e-06,
     "command_argmax_equal": true,
-    "keyword_max_abs_diff": 3.719329833984375e-05,
+    "keyword_max_abs_diff": 3.62396240234375e-05,
     "keyword_top1_equal": true
   }
 }

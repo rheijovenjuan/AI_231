@@ -282,3 +282,59 @@ rm -rf ~/rapi_vcm/feat ~/rapi_vcm/out
 bash ~/rapi_vcm/run_keyword.sh && bash ~/rapi_vcm/run_eval_keyword.sh
 bash ~/rapi_vcm/run_all.sh
 ```
+
+---
+
+## 10. Real-voice retrain (2026-10-02, run-4)
+
+The 11 clips recorded with [`record_wake.py`](../record_wake.py) (committed
+under [`wakeword_data/positive/`](../wakeword_data/positive/)) were uploaded
+to `~/rapi_vcm/real_wake/positive/` and mixed into the wake dataset:
+
+* `train/gen_wake_data.py` gained `--real DIR --real-per-clip N`
+  (N = 40): each recording becomes 40 augmented variants (clean placement,
+  lead-in, noise SNR 5-30 dB, gain, speed 0.9-1.12) plus 55
+  "real wake + command tail" mixes.
+* **Split hygiene**: the 70/15/15 split is assigned on the *original*
+  recording (7 train / 1 val / 3 test), so no variant of a test recording
+  reaches training.
+* `run_wake.sh` now passes `--real` automatically when the directory exists.
+
+Stage-by-stage log (1 x A100-SXM4-40GB, `CUDA_VISIBLE_DEVICES=1`,
+`n_gpu=1` confirmed in every log line; full logs committed under
+`output/training/logs/`):
+
+| stage | command | wall |
+|---|---|---:|
+| wake dataset (+ real) | `bash run_wake.sh` | 288 s |
+| wake train | `GPU=1 bash run_train_wake.sh` (34 epochs, best 21) | 112 s |
+| command baseline train | `GPU=1 bash run_train_cmd.sh` (60 epochs, best 54) | 224 s |
+| keyword train | `bash run_keyword.sh` (60 epochs, best 47) | 210 s |
+| keyword eval + ONNX export | `bash run_eval_keyword.sh` | 47 s |
+| baseline eval | `bash run_eval_export.sh` | 20 s |
+| **total** | | **~15 min** |
+
+Seeds: data generation `20260929` (real-clip shuffle `20260936`), training
+`1234` for all three models (script defaults).
+
+Effect on the test split (details in [`ACCURACY.md`](ACCURACY.md)):
+
+| metric | run-3 | run-4 |
+|---|---:|---:|
+| keyword intent (test) | 99.24 % | **99.24 %** (seed-exact reproduction) |
+| command baseline intent (test) | - | **99.62 %** |
+| wake TPR @ 0.40 | 99.75 % | **99.715 %** |
+| wake FAR @ 0.40 (full clip) | 0.000 % | **0.315 %** (6/1904; streaming false wakes still 0/19) |
+| real recordings >= 0.40 | 10/11 (worst 0.038) | **11/11 (worst 0.996)** |
+
+Artefacts of this run are committed for review:
+
+```
+output/training/
+├── checkpoints/   *_best.pt (3)
+├── history/       *_history.csv, *_summary.json, keyword_val.json
+├── logs/          wake_gen, wake_train, cmd_train, keyword_train,
+│                  eval_keyword, eval_export (stdout + metrics)
+├── wake_meta.json dataset composition (incl. real splits)
+└── (metrics live in output/metrics/, models in output/onnx/)
+```

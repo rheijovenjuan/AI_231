@@ -46,6 +46,8 @@ All training / performance / inference documentation lives in [`docs/`](docs/):
 | [docs/INFERENCE.md](docs/INFERENCE.md) | runtime API (`VoicePipeline`), thresholds, flags |
 | [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | latency benchmarks + Raspberry Pi measurement commands |
 | [docs/raspberry_pi.md](docs/raspberry_pi.md) | **install guide for Raspberry Pi 4 (4 GB)** |
+| [docs/testing_on_pi.md](docs/testing_on_pi.md) | **on-device acceptance runbook for the Pi (benchmark + live tests)** |
+| [docs/SUBMISSION.md](docs/SUBMISSION.md) | submission table, reviewer checklist, poster fields (dataset/cluster/weights) |
 | [docs/improving_accuracy.md](docs/improving_accuracy.md) | what was tried, measured results, what's left |
 | [docs/testing_checklist.md](docs/testing_checklist.md) | manual test checklist |
 | [docs/collecting_wakeword_data.md](docs/collecting_wakeword_data.md) | recording real "Hey Rapi" data |
@@ -123,7 +125,7 @@ after the `you said: "..."` transcript; GUI events show both.
 | held-out test split (1842 clips, `data/manifest.csv`) | intent **99.29 %** (clean 99.35 / noisy 99.24) |
 | hybrid transcript + intent (1510 clipped intents) | **99.93 %** (acoustic-only 99.54 %; 6 rescued by the transcript, 0 regressions) |
 | text-slot rules on ground-truth transcripts (18375 clips) | **100 %** correct intent |
-| false wake on command-only clips (no wake phrase) | **0/19** (top score 0.102 < 0.40, run-3 wake model) |
+| false wake on command-only clips (no wake phrase) | **0/19** streaming (run-4 wake model; top full-clip score 0.571 never sustains the 2-window streak) |
 | refused instead of guessed | 0 (confidence gate + fallback guard) |
 
 ## Layout
@@ -156,12 +158,18 @@ models/, reports/          # legacy GMM artifacts (not used by app.py)
 positives really say "Hey Rapi" - raw clips land in `data/wake_tts/` with a
 `plan.json` describing each file. The old offline formant fallback is still
 available via `--tts offline`, but its output does not sound like the phrase.
-The ONNX `wake.onnx` used by this app was trained on edge-tts audio in the
-source project, so nothing here needs regenerating for app.py.
+The ONNX `wake.onnx` used by this app was trained on edge-tts audio **plus 11
+real user recordings** (`wakeword_data/positive/`, recorded with
+`record_wake.py`, augmented 40x with clip-level split hygiene on the DGX -
+[docs/TRAINING.md](docs/TRAINING.md) § 10); all 11 recordings now score
+>= 0.40 (worst 0.996 - before the retrain one clip scored 0.038).
 
 ## Raspberry Pi
 
 Full step-by-step install for a **Pi 4 (4 GB)**: see
 [docs/raspberry_pi.md](docs/raspberry_pi.md) (or just run `./setup_pi.sh`).
+What to run and check on the device (benchmark, smoke tests, live mic,
+`--small-screen`, `--no-transcribe`, `--no-asr`): see
+[docs/testing_on_pi.md](docs/testing_on_pi.md).
 Same code, same flags - the trained ONNX models ship in `output/onnx/`, so
 nothing needs training on the Pi.

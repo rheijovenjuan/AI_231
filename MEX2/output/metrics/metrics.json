@@ -1,0 +1,82 @@
+{
+  "command": {
+    "split": 2,
+    "n_samples": 1842,
+    "intent_accuracy": 0.996199782844734,
+    "top2_accuracy": 0.998914223669924,
+    "macro_f1": 0.9939860034510644,
+    "slot_accuracy": 0.9964285714285714,
+    "slot_accuracy_all_including_none": 0.997828447339848,
+    "slot_accuracy_when_intent_correct": 0.9964253798033958,
+    "n_slot_samples": 1120,
+    "best_epoch": 54,
+    "per_class_f1": {
+      "PLAY_MUSIC": 0.9831,
+      "WEATHER": 1.0,
+      "TIME": 0.9714,
+      "LIGHT_ON": 1.0,
+      "LIGHT_OFF": 1.0,
+      "PAUSE": 1.0,
+      "STOP": 0.9908,
+      "NEXT": 0.9916,
+      "VOLUME_UP": 1.0,
+      "VOLUME_DOWN": 1.0,
+      "CALL": 0.9714,
+      "MESSAGE": 0.9912,
+      "LIST_REMINDERS": 0.9913,
+      "TIMER": 1.0,
+      "ALARM": 0.9971,
+      "TEMPERATURE": 1.0,
+      "BRIGHTNESS": 1.0,
+      "COLOR": 0.9978,
+      "CREATE_REMINDER": 1.0
+    },
+    "per_class_support": {
+      "PLAY_MUSIC": 58,
+      "WEATHER": 52,
+      "TIME": 53,
+      "LIGHT_ON": 54,
+      "LIGHT_OFF": 58,
+      "PAUSE": 55,
+      "STOP": 54,
+      "NEXT": 59,
+      "VOLUME_UP": 59,
+      "VOLUME_DOWN": 52,
+      "CALL": 54,
+      "MESSAGE": 57,
+      "LIST_REMINDERS": 57,
+      "TIMER": 176,
+      "ALARM": 173,
+      "TEMPERATURE": 180,
+      "BRIGHTNESS": 180,
+      "COLOR": 231,
+      "CREATE_REMINDER": 180
+    }
+  },
+  "wake": {
+    "split": 2,
+    "n_samples": 3658,
+    "n_positive": 1754,
+    "n_negative": 1904,
+    "threshold": 0.8193860650062561,
+    "tpr_at_threshold": 0.9954389965792474,
+    "far_at_threshold": 0.0010504201680672268,
+    "tpr_at_far_1pct": {
+      "tpr": 1.0,
+      "far": 0.009978991596638655,
+      "threshold": 0.05
+    },
+    "tpr_at_far_0p1pct": {
+      "tpr": 0.9954389965792474,
+      "far": 0.0005252100840336134,
+      "threshold": 0.86
+    },
+    "tpr_at_far_0p01pct": {
+      "tpr": 0.9954389965792474,
+      "far": 0.0,
+      "threshold": 0.9
+    },
+    "equal_error_rate": 0.0032860065348830404,
+    "best_epoch": 21
+  }
+}
