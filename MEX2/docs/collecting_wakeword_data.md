@@ -21,7 +21,35 @@ To make it real, collect your own data and retrain.
   "heir app", "hair up", general conversation.
 - Background noise without the phrase.
 
-## How to record (quick)
+## How to record (PC, easiest)
+
+A helper script ships at the repo root — 16 kHz mono WAVs, numbered
+`hey_rapi_001.wav` ... , with peak-level warnings and optional playback:
+
+```bash
+python record_wake.py --count 10      # 10 clips back-to-back -> wakeword_data/positive/
+python record_wake.py                 # interactive: Enter = one clip, q = quit
+python record_wake.py --play          # listen back after every clip
+python record_wake.py --device 2      # pick a mic (index or name substring)
+python record_wake.py --out wakeword_data/negative --prefix room_tone --seconds 5
+```
+
+Score a clip against the shipped `wake.onnx` (target: > 0.40):
+
+```bash
+python runtime/pc_test.py --model output/onnx --file wakeword_data/positive/hey_rapi_001.wav
+```
+
+CMD-only alternative (needs ffmpeg): record with
+
+```bash
+mkdir wakeword_data\positive
+ffmpeg -y -f dshow -i audio="Headset (EarPods)" -t 2 -ar 16000 -ac 1 wakeword_data\positive\hey_rapi_001.wav
+```
+
+(listenable device names: `ffmpeg -list_devices true -f dshow -i dummy 2>&1 | findstr /i audio`)
+
+## How to record (Pi / phone)
 
 On the Pi or a phone, record 16 kHz mono WAVs. A tiny recorder:
 
