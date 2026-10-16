@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ME2 — Voice Controlled Smart Device · infographic</title>
+<style>
+  :root{
+    --navy:#12294a; --blue:#1d6fe8; --orange:#e07b12; --beige:#fbf1e0;
+    --green:#2f9e44; --greenbox:#e7f6ea; --bluebox:#e8f1fd; --orbox:#fdeedd;
+    --purplebox:#efe8fb; --line:#d9dee5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef1f4;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:#1b1f24}
+  .page{width:1120px;margin:26px auto;background:#fff;padding:38px 46px 30px;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+  h1{font-size:34px;margin:0 0 2px}
+  .sub{font-size:17px;font-weight:600;color:#222;margin-bottom:4px}
+  .meta{font-size:14.5px;color:#444}
+  .rule{border-top:4px solid var(--green);margin:14px 0 22px}
+  h2{color:var(--blue);font-size:21px;margin:26px 0 10px}
+  h3{font-size:17px;margin:18px 0 8px;color:#111}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;margin:6px 0 12px}
+  th{background:var(--navy);color:#fff;text-align:left;padding:7px 10px;font-weight:600}
+  td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{white-space:nowrap}
+  .submit{border:2px solid var(--orange);padding:0;margin-bottom:22px}
+  .submit td{border-bottom:1px solid #ecd9bd}
+  .submit td:first-child{background:var(--beige);font-weight:700;color:#8a4b04;width:230px;white-space:normal}
+  .submit tr:last-child td{border-bottom:none}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .flow{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 4px}
+  .box{border:1.6px solid #9db6d8;background:var(--bluebox);border-radius:7px;padding:9px 14px;font-weight:600;font-size:15px;min-width:250px;text-align:center}
+  .box small{display:block;font-weight:500;font-size:12.5px;color:#4a5568;margin-top:3px}
+  .box.green{border-color:#8fc79d;background:var(--greenbox)}
+  .box.orange{border-color:#f0b27a;background:var(--orbox)}
+  .box.purple{border-color:#b9a4e8;background:var(--purplebox)}
+  .two{display:flex;gap:12px}
+  .two .box{flex:1;min-width:0}
+  .cols{display:flex;gap:34px}
+  .cols>div{flex:1;min-width:0}
+  .ok{color:#1f7a33;font-weight:700}
+  .note{font-size:13px;color:#555;margin-top:-4px}
+  @media print{body{background:#fff}.page{box-shadow:none;margin:0;width:auto}}
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1: submission ================= -->
+<div class="page">
+  <h1>To Be Submitted</h1>
+  <div class="rule"></div>
+
+  <table class="submit">
+    <tr><td>GitHub repository</td><td><b>rheijovenjuan/AI_231</b> — public, MIT</td></tr>
+    <tr><td>Dataset location</td><td><b>markandrian30/AI231</b> (GitHub, <code>MEX2/OptionB</code>) — no DOI; cite repo + access date <b>2026-09</b>; real-voice + wake clips committed in this repo</td></tr>
+    <tr><td>A100 cluster</td><td><b>n003.ai.internal</b> · 1 × A100-SXM4-40GB · <code>n_gpu=1</code> · ≈15 min/run · seeds <b>1234</b> (data 20260929)</td></tr>
+    <tr><td>Model weights</td><td><code>output/onnx/</code> (wake/keyword/command.onnx + model_card.json) and <code>output/training/checkpoints/</code> — MIT, committed</td></tr>
+  </table>
+
+  <h3 style="color:var(--blue)">What the reviewer will look for</h3>
+  <table>
+    <tr><th style="width:34px">#</th><th>Item</th><th style="width:330px">Status</th></tr>
+    <tr><td>1</td><td>Repo public, one-command reproduction</td><td class="ok">done — ./setup_pi.sh · python app.py · run_keyword.sh</td></tr>
+    <tr><td>2</td><td>Dataset licensed and citable (DOI)</td><td class="ok">done — source repo + access date, no-DOI note (SUBMISSION §1)</td></tr>
+    <tr><td>3</td><td>Training logs + final checkpoint committed</td><td class="ok">done — output/training/{logs,checkpoints,history}/</td></tr>
+    <tr><td>4</td><td>Pi 4 latency reproduced by the posted script</td><td class="ok">done — runtime/benchmark.py --label rpi4 --threads 2 → benchmark_rpi4.json</td></tr>
+    <tr><td>5</td><td>Held-out test set, unseen speakers</td><td class="ok">done — speaker-disjoint 70/15/15; test s91–s100</td></tr>
+    <tr><td>6</td><td>Baseline of comparable size compared</td><td class="ok">done — 123 303 vs 123 496 params · 99.84 % vs 99.29 %</td></tr>
+  </table>
+</div>
+
+<!-- ================= PAGE 2: poster ================= -->
+<div class="page">
+  <h1>ME2 — Voice Controlled Smart Device</h1>
+  <div class="sub">Always-on keyword + intent recognition at the edge · no cloud round-trip</div>
+  <div class="meta">2 October 2026 · Rhei Juan (rheijovenjuan) · Model · Dataset · Training on A100 · Validation on RPi 4 + PC</div>
+  <div class="rule"></div>
+
+  <div class="cols">
+    <div>
+      <h2>Model</h2>
+      <div class="flow"><div class="box">Mic · 16 kHz → log-mel <b>40 × 250</b><small>2.5 s window · HTK mel 20–7 600 Hz · CMVN (wake: 40 × 120)</small></div></div>
+      <div class="flow"><div class="box green">DS-CNN encoder · widths 64→192 · 192-d<small>MobileNetV2-style depthwise-separable · full-window (non-causal)</small></div></div>
+      <div class="flow two">
+        <div class="box orange">Intent head<small>40 keyword sigmoids → rule → 19 intents</small></div>
+        <div class="box orange">Slot head<small>rule over keyword set · 6 slots, 19 values + NONE</small></div>
+      </div>
+      <div class="flow two">
+        <div class="box purple">Actuator<small>wake ≥ 0.900 → ack beep → app.py action</small></div>
+        <div class="box green">Raspberry Pi 4<small>onnxruntime 1.30.0 · 2 threads · ~1.1 MB payload</small></div>
+      </div>
+
+      <table>
+        <tr><th>Item</th><th class="num">Value</th></tr>
+        <tr><td>Parameters / weights</td><td class="num"><b>0.27 M · 1.1 MB</b></td></tr>
+        <tr><td>wake / keyword / command</td><td class="num">23 665 / 123 496 / 123 303</td></tr>
+      </table>
+
+      <h2>Validation on the Raspberry Pi 4</h2>
+      <table>
+        <tr><th>Item</th><th>Value</th></tr>
+        <tr><td>Keyword / intent acc</td><td><b>99.29 % / 99.46 %</b> (test, n = 1 842)</td></tr>
+        <tr><td>False-accept rate</td><td><b>0.000 %</b> wake FAR @ 0.900 (0/1 904) · streaming FA 0/19</td></tr>
+        <tr><td>Latency wake+cmd / RTF</td><td><b>69.3 ms</b> / <b>0.016</b></td></tr>
+        <tr><td>Runtime</td><td>onnxruntime 1.30.0 · 2 thr</td></tr>
+      </table>
+
+      <h3>Benchmarks — Pi 4 vs PC</h3>
+      <table>
+        <tr><th>quantity</th><th class="num">Pi 4 (p50/p99)</th><th class="num">PC (p50/p99)</th></tr>
+        <tr><td>model load</td><td class="num">649 ms</td><td class="num">221.6 ms</td></tr>
+        <tr><td>wake inference</td><td class="num">17.2 / 32.1 ms</td><td class="num">3.4 / 6.5 ms</td></tr>
+        <tr><td>keyword inference</td><td class="num">40.0 / 70.7 ms</td><td class="num">9.7 / 11.9 ms</td></tr>
+        <tr><td>wake+command end-to-end</td><td class="num"><b>69.3 ms</b></td><td class="num"><b>16.9 ms</b></td></tr>
+        <tr><td>peak RSS</td><td class="num">147.0 MB</td><td class="num">139.6 MB</td></tr>
+        <tr><td>real-time factor</td><td class="num">0.0160</td><td class="num">0.0036</td></tr>
+      </table>
+      <div class="note">Measured 2026-10-02/03 · runtime/benchmark.py --threads 2 (Pi) · raw: output/onnx/benchmark_{rpi4,pc}.json</div>
+    </div>
+
+    <div>
+      <h2>Dataset</h2>
+      <table>
+        <tr><th>Item</th><th>Value</th></tr>
+        <tr><td>Source</td><td>markandrian30/AI231 (OptionB) + 94 real-voice clips</td></tr>
+        <tr><td>Hours / utts</td><td><b>8.8 h / 18 469</b></td></tr>
+        <tr><td>Speakers</td><td>100 TTS + 1 real (test s91–s100)</td></tr>
+        <tr><td>Labels</td><td>19 intents · 6 slots · 40 keywords</td></tr>
+        <tr><td>Splits (spk-disjoint)</td><td>14 752 / 1 875 / 1 842</td></tr>
+      </table>
+
+      <h2>Training on the A100 cluster</h2>
+      <table>
+        <tr><th>Item</th><th>Value</th></tr>
+        <tr><td>Cluster</td><td>1 × A100-SXM4-40GB (n003), n_gpu=1</td></tr>
+        <tr><td>Objective</td><td>BCE (40-kw multi-label) → rule · CE baseline · BCE wake</td></tr>
+        <tr><td>Optimiser</td><td>AdamW + OneCycleLR (max lr 1.6e-3 → 0)</td></tr>
+        <tr><td>Steps / loss</td><td><b>60 epochs (best 50) / 0.0345</b> · seed 1234 · ≈15 min</td></tr>
+        <tr><td>Run-5 retrain</td><td>+94 real clips → test intent 99.24→<b>99.29 %</b></td></tr>
+      </table>
+
+      <h2>Headline accuracy</h2>
+      <table>
+        <tr><th>metric</th><th class="num">value</th></tr>
+        <tr><td>keyword head — intent (test)</td><td class="num"><b>99.29 %</b></td></tr>
+        <tr><td>keyword head — slot (test)</td><td class="num"><b>99.46 %</b></td></tr>
+        <tr><td>baseline softmax — intent</td><td class="num">99.84 %</td></tr>
+        <tr><td>real-voice slice (val, was 42.1 %)</td><td class="num">78.9 %</td></tr>
+        <tr><td>wake TPR @ 0.900 (test)</td><td class="num">99.54 %</td></tr>
+      </table>
+      <div class="note">Docs: ACCURACY.md · BENCHMARKS.md · poster_data.md</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
