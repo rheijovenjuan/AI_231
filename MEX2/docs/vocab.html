@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ME2 — Vocabulary, Slots &amp; Who Decides (Whisper's role)</title>
+<style>
+  :root{
+    --navy:#12294a; --blue:#1d6fe8; --orange:#e07b12; --beige:#fbf1e0;
+    --green:#2f9e44; --line:#d9dee5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef1f4;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:#1b1f24}
+  .page{width:1120px;margin:26px auto;background:#fff;padding:38px 46px 30px;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+  h1{font-size:32px;margin:0 0 2px}
+  .sub{font-size:16.5px;font-weight:600;color:#222}
+  .meta{font-size:14px;color:#444;margin-top:3px}
+  .rule{border-top:4px solid var(--green);margin:13px 0 20px}
+  h2{color:var(--blue);font-size:20px;margin:22px 0 8px}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:6px 0 10px}
+  th{background:var(--navy);color:#fff;text-align:left;padding:6px 10px;font-weight:600}
+  td{padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 4px}
+  .chip{border-radius:14px;padding:4px 11px;font-size:13.5px;font-weight:600;border:1.4px solid}
+  .chip.k{background:#e8f1fd;border-color:#9db6d8;color:#17457e}      /* intent atom */
+  .chip.v{background:#e7f6ea;border-color:#8fc79d;color:#1c5c2c}      /* slot value  */
+  .chip.all{background:var(--navy);border-color:var(--navy);color:#fff}
+  .legend{font-size:13px;color:#444;margin:2px 0 8px}
+  .cols{display:flex;gap:30px}
+  .cols>div{flex:1;min-width:0}
+  .card{border:1.6px solid #cfd6de;border-radius:9px;padding:12px 15px;margin:8px 0;background:#fafbfc}
+  .card h4{margin:0 0 6px;font-size:15.5px;color:#111}
+  .card.orange{border-color:#f0b27a;background:#fdf6ee}
+  .card.green{border-color:#8fc79d;background:#f2faf4}
+  .card.blue{border-color:#9db6d8;background:#f4f8fd}
+  .flow{display:flex;align-items:stretch;gap:10px;margin:8px 0}
+  .step{flex:1;background:#eef3fa;border:1.5px solid #9db6d8;border-radius:8px;padding:8px 10px;font-size:13.5px;text-align:center}
+  .step b{display:block;font-size:14px;margin-bottom:3px}
+  .arrow{align-self:center;font-size:20px;color:#5b6b80;font-weight:700}
+  .win{background:#e7f6ea;border-color:#8fc79d}
+  .lose{background:#fdeeee;border-color:#e6a2a2}
+  .note{font-size:13px;color:#555}
+  .badge{display:inline-block;background:var(--orange);color:#fff;border-radius:10px;padding:1px 9px;font-size:12px;font-weight:700;vertical-align:1px}
+  ul{margin:5px 0 0;padding-left:18px;font-size:14px}
+  li{margin:3px 0}
+  @media print{body{background:#fff}.page{box-shadow:none;margin:0;width:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>ME2 — Vocabulary, Slots &amp; Who Decides</h1>
+  <div class="sub">The fixed 40-keyword vocabulary, the 19 intents — and exactly how much say Whisper gets</div>
+  <div class="meta">Rhei Juan (rheijovenjuan) · sources: rapi_vcm/keywords.py · voice_assistant/assistant.py:585-613</div>
+  <div class="rule"></div>
+
+  <div class="cols">
+    <div>
+      <h2>The 40 fixed keywords</h2>
+      <div class="legend"><span class="chip k" style="padding:1px 8px">21 intent atoms</span> point to an action &nbsp;·&nbsp; <span class="chip v" style="padding:1px 8px">19 slot values</span> carry a parameter</div>
+
+      <div class="chips">
+        <span class="chip k">play</span><span class="chip k">music</span><span class="chip k">next</span><span class="chip k">pause</span><span class="chip k">stop</span><span class="chip k">volume</span><span class="chip k">up</span><span class="chip k">down</span><span class="chip k">lights</span><span class="chip k">on</span><span class="chip k">off</span><span class="chip k">call</span><span class="chip k">message</span><span class="chip k">reminder</span><span class="chip k">timer</span><span class="chip k">alarm</span><span class="chip k">temperature</span><span class="chip k">brightness</span><span class="chip k">color</span><span class="chip k">time</span><span class="chip k">weather</span>
+      </div>
+      <div class="chips">
+        <span class="chip v">10 seconds</span><span class="chip v">30 seconds</span><span class="chip v">1 minute</span><span class="chip v">4 am</span><span class="chip v">8 am</span><span class="chip v">9 pm</span><span class="chip v">18 degrees</span><span class="chip v">22 degrees</span><span class="chip v">26 degrees</span><span class="chip v">20 percent</span><span class="chip v">60 percent</span><span class="chip v">100 percent</span><span class="chip v">red</span><span class="chip v">blue</span><span class="chip v">green</span><span class="chip v">yellow</span><span class="chip v">drink water</span><span class="chip v">study</span><span class="chip v">exercise</span>
+      </div>
+      <div class="note">Fixed at training time (string-matched against all 18 469 transcripts). The model can only hear words it knows — anything else is out-of-vocabulary.</div>
+
+      <h2>Slots — 6 of the 19 intents take one</h2>
+      <table>
+        <tr><th>slot intent</th><th>values it accepts</th></tr>
+        <tr><td><b>TIMER</b></td><td>10 seconds · 30 seconds · 1 minute</td></tr>
+        <tr><td><b>ALARM</b></td><td>4 am · 8 am · 9 pm</td></tr>
+        <tr><td><b>TEMPERATURE</b></td><td>18 · 22 · 26 degrees</td></tr>
+        <tr><td><b>BRIGHTNESS</b></td><td>20 · 60 · 100 percent</td></tr>
+        <tr><td><b>COLOR</b></td><td>red · blue · green · yellow</td></tr>
+        <tr><td><b>CREATE_REMINDER</b></td><td>drink water · study · exercise</td></tr>
+        <tr><td colspan="2" class="note">Other 13 intents (CALL, MESSAGE, PAUSE, STOP …) → slot <b>NONE</b>. No value keyword fired → NONE as well.</td></tr>
+      </table>
+
+      <h2>The 19 intents (output classes)</h2>
+      <table>
+        <tr><th>intent</th><th class="num">slot</th><th>intent</th><th class="num">slot</th></tr>
+        <tr><td>PLAY_MUSIC</td><td class="num">–</td><td>TIMER <span class="badge">slot</span></td><td class="num">yes</td></tr>
+        <tr><td>PAUSE</td><td class="num">–</td><td>ALARM <span class="badge">slot</span></td><td class="num">yes</td></tr>
+        <tr><td>STOP</td><td class="num">–</td><td>TEMPERATURE <span class="badge">slot</span></td><td class="num">yes</td></tr>
+        <tr><td>NEXT</td><td class="num">–</td><td>BRIGHTNESS <span class="badge">slot</span></td><td class="num">yes</td></tr>
+        <tr><td>VOLUME_UP</td><td class="num">–</td><td>COLOR <span class="badge">slot</span></td><td class="num">yes</td></tr>
+        <tr><td>VOLUME_DOWN</td><td class="num">–</td><td>CREATE_REMINDER <span class="badge">slot</span></td><td class="num">yes</td></tr>
+        <tr><td>LIGHT_ON</td><td class="num">–</td><td>TIME</td><td class="num">–</td></tr>
+        <tr><td>LIGHT_OFF</td><td class="num">–</td><td>WEATHER</td><td class="num">–</td></tr>
+        <tr><td>CALL</td><td class="num">–</td><td>LIST_REMINDERS</td><td class="num">–</td></tr>
+        <tr><td>MESSAGE</td><td class="num">–</td><td></td><td class="num"></td></tr>
+      </table>
+      <div class="note">CALL &amp; MESSAGE are action-only: the corpus has no caller/recipient names in the vocabulary.</div>
+    </div>
+
+    <div>
+      <h2>What Whisper does</h2>
+      <div class="card blue">
+        <h4>Audio → text caption (that's it)</h4>
+        <ul>
+          <li><b>faster-whisper base.en</b> (int8, ~74 M params) — encoder-decoder transformer, runs <b>on-device</b>, no cloud.</li>
+          <li>After the wake word it writes the sentence: <i>"set alarm for 8 am"</i> — a subtitle, <b>not</b> a decision.</li>
+          <li>~<b>1.1 s per clip</b> (slowest step) — excluded from every benchmark number.</li>
+          <li><b>Not an LLM</b>: no knowledge, no reasoning — it copies what it heard.</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h4>Where the caption is used</h4>
+        <ul>
+          <li><b>Display</b> — show "you said: …" in the log/GUI.</li>
+          <li><b>Free-form numbers</b> — slot policy <code>text</code>: "dim to <b>35</b> percent" (values outside the fixed 19) can override the keyword's value.</li>
+          <li><b>Second opinion on intent</b> — see the voting rules below.</li>
+        </ul>
+      </div>
+
+      <h2>Whisper's voting power on the intent</h2>
+      <div class="flow">
+        <div class="step"><b>1 · VCM (always runs)</b>mel 40×250 → keyword sigmoids → rule → <b>ac_intent</b> + ac_slot</div>
+        <div class="arrow">→</div>
+        <div class="step"><b>2 · Whisper (if enabled)</b>caption → text_intent() → <b>t_intent</b></div>
+        <div class="arrow">→</div>
+        <div class="step"><b>3 · Guarded vote</b>see the 3 conditions → final intent</div>
+      </div>
+
+      <table>
+        <tr><th>Whisper's caption…</th><th>who wins</th></tr>
+        <tr><td>VCM is <b>unsure</b> (low confidence / no keywords)</td><td><b>Whisper wins</b> — it rescues the utterance</td></tr>
+        <tr><td>caption is <b>strong</b> (clear command cue at the opening)</td><td><b>Whisper wins</b></td></tr>
+        <tr><td>caption <b>agrees</b> with the keyword head (expected keywords also fired)</td><td><b>Whisper wins</b></td></tr>
+        <tr><td>lone mishear, VCM confident, no agreement</td><td class="num"><b>VCM wins — caption ignored</b></td></tr>
+        <tr><td>caption says <i>CALL</i>, acoustics say colour (classic mishear)</td><td><b>VCM wins</b> — CALL is exempt from the cue rule</td></tr>
+      </table>
+
+      <div class="card green">
+        <h4>In plain terms</h4>
+        <ul>
+          <li>Whisper is a <b>tie-breaker / helper</b>, never a dictator: a wrong caption <b>cannot</b> overrule a confident keyword hit.</li>
+          <li>Slots: with default <code>slot_policy=text</code> the caption's number may override the keyword's value — keywords still decide <i>which</i> slot.</li>
+          <li><b><code>python app.py --mode mic --no-asr</code></b> → Whisper never loads: intent + slots decided <b>100 % by the VCM</b> (the configuration for requirements #7/#8).</li>
+        </ul>
+      </div>
+
+      <div class="note">Benchmarks &amp; poster accuracy (99.29 % / 99.46 %) are computed acoustic-only — Whisper is not in any reported metric. Requirements: #7 on-device ✓ · #8 pure VCM ✓ (with --no-asr) · #9 wake word allowed ✓</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
